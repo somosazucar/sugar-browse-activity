@@ -12,8 +12,8 @@ XS-Python-Version: all
 
 Package: sugar-browse-activity
 Architecture: all
-Depends: ${shlibs:Depends}, ${python:Depends}, python-hippocanvas, python-telepathy, python-gtk2, python-sugar, python-sugar-toolkit
-Recommends: sugar
+Depends: ${shlibs:Depends}, ${python:Depends}, python-gobject, python-gtk2, python-dbus, python-gnome2-desktop (>= 2.16), python-simplejson, python-xpcom, python-hulahop, python-olpc-datastore, python-sugar, python-sugar-toolkit
+Recommends: sugar, sugar-artwork
 Provides: ${python:Provides}
 XB-Python-Version: ${python:Versions}
 Description: web browsing activity for the Sugar graphical shell
