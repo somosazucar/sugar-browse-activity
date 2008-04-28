@@ -24,7 +24,7 @@ index 0000000..4191764
 +
 +#: activity/activity.info:2 webactivity.py:105
 +msgid "Browse"
-+msgstr ""
++msgstr "Bladr"
 +
 +#: browser.py:132
 +msgid "Source"
