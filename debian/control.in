@@ -10,7 +10,7 @@ Vcs-Browser: http://git.debian.org/?p=collab-maint/sugar-web-activity.git;a=summ
 Homepage: http://wiki.laptop.org/go/Sugar
 XS-Python-Version: all
 
-Package: sugar-browse-activity
+Package: sugar-web-activity
 Architecture: all
 Depends: ${shlibs:Depends}, ${python:Depends}, python-gobject, python-gtk2, python-dbus, python-gnome2-desktop (>= 2.16), python-simplejson, python-xpcom, python-hulahop, python-olpc-datastore, python-sugar, python-sugar-toolkit
 Recommends: sugar, sugar-artwork
