@@ -10,20 +10,14 @@ Vcs-Browser: http://git.debian.org/?p=collab-maint/sugar-web-activity.git;a=summ
 Homepage: http://wiki.laptop.org/go/Sugar
 XS-Python-Version: all
 
-Package: sugar-web-activity
+Package: sugar-browse-activity
 Architecture: all
 Depends: ${shlibs:Depends}, ${python:Depends}, python-hippocanvas, python-telepathy, python-gtk2, python-sugar, python-sugar-toolkit
 Recommends: sugar
 Provides: ${python:Provides}
 XB-Python-Version: ${python:Versions}
-Description: web activity for the Sugar graphical shell
+Description: web browsing activity for the Sugar graphical shell
  Sugar is a graphical user interface aimed at children.
  .
- This package contains the Chat activity, providing a simple interface
- for collaborative discussion, be it between two individuals or among a
- group as large as an entire classroom. While a lightweight and
- "impermanent" chat will be provided in a layer above all activities and
- the various mesh levels, this activity devoted to textual communication
- will keep detailed records of the conversation within the journal and
- provide a means of searching through the conversation to locate
- important comments.
+ This package contains the Browse activity, providing a simple web
+ browser based on the Mozilla Gecko engine.
