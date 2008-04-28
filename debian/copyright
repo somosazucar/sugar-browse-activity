@@ -1,0 +1,48 @@
+This is Sugar Chat activity packaged for Debian GNU systems.
+
+Upstream Git source: git://dev.laptop.org
+
+Upstream author: One Laptop Per Child
+
+Files: debian/*
+Copyright: © 2008 Jonas Smedegaard <dr@jones.dk>
+License: GPL-2+
+ The Debian packaging information is under the GPL, version 2 or later.
+
+Files: *
+Copyright: © 2007 One Laptop Per Child
+License: GPL-2+
+
+Files: model.py
+Copyright: © 2006-2007 One Laptop Per Child
+License: GPL-2+
+
+Files: browser.py, progresslistener.py, webtoolbar.py
+Copyright: © 2007 One Laptop Per Child
+	   © 2006, Red Hat, Inc.
+License: GPL-2+
+
+Files: setup.py, webactivity.py
+Copyright: © 2006, Red Hat, Inc.
+License: GPL-2+
+
+Files: linkbutton.py
+Copyright: © 2007, One Laptop Per Child
+License: LGPL-2+
+
+License: GPL-2+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+
+License: LGPL-2+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2 of the License, or (at your option) any later version.
+
+On Debian systems, the complete text of the GNU General Public License
+can be found in file "/usr/share/common-licenses/GPL", and the complete
+text of the GNU Lesser General Public License can be found in file
+"/usr/share/common-licenses/LGPL"..

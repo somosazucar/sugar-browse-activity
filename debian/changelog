@@ -1,0 +1,5 @@
+sugar-web-activity (78~git.20080311-1) UNRELEASED; urgency=low
+
+  * Initial release. Closes: bug#444021.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 28 Apr 2008 12:22:57 +0200

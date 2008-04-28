@@ -1,0 +1,29 @@
+Source: sugar-web-activity
+Section: x11
+Priority: optional
+Maintainer: Debian OLPC <debian-olpc-devel@lists.alioth.debian.org>
+Uploaders: Jonas Smedegaard <dr@jones.dk>
+Build-Depends: cdbs (>= 0.4.23-1.1), debhelper (>= 5.0.44), python-sugar, python-sugar-toolkit (>= 0.79.6-2~), unzip, python-dev (>= 2.3.5-11), python-central (>= 0.5.6), devscripts (>= 2.10.7), dh-buildinfo
+Standards-Version: 3.7.3
+Vcs-Git: git://git.debian.org/git/collab-maint/sugar-web-activity.git
+Vcs-Browser: http://git.debian.org/?p=collab-maint/sugar-web-activity.git;a=summary
+Homepage: http://wiki.laptop.org/go/Sugar
+XS-Python-Version: all
+
+Package: sugar-web-activity
+Architecture: all
+Depends: ${shlibs:Depends}, ${python:Depends}, python-hippocanvas, python-telepathy, python-gtk2, python-sugar, python-sugar-toolkit
+Recommends: sugar
+Provides: ${python:Provides}
+XB-Python-Version: ${python:Versions}
+Description: web activity for the Sugar graphical shell
+ Sugar is a graphical user interface aimed at children.
+ .
+ This package contains the Chat activity, providing a simple interface
+ for collaborative discussion, be it between two individuals or among a
+ group as large as an entire classroom. While a lightweight and
+ "impermanent" chat will be provided in a layer above all activities and
+ the various mesh levels, this activity devoted to textual communication
+ will keep detailed records of the conversation within the journal and
+ provide a means of searching through the conversation to locate
+ important comments.
