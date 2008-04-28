@@ -1,0 +1,130 @@
+diff --git a/po/da.po b/po/da.po
+new file mode 100644
+index 0000000..4191764
+--- /dev/null
++++ b/po/da.po
+@@ -0,0 +1,124 @@
++# This is danish localisation for Sugar Web activity.
++# Copyright (C) 2008 Jonas Smedegaard <dr@jones.dk>
++# This file is distributed under the same license as the Sugar Web activity package.
++# Jonas Smedegaard <dr@jones.dk>, 2008.
++#
++#, fuzzy
++msgid ""
++msgstr ""
++"Project-Id-Version: Sugar Web activity 78\n"
++"Report-Msgid-Bugs-To: \n"
++"POT-Creation-Date: 2008-01-16 00:30+0000\n"
++"PO-Revision-Date: 2008-04-28 13:25+0200\n"
++"Last-Translator: Jonas Smedegaard <dr@jones.dk>\n"
++"Language-Team: LANGUAGE <LL@li.org>\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: 8bit\n"
++
++#: activity/activity.info:2 webactivity.py:105
++msgid "Browse"
++msgstr ""
++
++#: browser.py:132
++msgid "Source"
++msgstr "Kildekode"
++
++#: downloadmanager.py:140
++msgid "Download started"
++msgstr "Nedlastning startet"
++
++#: downloadmanager.py:142 downloadmanager.py:156
++#, python-format
++msgid "%s"
++msgstr "%s"
++
++#: downloadmanager.py:154
++msgid "Download completed"
++msgstr "Nedlastning færdig"
++
++#: downloadmanager.py:158
++msgid "Show in Journal"
++msgstr "Vis i logbog"
++
++#: downloadmanager.py:161
++msgid "Ok"
++msgstr "Ok"
++
++#: downloadmanager.py:167
++#, python-format
++msgid "File %s from %s."
++msgstr "Fil %s fra %s."
++
++#: downloadmanager.py:243
++#, python-format
++msgid ""
++"Downloading %s from \n"
++"%s."
++msgstr ""
++"Henter %s fra \n"
++"%s."
++
++#: linkbutton.py:96
++msgid "Remove"
++msgstr "Fjern"
++
++#: viewtoolbar.py:34
++msgid "Zoom out"
++msgstr "Formindsk"
++
++#: viewtoolbar.py:40
++msgid "Zoom in"
++msgstr ""
++
++#: viewtoolbar.py:51
++msgid "Fullscreen"
++msgstr "Fuldskærm"
++
++#: viewtoolbar.py:87
++msgid "Show Tray"
++msgstr "Vis skuffe"
++
++#: viewtoolbar.py:91
++msgid "Hide Tray"
++msgstr "Skjul skuffe"
++
++#: webactivity.py:113
++msgid "View"
++msgstr "Vis"
++
++#: webactivity.py:131 webactivity.py:132
++msgid "blank"
++msgstr "tom"
++
++#: webactivity.py:440
++msgid "Download in progress"
++msgstr "Nedlastning igang"
++
++#: webactivity.py:441
++msgid "Stopping now will cancel your download"
++msgstr "Hvis du stopper nu vil din nedlastning blive afbrudt"
++
++#: webactivity.py:443
++msgid "Cancel"
++msgstr "Afbryd"
++
++#: webactivity.py:445 webtoolbar.py:171
++msgid "Stop"
++msgstr "Stop"
++
++#: webtoolbar.py:53
++msgid "Back"
++msgstr "Tilbage"
++
++#: webtoolbar.py:60
++msgid "Forward"
++msgstr "Frem"
++
++#: webtoolbar.py:83
++msgid "Bookmark"
++msgstr "Bogmærke"
++
++#: webtoolbar.py:174
++msgid "Reload"
++msgstr "Genindlæs"
