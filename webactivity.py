@@ -64,11 +64,13 @@ import hulahop
 hulahop.startup(_profile_path)
 
 from browser import Browser
+from edittoolbar import EditToolbar
 from webtoolbar import WebToolbar
 from viewtoolbar import ViewToolbar
 import downloadmanager
 import sessionhistory 
 import progresslistener
+import filepicker
 
 _LIBRARY_PATH = '/usr/share/library-common/index.html'
 
@@ -81,7 +83,7 @@ SERVICE = "org.laptop.WebActivity"
 IFACE = SERVICE
 PATH = "/org/laptop/WebActivity"
 
-_TOOLBAR_BROWSE = 1
+_TOOLBAR_BROWSE = 2
 
 _logger = logging.getLogger('web-activity')
 
@@ -97,9 +99,13 @@ class WebActivity(activity.Activity):
         downloadmanager.init(self._browser, self, temp_path)
         sessionhistory.init(self._browser)
         progresslistener.init(self._browser)
+        filepicker.init(self)
 
         toolbox = activity.ActivityToolbox(self)
-        activity_toolbar = toolbox.get_activity_toolbar()
+
+        self._edit_toolbar = EditToolbar(self._browser)
+        toolbox.add_toolbar(_('Edit'), self._edit_toolbar)
+        self._edit_toolbar.show()
 
         self.toolbar = WebToolbar(self._browser)
         toolbox.add_toolbar(_('Browse'), self.toolbar)
@@ -120,7 +126,8 @@ class WebActivity(activity.Activity):
         self._browser.show()
                  
         self.session_history = sessionhistory.get_instance()
-        self.session_history.connect('session-link-changed', self._session_history_changed_cb)
+        self.session_history.connect('session-link-changed', 
+                                     self._session_history_changed_cb)
         self.toolbar.connect('add-link', self._link_add_button_cb)
 
         self._browser.connect("notify::title", self._title_changed_cb)
@@ -168,21 +175,21 @@ class WebActivity(activity.Activity):
         else:   
             _logger.debug('Created activity')
     
-    def _shared_cb(self, activity):
+    def _shared_cb(self, activity_):
         _logger.debug('My activity was shared')        
         self.initiating = True                        
         self._setup()
 
         _logger.debug('This is my activity: making a tube...')
-        id = self.tubes_chan[telepathy.CHANNEL_TYPE_TUBES].OfferDBusTube(
-                SERVICE, {})
+        self.tubes_chan[telepathy.CHANNEL_TYPE_TUBES].OfferDBusTube(SERVICE, {})
                 
     def _setup(self):
         if self._shared_activity is None:
             _logger.debug('Failed to share or join activity')
             return
 
-        bus_name, conn_path, channel_paths = self._shared_activity.get_channels()
+        bus_name, conn_path, channel_paths = \
+                self._shared_activity.get_channels()
 
         # Work out what our room is called and whether we have Tubes already
         room = None
@@ -213,14 +220,15 @@ class WebActivity(activity.Activity):
         # Make sure we have a Tubes channel - PS doesn't yet provide one
         if tubes_chan is None:
             _logger.debug("Didn't find our Tubes channel, requesting one...")
-            tubes_chan = self.conn.request_channel(telepathy.CHANNEL_TYPE_TUBES, 
-                                                   telepathy.HANDLE_TYPE_ROOM, room, True)
+            tubes_chan = self.conn.request_channel(telepathy.CHANNEL_TYPE_TUBES,
+                                                   telepathy.HANDLE_TYPE_ROOM, 
+                                                   room, True)
 
         self.tubes_chan = tubes_chan
         self.text_chan = text_chan
 
-        tubes_chan[telepathy.CHANNEL_TYPE_TUBES].connect_to_signal('NewTube', 
-                                                                   self._new_tube_cb)
+        tubes_chan[telepathy.CHANNEL_TYPE_TUBES].connect_to_signal( \
+                'NewTube', self._new_tube_cb)
 
     def _list_tubes_reply_cb(self, tubes):
         for tube_info in tubes:
@@ -229,7 +237,7 @@ class WebActivity(activity.Activity):
     def _list_tubes_error_cb(self, e):
         _logger.debug('ListTubes() failed: %s'%e)
 
-    def _joined_cb(self, activity):
+    def _joined_cb(self, activity_):
         if not self._shared_activity:
             return
 
@@ -243,22 +251,25 @@ class WebActivity(activity.Activity):
             reply_handler=self._list_tubes_reply_cb, 
             error_handler=self._list_tubes_error_cb)
 
-    def _new_tube_cb(self, id, initiator, type, service, params, state):
+    def _new_tube_cb(self, identifier, initiator, type, service, params, state):
         _logger.debug('New tube: ID=%d initator=%d type=%d service=%s '
-                     'params=%r state=%d' %(id, initiator, type, service, 
-                     params, state))
+                      'params=%r state=%d' %(identifier, initiator, type, 
+                                             service, params, state))
 
         if (type == telepathy.TUBE_TYPE_DBUS and
             service == SERVICE):
             if state == telepathy.TUBE_STATE_LOCAL_PENDING:
-                self.tubes_chan[telepathy.CHANNEL_TYPE_TUBES].AcceptDBusTube(id)
+                self.tubes_chan[telepathy.CHANNEL_TYPE_TUBES].AcceptDBusTube(
+                        identifier)
 
             self.tube_conn = TubeConnection(self.conn, 
                 self.tubes_chan[telepathy.CHANNEL_TYPE_TUBES], 
-                id, group_iface=self.text_chan[telepathy.CHANNEL_INTERFACE_GROUP])
+                identifier, group_iface = self.text_chan[
+                    telepathy.CHANNEL_INTERFACE_GROUP])
             
             _logger.debug('Tube created')
-            self.messenger = Messenger(self.tube_conn, self.initiating, self.model)         
+            self.messenger = Messenger(self.tube_conn, self.initiating, 
+                                       self.model)         
 
              
     def _load_homepage(self):
@@ -296,7 +307,7 @@ class WebActivity(activity.Activity):
                 self._add_link_totray(link['url'],
                                       base64.b64decode(link['thumb']),
                                       link['color'], link['title'],
-                                      link['owner'], -1, link['hash'])                                
+                                      link['owner'], -1, link['hash'])      
             self._browser.set_session(self.model.data['history'])
         elif self.metadata['mime_type'] == 'text/uri-list':
             data = self._get_data_from_file_path(file_path)
@@ -333,7 +344,7 @@ class WebActivity(activity.Activity):
     def _key_press_cb(self, widget, event):
         if event.state & gtk.gdk.CONTROL_MASK:
             if gtk.gdk.keyval_name(event.keyval) == "l":
-                _logger.debug('keyboard: Add link: %s.' % self.current)                
+                _logger.debug('keyboard: Add link: %s.' % self.current)     
                 self._add_link()                
                 return True
             elif gtk.gdk.keyval_name(event.keyval) == "u":
@@ -362,17 +373,17 @@ class WebActivity(activity.Activity):
                 _logger.debug('_add_link: link exist already a=%s b=%s' %(
                     link['hash'], sha.new(self.current).hexdigest()))
                 return
-        buffer = self._get_screenshot()
+        buf = self._get_screenshot()
         timestamp = time.time()
-        self.model.add_link(self.current, self.webtitle, buffer,
+        self.model.add_link(self.current, self.webtitle, buf,
                             profile.get_nick_name(),
                             profile.get_color().to_string(), timestamp)
 
         if self.messenger is not None:
-            self.messenger._add_link(self.current, self.webtitle,                                     
+            self.messenger._add_link(self.current, self.webtitle,       
                                      profile.get_color().to_string(),
                                      profile.get_nick_name(),
-                                     base64.b64encode(buffer), timestamp)
+                                     base64.b64encode(buf), timestamp)
 
     def _add_link_model_cb(self, model, index):
         ''' receive index of new link from the model '''
@@ -381,9 +392,9 @@ class WebActivity(activity.Activity):
                               link['color'], link['title'],
                               link['owner'], index, link['hash'])
 
-    def _add_link_totray(self, url, buffer, color, title, owner, index, hash):
+    def _add_link_totray(self, url, buf, color, title, owner, index, hash):
         ''' add a link to the tray '''
-        item = LinkButton(url, buffer, color, title, owner, index, hash)
+        item = LinkButton(url, buf, color, title, owner, index, hash)
         item.connect('clicked', self._link_clicked_cb, url)
         item.connect('remove_link', self._link_removed_cb)
         self._tray.add_item(item, index) # use index to add to the tray
@@ -429,8 +440,8 @@ class WebActivity(activity.Activity):
                                                  style.zoom(80),
                                                  gtk.gdk.INTERP_BILINEAR)
 
-        buffer = self.get_buffer(screenshot)
-        return buffer
+        buf = self.get_buffer(screenshot)
+        return buf
 
     def can_close(self):
         if downloadmanager.can_quit():
