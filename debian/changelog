@@ -8,10 +8,9 @@ sugar-web-activity (89-1) UNRELEASED; urgency=low
   * Update local cdbs snippets:
     + Use upstream-tarball.mk to track upstream source releases.
     + Adjust dependency cleanup (upstream-tarball.mk needs newer cdbs).
-    + Fix python-sugar.mk to work with recent python-sugar-toolkit, and
-      tighten build-dependency.
-    + Extend default DEB_PYTHON_SUGAR_MANIFEST_IGNORE_REGEX in
-      python-sugar.mk to include dot-files.
+    + Fix python-sugar.mk to work with recent python-sugar-toolkit where
+      MANIFEST files are ignored and an internal hardcoded exception
+      list is used instead.  Tighten build-dependency.
   * Semi-auto-update debian/control to update build-dependencies:
       DEB_AUTO_UPDATE_DEBIAN_CONTROL=yes fakeroot debian/rules clean
 
