@@ -53,7 +53,7 @@ DEB_PYTHON_SUGAR_PACKAGES = $(filter sugar-%-activity, $(DEB_PACKAGES))
 #DEB_PYTHON_SUGAR_MANIFEST = *.py *.po *.pot *.svg
 
 DEB_PYTHON_SUGAR_MANIFEST_REGEX =
-DEB_PYTHON_SUGAR_MANIFEST_IGNORE_REGEX = ^debian/.*
+DEB_PYTHON_SUGAR_MANIFEST_IGNORE_REGEX = ^(\..*|.*/\..*|debian/.*)
 
 # TODO: Move this to buildvars.mk
 cdbs_pkgsrcdir = $(if $(DEB_PKGSRCDIR_$(cdbs_curpkg)),$(DEB_PKGSRCDIR_$(cdbs_curpkg)),$(DEB_SRCDIR))
