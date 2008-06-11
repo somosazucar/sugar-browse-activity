@@ -1,4 +1,4 @@
-sugar-web-activity (89-1) UNRELEASED; urgency=low
+sugar-web-activity (89-1) unstable; urgency=low
 
   * New upstream release.
   * Add watch file.
@@ -14,7 +14,7 @@ sugar-web-activity (89-1) UNRELEASED; urgency=low
   * Semi-auto-update debian/control to update build-dependencies:
       DEB_AUTO_UPDATE_DEBIAN_CONTROL=yes fakeroot debian/rules clean
 
- -- Jonas Smedegaard <dr@jones.dk>  Wed, 11 Jun 2008 02:26:11 +0200
+ -- Jonas Smedegaard <dr@jones.dk>  Wed, 11 Jun 2008 12:39:54 +0200
 
 sugar-web-activity (78~git.20080311-1) UNRELEASED; urgency=low
 
