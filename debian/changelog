@@ -1,3 +1,18 @@
+sugar-web-activity (89-1) UNRELEASED; urgency=low
+
+  * New upstream release.
+  * Add watch file.
+  * Update debian/copyright:
+    + Add URL to upstream tarball source.
+    + Add a few new files (same owner and license).
+  * Update local cdbs snippets:
+    + Use upstream-tarball.mk to track upstream source releases.
+    + Adjust dependency cleanup (upstream-tarball.mk needs newer cdbs).
+  * Semi-auto-update debian/control to update build-dependencies:
+      DEB_AUTO_UPDATE_DEBIAN_CONTROL=yes fakeroot debian/rules clean
+
+ -- Jonas Smedegaard <dr@jones.dk>  Wed, 11 Jun 2008 02:26:11 +0200
+
 sugar-web-activity (78~git.20080311-1) UNRELEASED; urgency=low
 
   * Initial release. Closes: bug#444021.

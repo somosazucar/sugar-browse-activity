@@ -1,5 +1,7 @@
 This is Sugar Web activity packaged for Debian GNU systems.
 
+Upstream source: http://dev.laptop.org/pub/sugar/sources/web-activity/
+
 Upstream Git source: git://dev.laptop.org/web-activity
 
 Upstream author: One Laptop Per Child
@@ -11,6 +13,10 @@ License: GPL-2+
 
 Files: *
 Copyright: © 2007 One Laptop Per Child
+License: GPL-2+
+
+Files: edittoolbar.py, palettes.py
+Copyright: © 2008, One Laptop Per Child
 License: GPL-2+
 
 Files: model.py

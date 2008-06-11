@@ -44,7 +44,8 @@ UNKNOWN [YEAR THE PACKAGE'S COPYRIGHT HOLDER]: po/Web.pot
 	po/ur.po
 	po/vi.po
 	po/yo.po
-*No copyright* UNKNOWN []: NEWS
+*No copyright* UNKNOWN []: AUTHORS
+	NEWS
 	activity/activity-web.svg
 	activity/activity.info
 	agent-stylesheet.css
@@ -69,6 +70,8 @@ GPL-2+ [2007, One Laptop Per Child / 2006, Red Hat, Inc]: browser.py
 	webtoolbar.py
 GPL-2+ [2006, Red Hat, Inc]: setup.py
 	webactivity.py
+GPL-2+ [2008, One Laptop Per Child]: edittoolbar.py
+	palettes.py
 UNKNOWN [2007 THE PACKAGE'S COPYRIGHT HOLDER]: po/es.po
 	po/pt.po
 GPL-2+ [2006-2007, One Laptop Per Child]: model.py
