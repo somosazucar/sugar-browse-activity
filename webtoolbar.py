@@ -19,6 +19,7 @@ from gettext import gettext as _
 
 import gobject
 import gtk
+import pango
 from xpcom.components import interfaces
 from xpcom import components
 
@@ -29,8 +30,179 @@ from sugar._sugarext import AddressEntry
 import sessionhistory
 import progresslistener
 import filepicker
+import places
 
 _MAX_HISTORY_ENTRIES = 15
+
+class WebEntry(AddressEntry):
+    _COL_ADDRESS = 0
+    _COL_TITLE = 1
+
+    def __init__(self):
+        gobject.GObject.__init__(self)
+
+        self._address = None
+        self._title = None
+        self._search_view = self._search_create_view()
+
+        self._search_window = gtk.Window(gtk.WINDOW_POPUP)
+        self._search_window.add(self._search_view)
+        self._search_view.show()
+
+        self.connect('focus-in-event', self.__focus_in_event_cb)
+        self.connect('populate-popup', self.__populate_popup_cb)
+        self.connect('key-press-event', self.__key_press_event_cb)
+        self.connect('enter-notify-event', self.__enter_notify_event_cb)
+        self.connect('leave-notify-event', self.__leave_notify_event_cb)
+        self._focus_out_hid = self.connect(
+                    'focus-out-event', self.__focus_out_event_cb)
+        self._change_hid = self.connect('changed', self.__changed_cb)
+
+    def _set_text(self, text):
+        """Set the text but block changes notification, so that we can
+           recognize changes caused directly by user actions"""
+        self.handler_block(self._change_hid)
+        try:
+            self.props.text = text
+        finally:
+            self.handler_unblock(self._change_hid)
+
+    def activate(self, uri):
+        self._set_text(uri)
+        self._search_popdown()
+        self.emit('activate')
+
+    def _set_address(self, address):
+        self._address = address
+
+    address = gobject.property(type=str, setter=_set_address)
+
+    def _set_title(self, title):
+        self._title = title
+        if title is not None and not self.props.has_focus:
+            self._set_text(title)
+
+    title = gobject.property(type=str, setter=_set_title)
+
+    def _search_create_view(self):
+        view = gtk.TreeView()
+        view.props.headers_visible = False
+
+        view.connect('button-press-event', self.__view_button_press_event_cb)
+
+        column = gtk.TreeViewColumn()
+        view.append_column(column)
+
+        cell = gtk.CellRendererText()
+        cell.props.ellipsize = pango.ELLIPSIZE_END
+        cell.props.ellipsize_set = True
+        cell.props.font = 'Bold'
+        column.pack_start(cell, True)
+
+        column.set_attributes(cell, text=self._COL_TITLE)
+
+        cell = gtk.CellRendererText()
+        cell.props.ellipsize = pango.ELLIPSIZE_END
+        cell.props.ellipsize_set = True
+        cell.props.alignment = pango.ALIGN_LEFT
+        column.pack_start(cell)
+
+        column.set_attributes(cell, text=self._COL_ADDRESS)
+
+        return view
+
+    def _search_update(self):
+        list_store = gtk.ListStore(str, str)
+
+        for place in places.get_store().search(self.props.text):
+            list_store.append([place.uri, place.title])
+
+        self._search_view.set_model(list_store)
+
+        return len(list_store) > 0
+
+    def _search_popup(self):
+        entry_x, entry_y = self.window.get_origin()
+        entry_w, entry_h = self.size_request()
+
+        x = entry_x + entry_h / 2
+        y = entry_y + entry_h
+        width = self.allocation.width - entry_h
+        height = gtk.gdk.screen_height() / 3
+
+        i = self._search_view.get_model().get_iter_first()
+        self._search_view.get_selection().select_iter(i)
+
+        self._search_window.move(x, y)
+        self._search_window.resize(width, height)
+        self._search_window.show()
+
+    def _search_popdown(self):
+        self._search_window.hide()
+
+    def __focus_in_event_cb(self, entry, event):
+        self._set_text(self._address)
+        self._search_popdown()
+
+    def __focus_out_event_cb(self, entry, event):
+        self._set_text(self._title)
+        self._search_popdown()
+
+    def __enter_notify_event_cb(self, entry, event):
+        if not entry.props.has_focus:
+            self._set_text(self._address)
+
+    def __leave_notify_event_cb(self, entry, event):
+        if not entry.props.has_focus:
+            self._set_text(self._title)
+
+    def __view_button_press_event_cb(self, view, event):
+        model = view.get_model()
+
+        path, col_, x_, y_ = view.get_path_at_pos(event.x, event.y)
+        if path:
+            uri = model[path][self._COL_ADDRESS]
+            self.activate(uri)
+
+    def __key_press_event_cb(self, entry, event):
+        keyname = gtk.gdk.keyval_name(event.keyval)
+
+        selection = self._search_view.get_selection()
+        model, selected = selection.get_selected()
+        if selected == None:
+            return False
+
+        if keyname == 'Up':
+            index = model.get_path(selected)[0]
+            if index > 0:
+                selection.select_path(index - 1)
+            return True
+        elif keyname == 'Down':
+            next = model.iter_next(selected)
+            if next:
+                selection.select_iter(next)
+            return True
+        elif keyname == 'Return':
+            uri = model[model.get_path(selected)][self._COL_ADDRESS]
+            self.activate(uri)
+            return True
+
+        return False
+
+    def __popup_unmap_cb(self, entry):
+        self.handler_unblock(self._focus_out_hid)
+
+    def __populate_popup_cb(self, entry, menu):
+        self.handler_block(self._focus_out_hid)
+        menu.connect('unmap', self.__popup_unmap_cb)
+
+    def __changed_cb(self, entry):
+        self._address = self.props.text
+
+        if not self.props.text or not self._search_update():
+            self._search_popdown()
+        else:
+            self._search_popup()
 
 class WebToolbar(gtk.Toolbar):
     __gtype_name__ = 'WebToolbar'
@@ -67,13 +239,13 @@ class WebToolbar(gtk.Toolbar):
         self.insert(self._stop_and_reload, -1)
         self._stop_and_reload.show()
 
-        self._entry = AddressEntry()
-        self._entry.connect('activate', self._entry_activate_cb)
+        self.entry = WebEntry()
+        self.entry.connect('activate', self._entry_activate_cb)
 
         entry_item = gtk.ToolItem()
         entry_item.set_expand(True)
-        entry_item.add(self._entry)
-        self._entry.show()
+        entry_item.add(self.entry)
+        self.entry.show()
         
         self.insert(entry_item, -1)
         entry_item.show()
@@ -124,13 +296,13 @@ class WebToolbar(gtk.Toolbar):
         self._set_progress(progress)
 
     def _set_progress(self, progress):
-        self._entry.props.progress = progress
+        self.entry.props.progress = progress
 
     def _set_address(self, address):
-        self._entry.props.address = address
+        self.entry.props.address = address
 
     def _set_title(self, title):
-        self._entry.props.title = title
+        self.entry.props.title = title
 
     def _show_stop_icon(self):
         self._stop_and_reload.set_icon('media-playback-stop')

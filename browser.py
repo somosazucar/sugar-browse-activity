@@ -67,6 +67,23 @@ class GetSourceListener(gobject.GObject):
     def onSecurityChange(self, progress, request, state):
         pass
 
+class CommandListener(object):
+    _com_interfaces_ = interfaces.nsIDOMEventListener
+    def __init__(self, window):
+        self._window = window
+
+    def handleEvent(self, event):
+        if not event.isTrusted:
+            return
+
+        uri = event.originalTarget.ownerDocument.documentURI
+        if not uri.startswith('about:neterror?e=nssBadCert'):
+            return
+
+        cls = components.classes['@sugarlabs.org/add-cert-exception;1']
+        cert_exception = cls.createInstance(interfaces.hulahopAddCertException)
+        cert_exception.showDialog(self._window)
+
 class Browser(WebView):
 
     AGENT_SHEET = os.path.join(activity.get_bundle_path(), 
@@ -82,6 +99,11 @@ class Browser(WebView):
         io_service_class = components.classes[ \
                 "@mozilla.org/network/io-service;1"]
         io_service = io_service_class.getService(interfaces.nsIIOService)
+
+        # Use xpcom to turn off "offline mode" detection, which disables
+        # access to localhost for no good reason.  (Trac #6250.)
+        io_service2 = io_service_class.getService(interfaces.nsIIOService2)
+        io_service2.manageOfflineStatus = False
 
         cls = components.classes['@mozilla.org/content/style-sheet-service;1']
         style_sheet_service = cls.getService(interfaces.nsIStyleSheetService)
@@ -101,7 +123,11 @@ class Browser(WebView):
 
         listener = xpcom.server.WrapObject(ContentInvoker(self),
                                            interfaces.nsIDOMEventListener)
-        self.get_window_root().addEventListener('click', listener, False)
+        self.window_root.addEventListener('click', listener, False)
+
+        listener = xpcom.server.WrapObject(CommandListener(self.dom_window),
+                                           interfaces.nsIDOMEventListener)
+        self.window_root.addEventListener('command', listener, False)
 
     def get_session(self):
         return sessionstore.get_session(self)
