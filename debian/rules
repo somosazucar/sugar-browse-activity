@@ -10,10 +10,10 @@ include debian/cdbs/1/rules/copyright-check.mk
 include /usr/share/cdbs/1/rules/patchsys-quilt.mk
 include debian/cdbs/1/rules/buildinfo.mk
 
-DEB_UPSTREAM_PACKAGE = Chat
-DEB_UPSTREAM_URL = http://dev.laptop.org/pub/sugar/sources/chat-activity
+DEB_UPSTREAM_PACKAGE = Web
+DEB_UPSTREAM_URL = http://dev.laptop.org/pub/sugar/sources/web-activity
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
-DEB_UPSTREAM_TARBALL_MD5 = 8d038eb416676ee90a921691a89f28bc
+DEB_UPSTREAM_TARBALL_MD5 = 82391f085bc076b6544c0133780eb4eb
 
 # Merge duplicate build-dependencies
 CDBS_BUILD_DEPENDS := $(shell echo '$(CDBS_BUILD_DEPENDS)' | sed -e '/\bcdbs (>= 0.4.39)/ s/ *,* *\bcdbs (>= \(0.4.23-1.1\|0.4.27\)) *,* */, /g' -e 's/^ *, *//' -e 's/ *, *$$//')
