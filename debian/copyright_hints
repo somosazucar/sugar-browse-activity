@@ -1,4 +1,4 @@
-UNKNOWN [YEAR THE PACKAGE'S COPYRIGHT HOLDER]: po/Web.pot
+UNKNOWN [YEAR THE PACKAGE'S HOLDER]: po/Web.pot
 	po/am.po
 	po/ar.po
 	po/ay.po
@@ -31,7 +31,6 @@ UNKNOWN [YEAR THE PACKAGE'S COPYRIGHT HOLDER]: po/Web.pot
 	po/pa.po
 	po/pl.po
 	po/ps.po
-	po/pseudo.po
 	po/pt_BR.po
 	po/qu.po
 	po/ro.po
@@ -41,7 +40,6 @@ UNKNOWN [YEAR THE PACKAGE'S COPYRIGHT HOLDER]: po/Web.pot
 	po/te.po
 	po/th.po
 	po/tr.po
-	po/ur.po
 	po/vi.po
 	po/yo.po
 *No copyright* UNKNOWN []: AUTHORS
@@ -72,8 +70,12 @@ GPL-2+ [2006, Red Hat, Inc]: setup.py
 	webactivity.py
 GPL-2+ [2008, One Laptop Per Child]: edittoolbar.py
 	palettes.py
-UNKNOWN [2007 THE PACKAGE'S COPYRIGHT HOLDER]: po/es.po
+GPL-2+ [2008, Red Hat, Inc]: globalhistory.py
+	places.py
+UNKNOWN [2007 THE PACKAGE'S HOLDER]: po/es.po
 	po/pt.po
 GPL-2+ [2006-2007, One Laptop Per Child]: model.py
 LGPL-2+ [2007, One Laptop Per Child]: linkbutton.py
-UNKNOWN [2007 The package's copyright holder]: po/fr.po
+UNKNOWN [" / YEAR THE PACKAGE'S HOLDER]: po/ur.po
+UNKNOWN [2007 The package's holder]: po/fr.po
+UNKNOWN [] " / YEAR THE PACKAGE'S HOLDER]: po/pseudo.po

@@ -28,6 +28,10 @@ Copyright: © 2007 One Laptop Per Child
 	   © 2006, Red Hat, Inc.
 License: GPL-2+
 
+Files: globalhistory.py
+Copyright: © 2008, Red Hat, Inc.
+License: GPL-2+
+
 Files: setup.py, webactivity.py
 Copyright: © 2006, Red Hat, Inc.
 License: GPL-2+
