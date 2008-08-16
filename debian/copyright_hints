@@ -1,4 +1,8 @@
-UNKNOWN [YEAR THE PACKAGE'S HOLDER]: po/Web.pot
+Format-Specification: http://wiki.debian.org/Proposals/CopyrightFormat?action=recall&rev=XXX
+Upstream-Name: Untrusted draft - double-check copyrights yourself!
+
+Files: po/Web.pot
+	po/af.po
 	po/am.po
 	po/ar.po
 	po/ay.po
@@ -26,23 +30,36 @@ UNKNOWN [YEAR THE PACKAGE'S HOLDER]: po/Web.pot
 	po/ml.po
 	po/mn.po
 	po/mr.po
+	po/mvo.po
+	po/nb.po
 	po/ne.po
 	po/nl.po
 	po/pa.po
+	po/pap.po
+	po/pis.po
 	po/pl.po
 	po/ps.po
+	po/pseudo.po
 	po/pt_BR.po
 	po/qu.po
 	po/ro.po
 	po/ru.po
 	po/rw.po
+	po/sd.po
 	po/si.po
+	po/sl.po
 	po/te.po
 	po/th.po
+	po/tpi.po
 	po/tr.po
+	po/ur.po
 	po/vi.po
 	po/yo.po
-*No copyright* UNKNOWN []: AUTHORS
+Copyright: YEAR THE PACKAGE'S HOLDER
+License: UNKNOWN
+
+Files: AUTHORS
+	MANIFEST
 	NEWS
 	activity/activity-web.svg
 	activity/activity.info
@@ -55,7 +72,10 @@ UNKNOWN [YEAR THE PACKAGE'S HOLDER]: po/Web.pot
 	po/de.po
 	po/zh_CN.po
 	po/zh_TW.po
-GPL-2+ [2007, One Laptop Per Child]: downloadmanager.py
+Copyright: *No copyright*
+License: UNKNOWN
+
+Files: downloadmanager.py
 	filepicker.py
 	messenger.py
 	promptservice.py
@@ -63,19 +83,45 @@ GPL-2+ [2007, One Laptop Per Child]: downloadmanager.py
 	sessionhistory.py
 	sessionstore.py
 	viewtoolbar.py
-GPL-2+ [2007, One Laptop Per Child / 2006, Red Hat, Inc]: browser.py
+Copyright: 2007, One Laptop Per Child
+License: GPL-2+
+
+Files: browser.py
 	progresslistener.py
 	webtoolbar.py
-GPL-2+ [2006, Red Hat, Inc]: setup.py
+Copyright: 2007, One Laptop Per Child
+	2006, Red Hat, Inc
+License: GPL-2+
+
+Files: setup.py
 	webactivity.py
-GPL-2+ [2008, One Laptop Per Child]: edittoolbar.py
+Copyright: 2006, Red Hat, Inc
+License: GPL-2+
+
+Files: edittoolbar.py
 	palettes.py
-GPL-2+ [2008, Red Hat, Inc]: globalhistory.py
+Copyright: 2008, One Laptop Per Child
+License: GPL-2+
+
+Files: globalhistory.py
 	places.py
-UNKNOWN [2007 THE PACKAGE'S HOLDER]: po/es.po
+Copyright: 2008, Red Hat, Inc
+License: GPL-2+
+
+Files: po/es.po
 	po/pt.po
-GPL-2+ [2006-2007, One Laptop Per Child]: model.py
-LGPL-2+ [2007, One Laptop Per Child]: linkbutton.py
-UNKNOWN [" / YEAR THE PACKAGE'S HOLDER]: po/ur.po
-UNKNOWN [2007 The package's holder]: po/fr.po
-UNKNOWN [] " / YEAR THE PACKAGE'S HOLDER]: po/pseudo.po
+Copyright: 2007, THE PACKAGE'S HOLDER
+License: UNKNOWN
+
+Files: model.py
+Copyright: 2006-2007, One Laptop Per Child
+License: GPL-2+
+
+Files: linkbutton.py
+Copyright: 2007, One Laptop Per Child
+License: LGPL-2+
+
+Files: po/fr.po
+Copyright: 2007, The package's holder
+License: UNKNOWN
+

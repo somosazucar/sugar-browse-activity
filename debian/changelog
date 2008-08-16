@@ -1,10 +1,16 @@
-sugar-web-activity (95-1) UNRELEASED; urgency=low
+sugar-web-activity (95-1) unstable; urgency=low
 
   * New upstream release.
   * Upstream package changed name to Browse (from Web).  Update watch
     file and cdbs hint for get-orig-source target.
+  * Update cdbs snippets:
+    + Move dependency cleanup to new local snippet package-relations.mk.
+    + Update copyright-check output to more closely match proposed new
+      copyright file format.  Update copyright-hints.
+    + Update README.cdbs-tweaks.
+  * Add DEB_MAINTAINER_MODE in debian/rules (thanks to Romain Beauxis).
 
- -- Jonas Smedegaard <dr@jones.dk>  Sat, 16 Aug 2008 15:30:47 +0200
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 16 Aug 2008 16:36:09 +0200
 
 sugar-web-activity (91-1) unstable; urgency=low
 
