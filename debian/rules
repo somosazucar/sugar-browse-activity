@@ -13,7 +13,7 @@ include debian/cdbs/1/rules/buildinfo.mk
 DEB_UPSTREAM_PACKAGE = Web
 DEB_UPSTREAM_URL = http://dev.laptop.org/pub/sugar/sources/web-activity
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
-DEB_UPSTREAM_TARBALL_MD5 = 82391f085bc076b6544c0133780eb4eb
+DEB_UPSTREAM_TARBALL_MD5 = 91101a2be879c3d3563861b10433deda
 
 # Merge duplicate build-dependencies
 CDBS_BUILD_DEPENDS := $(shell echo '$(CDBS_BUILD_DEPENDS)' | sed -e '/\bcdbs (>= 0.4.39)/ s/ *,* *\bcdbs (>= \(0.4.23-1.1\|0.4.27\)) *,* */, /g' -e 's/^ *, *//' -e 's/ *, *$$//')
