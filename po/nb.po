@@ -7,49 +7,50 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-06-14 00:30-0400\n"
-"PO-Revision-Date: 2008-07-24 13:49+0100\n"
-"Last-Translator: Satyanarayana Murthy Saladi <saladism@gmail.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2008-07-23 17:28+0100\n"
+"Last-Translator: Kent Dahl <kentda@pvv.org>\n"
+"Language-Team: Norwegian <i18n-no@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Pootle 1.0.2\n"
+"X-Generator: Translate Toolkit 1.1.1rc4\n"
 
 #: activity/activity.info:2
 #: webactivity.py:113
+#, fuzzy
 msgid "Browse"
-msgstr "వెబ్ చూడు"
+msgstr "Surfe"
 
 #: browser.py:149
 msgid "Source"
-msgstr "మూలం"
+msgstr "Kildekode"
 
 #: downloadmanager.py:141
 msgid "Download started"
-msgstr "దిగుమతి మొదలయింది"
+msgstr "Nedlasting startet"
 
 #: downloadmanager.py:143
 #: downloadmanager.py:157
 #, python-format
 msgid "%s"
-msgstr "%s"
+msgstr ""
 
 #: downloadmanager.py:155
 msgid "Download completed"
-msgstr "దిగుమతి పూర్తయింది"
+msgstr "Nedlasting ferdig"
 
 #: downloadmanager.py:160
 msgid "Show in Journal"
-msgstr "పద్దులో చూపు"
+msgstr "Vis i dagbok"
 
 #: downloadmanager.py:163
 msgid "Ok"
-msgstr "సరి"
+msgstr ""
 
 #: downloadmanager.py:169
 #, python-format
 msgid "File %s from %s."
-msgstr "ఫైలు %s నుండి %s."
+msgstr "Fil %s fra %s."
 
 #: downloadmanager.py:245
 #, python-format
@@ -57,92 +58,93 @@ msgid ""
 "Downloading %s from \n"
 "%s."
 msgstr ""
-"%s నుండి దిగుమతి అవుతుంది\n"
-" %s."
+"Laster %s fra\n"
+"%s."
 
 #: edittoolbar.py:94
 msgid "Previous"
-msgstr "ముందుది"
+msgstr "Forrige"
 
 #: edittoolbar.py:101
 msgid "Next"
-msgstr "తర్వాతది"
+msgstr "Neste"
 
 #: linkbutton.py:94
 msgid "Remove"
-msgstr "తీసివేయి"
+msgstr "Fjern"
 
 #: palettes.py:89
 msgid "Follow link"
-msgstr "జోడికను తెరువుము"
+msgstr "Følg lenke"
 
 #: palettes.py:94
 #: palettes.py:142
 msgid "Copy"
-msgstr "నకలు"
+msgstr "Kopier"
 
 #: viewtoolbar.py:34
 msgid "Zoom out"
-msgstr "దూరంగా చూపు"
+msgstr "Forminsk"
 
 #: viewtoolbar.py:40
 msgid "Zoom in"
-msgstr "దగ్గరగా చూపు"
+msgstr "Forstørr"
 
 #: viewtoolbar.py:51
 msgid "Fullscreen"
-msgstr "తెరనిండుగా"
+msgstr "Fullskjerm"
 
 #: viewtoolbar.py:87
 msgid "Show Tray"
-msgstr "ట్రే చూపు"
+msgstr ""
 
 #: viewtoolbar.py:91
 msgid "Hide Tray"
-msgstr "ట్రే దాచివేయి"
+msgstr ""
 
 #: webactivity.py:109
 msgid "Edit"
-msgstr "కూర్చు"
+msgstr "Endre"
 
 #: webactivity.py:121
 msgid "View"
-msgstr "చూడు"
+msgstr "Visning"
 
 #: webactivity.py:140
 #: webactivity.py:141
 msgid "blank"
-msgstr "ఖాళీ"
+msgstr ""
 
 #: webactivity.py:463
 msgid "Download in progress"
-msgstr "దిగుమతి జరుగుతుంది"
+msgstr "Nedlasting underveis"
 
 #: webactivity.py:464
+#, fuzzy
 msgid "Stopping now will cancel your download"
-msgstr "ఇప్పుడు ఆపితే మీ దిగుమతి రద్దవుతుంది"
+msgstr "Stopper du nå vil det avbryte nedlastingen din"
 
 #: webactivity.py:466
 msgid "Cancel"
-msgstr "రద్దుచేయి"
+msgstr "Avbryt"
 
 #: webactivity.py:468
 #: webtoolbar.py:334
 msgid "Stop"
-msgstr "ఆపు"
+msgstr "Stans"
 
 #: webtoolbar.py:212
 msgid "Back"
-msgstr "వెనుకకు"
+msgstr "Tilbake"
 
 #: webtoolbar.py:219
 msgid "Forward"
-msgstr "ముందుకు"
+msgstr "Framover"
 
 #: webtoolbar.py:242
 msgid "Bookmark"
-msgstr "గుర్తు"
+msgstr "Bokmerke"
 
 #: webtoolbar.py:337
 msgid "Reload"
-msgstr "తిరిగి లోడ్ చేయి"
+msgstr "Last på nytt"
