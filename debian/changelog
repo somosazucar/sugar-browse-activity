@@ -1,6 +1,8 @@
 sugar-web-activity (95-1) UNRELEASED; urgency=low
 
   * New upstream release.
+  * Upstream package changed name to Browse (from Web).  Update watch
+    file and cdbs hint for get-orig-source target.
 
  -- Jonas Smedegaard <dr@jones.dk>  Sat, 16 Aug 2008 15:30:47 +0200
 

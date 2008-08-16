@@ -10,7 +10,7 @@ include debian/cdbs/1/rules/copyright-check.mk
 include /usr/share/cdbs/1/rules/patchsys-quilt.mk
 include debian/cdbs/1/rules/buildinfo.mk
 
-DEB_UPSTREAM_PACKAGE = Web
+DEB_UPSTREAM_PACKAGE = Browse
 DEB_UPSTREAM_URL = http://dev.laptop.org/pub/sugar/sources/web-activity
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
 DEB_UPSTREAM_TARBALL_MD5 = 91101a2be879c3d3563861b10433deda
