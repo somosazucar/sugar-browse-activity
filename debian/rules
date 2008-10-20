@@ -18,7 +18,7 @@ include debian/cdbs/1/rules/buildinfo.mk
 DEB_UPSTREAM_PACKAGE = Browse
 DEB_UPSTREAM_URL = http://dev.laptop.org/pub/sugar/sources/web-activity
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
-DEB_UPSTREAM_TARBALL_MD5 = 91101a2be879c3d3563861b10433deda
+DEB_UPSTREAM_TARBALL_MD5 = be7ce52ae750f24a1e374f9c7f14fade
 
 # Resolve, cleanup and apply CDBS-declared dependencies
 include debian/cdbs/1/rules/package-relations.mk

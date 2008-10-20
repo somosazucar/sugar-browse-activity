@@ -1,5 +1,6 @@
-sugar-web-activity (95-2) UNRELEASED; urgency=low
+sugar-web-activity (99-1) UNRELEASED; urgency=low
 
+  * New upstream release.
   * Depend on ${misc:Depends}.
 
  -- Jonas Smedegaard <dr@jones.dk>  Tue, 07 Oct 2008 11:45:03 +0200
