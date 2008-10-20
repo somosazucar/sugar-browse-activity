@@ -59,7 +59,6 @@ Copyright: YEAR THE PACKAGE'S HOLDER
 License: UNKNOWN
 
 Files: AUTHORS
-	MANIFEST
 	NEWS
 	activity/activity-web.svg
 	activity/activity.info
@@ -120,6 +119,11 @@ License: GPL-2+
 Files: linkbutton.py
 Copyright: 2007, One Laptop Per Child
 License: LGPL-2+
+
+Files: COPYING
+Copyright: 1989, 1991, Free Software Foundation, Inc.
+	the software, and
+License: UNKNOWN
 
 Files: po/fr.po
 Copyright: 2007, The package's holder
