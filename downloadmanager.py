@@ -20,8 +20,11 @@ from gettext import gettext as _
 import time
 import tempfile
 import urlparse
+import urllib
 
 import gtk
+import hulahop
+import xpcom
 from xpcom.nsError import *
 from xpcom import components
 from xpcom.components import interfaces
@@ -42,7 +45,8 @@ if dbus.version >= (0, 82, 3):
 else:
     DBUS_PYTHON_TIMEOUT_UNITS_PER_SECOND = 1000
 
-NS_BINDING_ABORTED = 0x804b0002     # From nsNetError.h
+NS_BINDING_ABORTED = 0x804b0002             # From nsNetError.h
+NS_ERROR_SAVE_LINK_AS_TIMEOUT = 0x805d0020  # From nsURILoader.h
 
 DS_DBUS_SERVICE = 'org.laptop.sugar.DataStore'
 DS_DBUS_INTERFACE = 'org.laptop.sugar.DataStore'
@@ -51,20 +55,8 @@ DS_DBUS_PATH = '/org/laptop/sugar/DataStore'
 _MIN_TIME_UPDATE = 5        # In seconds
 _MIN_PERCENT_UPDATE = 10
 
-_browser = None
-_activity = None
-_temp_path = '/tmp'
-def init(browser, activity_instance, temp_path):
-    global _browser
-    _browser = browser
-
-    global _activity
-    _activity = activity_instance
-    
-    global _temp_path
-    _temp_path = temp_path
-
 _active_downloads = []
+_dest_to_window = {}
 
 def can_quit():
     return len(_active_downloads) == 0
@@ -87,6 +79,7 @@ class HelperAppLauncherDialog:
         dest_file = file_class.createInstance(interfaces.nsILocalFile)
 
         if default_file:
+            default_file = default_file.encode('utf-8', 'replace')
             base_name, extension = os.path.splitext(default_file)
         else:
             base_name = ''
@@ -95,12 +88,17 @@ class HelperAppLauncherDialog:
             else:
                 extension = ''
 
-        if not os.path.exists(_temp_path):
-            os.makedirs(_temp_path)
-        fd, file_path = tempfile.mkstemp(dir=_temp_path, prefix=base_name, suffix=extension)
+        temp_path = os.path.join(activity.get_activity_root(), 'instance')
+        if not os.path.exists(temp_path):
+            os.makedirs(temp_path)
+        fd, file_path = tempfile.mkstemp(dir=temp_path, prefix=base_name, suffix=extension)
         os.close(fd)
         os.chmod(file_path, 0644)
         dest_file.initWithPath(file_path)
+
+        requestor = window_context.queryInterface(interfaces.nsIInterfaceRequestor)
+        dom_window = requestor.getInterface(interfaces.nsIDOMWindow)
+        _dest_to_window[file_path] = dom_window
         
         return dest_file
                             
@@ -131,6 +129,13 @@ class Download:
         self._last_update_time = 0
         self._last_update_percent = 0
         self._stop_alert = None
+
+        dom_window = _dest_to_window[self._target_file.path]
+        del _dest_to_window[self._target_file.path]
+
+        view = hulahop.get_view_for_window(dom_window)
+        print dom_window
+        self._activity = view.get_toplevel()
         
         return NS_OK
 
@@ -146,7 +151,7 @@ class Download:
             alert = TimeoutAlert(9)
             alert.props.title = _('Download started')
             alert.props.msg = _('%s' % self._get_file_name()) 
-            _activity.add_alert(alert)
+            self._activity.add_alert(alert)
             alert.connect('response', self.__start_response_cb)
             alert.show()
             global _active_downloads
@@ -166,7 +171,7 @@ class Download:
             ok_icon = Icon(icon_name='dialog-ok') 
             self._stop_alert.add_button(gtk.RESPONSE_OK, _('Ok'), ok_icon) 
             ok_icon.show()            
-            _activity.add_alert(self._stop_alert) 
+            self._activity.add_alert(self._stop_alert) 
             self._stop_alert.connect('response', self.__stop_response_cb)
             self._stop_alert.show()
 
@@ -198,16 +203,16 @@ class Download:
             if self.dl_jobject is not None:
                 self.cleanup_datastore_write()
             if self._stop_alert is not None:
-                _activity.remove_alert(self._stop_alert)
+                self._activity.remove_alert(self._stop_alert)
 
-        _activity.remove_alert(alert)        
+        self._activity.remove_alert(alert)        
 
     def __stop_response_cb(self, alert, response_id):        
         global _active_downloads 
         if response_id is gtk.RESPONSE_APPLY: 
             logging.debug('Start application with downloaded object') 
             activity.show_object_in_journal(self._object_id) 
-        _activity.remove_alert(alert)
+        self._activity.remove_alert(alert)
             
     def cleanup_datastore_write(self):
         global _active_downloads        
@@ -247,6 +252,7 @@ class Download:
         else:
             path = urlparse.urlparse(self._source.spec).path
             location, file_name = os.path.split(path)
+            file_name = urllib.unquote(file_name.encode('utf-8', 'replace'))
             return file_name
 
     def _create_journal_object(self):
@@ -274,14 +280,99 @@ class Download:
     def __datastore_deleted_cb(self, uid):
         logging.debug('Downloaded entry has been deleted from the datastore: %r'
                       % uid)
+        global _active_downloads
         if self in _active_downloads:
             # TODO: Use NS_BINDING_ABORTED instead of NS_ERROR_FAILURE.
             self.cancelable.cancel(NS_ERROR_FAILURE) #NS_BINDING_ABORTED)
-            global _active_downloads
             _active_downloads.remove(self)
 
 components.registrar.registerFactory('{23c51569-e9a1-4a92-adeb-3723db82ef7c}',
                                      'Sugar Download',
                                      '@mozilla.org/transfer;1',
                                      Factory(Download))
+
+def save_link(url, text, owner_document):
+    # Inspired on Firefox' browser/base/content/nsContextMenu.js:saveLink()
+
+    cls = components.classes["@mozilla.org/network/io-service;1"]
+    io_service = cls.getService(interfaces.nsIIOService)
+    uri = io_service.newURI(url, None, None)
+    channel = io_service.newChannelFromURI(uri)
+
+    auth_prompt_callback = xpcom.server.WrapObject(
+            _AuthPromptCallback(owner_document.defaultView),
+            interfaces.nsIInterfaceRequestor)
+    channel.notificationCallbacks = auth_prompt_callback
+
+    channel.loadFlags = channel.loadFlags | \
+        interfaces.nsIRequest.LOAD_BYPASS_CACHE | \
+        interfaces.nsIChannel.LOAD_CALL_CONTENT_SNIFFERS
+
+    if _implements_interface(channel, interfaces.nsIHttpChannel):
+        channel.referrer = io_service.newURI(owner_document.documentURI, None,
+                                             None)
+
+    # kick off the channel with our proxy object as the listener
+    listener = xpcom.server.WrapObject(
+            _SaveLinkProgressListener(owner_document),
+            interfaces.nsIStreamListener)
+    channel.asyncOpen(listener, None)
+
+def _implements_interface(obj, interface):
+    try:
+        obj.QueryInterface(interface)
+        return True
+    except xpcom.Exception, e:
+        if e.errno == NS_NOINTERFACE:
+            return False
+        else:
+            raise
+
+class _AuthPromptCallback(object):
+    _com_interfaces_ = interfaces.nsIInterfaceRequestor
+
+    def __init__(self, dom_window):
+        self._dom_window = dom_window
+
+    def getInterface(self, uuid):
+        if uuid in [interfaces.nsIAuthPrompt, interfaces.nsIAuthPrompt2]:
+            cls = components.classes["@mozilla.org/embedcomp/window-watcher;1"]
+            window_watcher = cls.getService(interfaces.nsIPromptFactory)
+            return window_watcher.getPrompt(self._dom_window, uuid)
+        return None
+
+class _SaveLinkProgressListener(object):
+    _com_interfaces_ = interfaces.nsIStreamListener
+
+    """ an object to proxy the data through to
+    nsIExternalHelperAppService.doContent, which will wait for the appropriate
+    MIME-type headers and then prompt the user with a file picker
+    """
+
+    def __init__(self, owner_document):
+        self._owner_document = owner_document
+        self._external_listener = None
+
+    def onStartRequest(self, request, context):
+        if request.status != NS_OK:
+            logging.error("Error downloading link")
+            return
+
+        cls = components.classes[
+                "@mozilla.org/uriloader/external-helper-app-service;1"]
+        external_helper = cls.getService(interfaces.nsIExternalHelperAppService)
+
+        channel = request.QueryInterface(interfaces.nsIChannel)
+
+        self._external_listener = \
+            external_helper.doContent(channel.contentType, request, 
+                                      self._owner_document.defaultView, True)
+        self._external_listener.onStartRequest(request, context)
+
+    def onStopRequest(self, request, context, statusCode):
+        self._external_listener.onStopRequest(request, context, statusCode)
+
+    def onDataAvailable(self, request, context, inputStream, offset, count):
+        self._external_listener.onDataAvailable(request, context, inputStream,
+                                                offset, count);
 

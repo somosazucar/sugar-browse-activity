@@ -30,6 +30,8 @@ from sugar.graphics.icon import Icon
 from sugar import profile
 from sugar.activity import activity
 
+import downloadmanager
+
 class ContentInvoker(Invoker):
     _com_interfaces_ = interfaces.nsIDOMEventListener
 
@@ -59,7 +61,8 @@ class ContentInvoker(Invoker):
             else:
                 title = None
 
-            self.palette = LinkPalette(self._browser, title, target.href)
+            self.palette = LinkPalette(self._browser, title, target.href,
+                                       target.ownerDocument)
             self.notify_right_click()
         elif target.tagName.lower() == 'img':
             if target.title:
@@ -71,15 +74,17 @@ class ContentInvoker(Invoker):
             else:
                 title = os.path.basename(urlparse.urlparse(target.src).path)
 
-            self.palette = ImagePalette(title, target.src)
+            self.palette = ImagePalette(title, target.src, target.ownerDocument)
             self.notify_right_click()
 
 class LinkPalette(Palette):
-    def __init__(self, browser, title, url):
+    def __init__(self, browser, title, url, owner_document):
         Palette.__init__(self)
 
-        self._url = url
         self._browser = browser
+        self._title = title
+        self._url = url
+        self._owner_document = owner_document
 
         if title is not None:
             self.props.primary_text = title
@@ -97,6 +102,11 @@ class LinkPalette(Palette):
                     icon_size=gtk.ICON_SIZE_MENU)
         menu_item.set_image(icon)
         menu_item.connect('activate', self.__copy_activate_cb)
+        self.menu.append(menu_item)
+        menu_item.show()
+
+        menu_item = MenuItem(_('Download link'))
+        menu_item.connect('activate', self.__download_activate_cb)
         self.menu.append(menu_item)
         menu_item.show()
 
@@ -130,11 +140,16 @@ class LinkPalette(Palette):
     def __clipboard_clear_func_cb(self, clipboard, data):
         pass
 
+    def __download_activate_cb(self, menu_item):
+        downloadmanager.save_link(self._url, self._title, self._owner_document)
+
 class ImagePalette(Palette):
-    def __init__(self, title, url):
+    def __init__(self, title, url, owner_document):
         Palette.__init__(self)
 
+        self._title = title
         self._url = url
+        self._owner_document = owner_document
 
         self.props.primary_text = title
         self.props.secondary_text = url
@@ -144,6 +159,11 @@ class ImagePalette(Palette):
                     icon_size=gtk.ICON_SIZE_MENU)
         menu_item.set_image(icon)
         menu_item.connect('activate', self.__copy_activate_cb)
+        self.menu.append(menu_item)
+        menu_item.show()
+
+        menu_item = MenuItem(_('Download image'))
+        menu_item.connect('activate', self.__download_activate_cb)
         self.menu.append(menu_item)
         menu_item.show()
 
@@ -178,6 +198,9 @@ class ImagePalette(Palette):
                                            interfaces.nsIWebProgressListener)
         persist.progressListener = listener
         persist.saveURI(uri, None, None, None, None, target_file)
+
+    def __download_activate_cb(self, menu_item):
+        downloadmanager.save_link(self._url, self._title, self._owner_document)
 
 class _ImageProgressListener(object):
     _com_interfaces_ = interfaces.nsIWebProgressListener
