@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-06-14 00:30-0400\n"
-"PO-Revision-Date: 2008-08-28 03:12-0400\n"
+"PO-Revision-Date: 2008-08-26 10:49-0400\n"
 "Last-Translator: abdullah kocabas <abdullah.kocabas@abcdizustu.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 
 #: activity/activity.info:2 webactivity.py:113
 msgid "Browse"
-msgstr "göz atınız."
+msgstr "göz atmak"
 
 #: browser.py:149
 msgid "Source"
@@ -38,7 +38,7 @@ msgstr "indirme tamamlanmıştır."
 
 #: downloadmanager.py:160
 msgid "Show in Journal"
-msgstr "günlükte gösteriniz."
+msgstr "makalede gösteriniz."
 
 #: downloadmanager.py:163
 msgid "Ok"
@@ -54,7 +54,7 @@ msgstr "%s'den %s dosyası"
 msgid ""
 "Downloading %s from \n"
 "%s."
-msgstr "%s %s'ten yüklenmiştir."
+msgstr "%s %s'ten yükleniyor."
 
 #: edittoolbar.py:94
 msgid "Previous"
@@ -74,7 +74,7 @@ msgstr "bağlantıyı takip ediniz."
 
 #: palettes.py:94 palettes.py:142
 msgid "Copy"
-msgstr "kopyalayınız."
+msgstr "kopya"
 
 #: viewtoolbar.py:34
 msgid "Zoom out"
