@@ -12,8 +12,12 @@ sugar-web-activity (100-1) unstable; urgency=low
     (those without ' or later').
   * Update upstream source URL in debian/copyright and watch file.
   * Fix Homepage in long description.
+  * Fix cdbs snippet python-sugar.mk to use --prefix option. Tighten
+    build-dependency to python-sugar-toolkit since that change.
+  * Semi-auto-update debian/control to tighten build-dependencies.
+  * Clean auto-generated MANifEST file.
 
- -- Jonas Smedegaard <dr@jones.dk>  Thu, 13 Nov 2008 11:40:00 +0100
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 13 Nov 2008 16:41:21 +0100
 
 sugar-web-activity (95-1) unstable; urgency=low
 
