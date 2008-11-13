@@ -1,10 +1,19 @@
-sugar-web-activity (99-1) UNRELEASED; urgency=low
+sugar-web-activity (100-1) unstable; urgency=low
 
   * New upstream release.
   * Depend on ${misc:Depends}.
   * Update copyright hints (no new owners or licenses).
+  * Update danish (da) locale.
+  * Fix cdbs snippet python-sugar.mk to install activities below
+    /usr/share/sugar (not /usr/share).
+  * Several minor improvements to local cdbs snippet upstream-
+    tarball.mk.
+  * Update CDBS snippet copyright-check.mk: Compact simple licenses
+    (those without ' or later').
+  * Update upstream source URL in debian/copyright and watch file.
+  * Fix Homepage in long description.
 
- -- Jonas Smedegaard <dr@jones.dk>  Tue, 07 Oct 2008 11:45:03 +0200
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 13 Nov 2008 11:40:00 +0100
 
 sugar-web-activity (95-1) unstable; urgency=low
 
