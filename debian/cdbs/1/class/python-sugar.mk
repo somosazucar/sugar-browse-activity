@@ -30,7 +30,7 @@ include debian/cdbs/1/class/python-vars.mk
 include $(_cdbs_rules_path)/debhelper.mk$(_cdbs_makefile_suffix)
 
 # Declare Build-Deps for packages using this file
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-sugar, python-sugar-toolkit (>= 0.81.4-2~), unzip
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-sugar, python-sugar-toolkit (>= 0.82.5), unzip
 # FIXME: Resolve DEB_PYTHON_PACKAGES in build targets only
 ifeq (,$(cdbs_python_pkg_check)$(DEB_PYTHON_ARCH_PACKAGES))
   ifneq (, $(cdbs_python_compile_version))
@@ -63,7 +63,7 @@ $(patsubst %,build/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: build/%:
 $(patsubst %,install/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: install/%:
 	mkdir -p $(DEB_DESTDIR)usr/share/sugar/activities
 	for pythonver in $(cdbs_python_build_versions); do \
-		/usr/bin/python$$ver $(cdbs_pkgsrcdir)/setup.py install $(DEB_DESTDIR)usr/share/sugar/activities; \
+		/usr/bin/python$$ver $(cdbs_pkgsrcdir)/setup.py install --prefix="$(DEB_DESTDIR)/usr"; \
 	done
 
 $(patsubst %,binary-install/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: binary-install/%:
