@@ -1,3 +1,3 @@
 # run the "uscan" command to check for upstream updates and more.
 version=3
-http://dev.laptop.org/pub/sugar/sources/web-activity/Browse-(.*)\.tar\.bz2
+http://dev.laptop.org/pub/sugar/sources/Browse/Browse-(.*)\.tar\.bz2

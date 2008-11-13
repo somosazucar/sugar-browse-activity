@@ -16,9 +16,9 @@ include /usr/share/cdbs/1/rules/patchsys-quilt.mk
 include debian/cdbs/1/rules/buildinfo.mk
 
 DEB_UPSTREAM_PACKAGE = Browse
-DEB_UPSTREAM_URL = http://dev.laptop.org/pub/sugar/sources/web-activity
+DEB_UPSTREAM_URL = http://dev.laptop.org/pub/sugar/sources/$(DEB_UPSTREAM_PACKAGE)
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
-DEB_UPSTREAM_TARBALL_MD5 = be7ce52ae750f24a1e374f9c7f14fade
+DEB_UPSTREAM_TARBALL_MD5 = 7a3b445e4a3eaaf020b6dd30843a9174
 
 # Resolve, cleanup and apply CDBS-declared dependencies
 include debian/cdbs/1/rules/package-relations.mk
