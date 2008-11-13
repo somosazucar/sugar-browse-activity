@@ -61,9 +61,9 @@ $(patsubst %,build/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: build/%:
 	done
 
 $(patsubst %,install/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: install/%:
-	mkdir -p $(DEB_DESTDIR)usr/share/activities
+	mkdir -p $(DEB_DESTDIR)usr/share/sugar/activities
 	for pythonver in $(cdbs_python_build_versions); do \
-		/usr/bin/python$$ver $(cdbs_pkgsrcdir)/setup.py install $(DEB_DESTDIR)usr/share/activities; \
+		/usr/bin/python$$ver $(cdbs_pkgsrcdir)/setup.py install $(DEB_DESTDIR)usr/share/sugar/activities; \
 	done
 
 $(patsubst %,binary-install/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: binary-install/%:
