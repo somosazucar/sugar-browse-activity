@@ -1,7 +1,7 @@
 diff --git a/po/da.po b/po/da.po
 --- /dev/null
 +++ b/po/da.po
-@@ -0,0 +1,141 @@
+@@ -0,0 +1,143 @@
 +# This is danish localisation for Sugar Web activity.
 +# Copyright (C) 2008 Jonas Smedegaard <dr@jones.dk>
 +# This file is distributed under the same license as the Sugar Web activity package.
@@ -12,7 +12,7 @@ diff --git a/po/da.po b/po/da.po
 +"Project-Id-Version: Sugar Web activity 99\n"
 +"Report-Msgid-Bugs-To: \n"
 +"POT-Creation-Date: 2008-10-20 13:36+0200\n"
-+"PO-Revision-Date: 2008-10-20 13:47+0200\n"
++"PO-Revision-Date: 2008-11-13 11:20+0200\n"
 +"Last-Translator: Jonas Smedegaard <dr@jones.dk>\n"
 +"Language-Team: None\n"
 +"MIME-Version: 1.0\n"
@@ -41,7 +41,7 @@ diff --git a/po/da.po b/po/da.po
 +
 +#: downloadmanager.py:147
 +msgid "Download started"
-+msgstr "Nedlastning påbegyndt"
++msgstr "Nedhentning startet"
 +
 +#: downloadmanager.py:148 downloadmanager.py:161
 +#, python-format
@@ -50,7 +50,7 @@ diff --git a/po/da.po b/po/da.po
 +
 +#: downloadmanager.py:160
 +msgid "Download completed"
-+msgstr "Nedlastning færdig"
++msgstr "Nedhentning færdig"
 +
 +#: downloadmanager.py:164
 +msgid "Show in Journal"
@@ -70,7 +70,9 @@ diff --git a/po/da.po b/po/da.po
 +msgid ""
 +"Downloading %s from \n"
 +"%s."
-+msgstr "Nedlastning %s fra \n"
++msgstr ""
++"Nedhentning %s fra \n"
++"%s."
 +
 +#: webtoolbar.py:233
 +msgid "Back"
@@ -102,15 +104,15 @@ diff --git a/po/da.po b/po/da.po
 +
 +#: webactivity.py:141 webactivity.py:142
 +msgid "blank"
-+msgstr "blank"
++msgstr "tom"
 +
 +#: webactivity.py:464
 +msgid "Download in progress"
-+msgstr "Nedlastning er igang"
++msgstr "Nedhentning er igang"
 +
 +#: webactivity.py:465
 +msgid "Stopping now will cancel your download"
-+msgstr "Stoppes nu vil din nedlastning blive afbrudt"
++msgstr "Hvis du stopper nu vil din nedhentning blive afbrudt"
 +
 +#: webactivity.py:467
 +msgid "Cancel"
@@ -130,11 +132,11 @@ diff --git a/po/da.po b/po/da.po
 +
 +#: viewtoolbar.py:87
 +msgid "Show Tray"
-+msgstr "Vis bakke"
++msgstr "Vis skuffe"
 +
 +#: viewtoolbar.py:91
 +msgid "Hide Tray"
-+msgstr "Skjul bakke"
++msgstr "Skjul skuffe"
 +
 +#: palettes.py:90
 +msgid "Follow link"
