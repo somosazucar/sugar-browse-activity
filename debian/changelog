@@ -1,6 +1,14 @@
 sugar-web-activity (101-1) unstable; urgency=low
 
+  [ Luke Faraone ]
+  * Fix activity install path.
+
+  [ Jonas Smedegaard ]
   * New upstream release.
+  * Update local CDBS snippets:
+    + python-sugar.mk: Install into right path. Closes: bug#507330.
+    + python-sugar.mk: Install as non-localized activity name.
+    + python-sugar.mk: Dynamically update locale entries in MANIFEST.
 
  -- Jonas Smedegaard <dr@jones.dk>  Thu, 04 Dec 2008 04:40:32 +0100
 

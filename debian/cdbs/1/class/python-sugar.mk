@@ -56,14 +56,19 @@ pre-build::
 	mkdir -p debian/stamps-configure
 
 $(patsubst %,build/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: build/%:
+	[ ! -e $(cdbs_pkgsrcdir)/MANIFEST ] || [ -e $(cdbs_pkgsrcdir)/MANIFEST.upstream ] || mv $(cdbs_pkgsrcdir)/MANIFEST $(cdbs_pkgsrcdir)/MANIFEST.upstream
+	[ ! -e $(cdbs_pkgsrcdir)/MANIFEST.upstream ] || egrep -v '^locale/.*/(.*\.mo|activity\.linfo)$$' $(cdbs_pkgsrcdir)/MANIFEST.upstream > $(cdbs_pkgsrcdir)/MANIFEST
 	for pythonver in $(cdbs_python_build_versions); do \
-		/usr/bin/python$$ver $(cdbs_pkgsrcdir)/setup.py dist_xo; \
+		/usr/bin/python$$ver $(cdbs_pkgsrcdir)/setup.py build; \
+	done
+	[ ! -e $(cdbs_pkgsrcdir)/MANIFEST.upstream ] || IFS="`printf '\n'`" find "$(cdbs_pkgsrcdir)/locale" -type f \( -name '*.mo' -or -name 'activity.linfo' \) | while read path; do \
+		echo "$$path" | sed 's!^$(cdbs_pkgsrcdir)/!!' >> $(cdbs_pkgsrcdir)/MANIFEST; \
 	done
 
 $(patsubst %,install/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: install/%:
 	mkdir -p $(DEB_DESTDIR)usr/share/sugar/activities
 	for pythonver in $(cdbs_python_build_versions); do \
-		/usr/bin/python$$ver $(cdbs_pkgsrcdir)/setup.py install --prefix="$(DEB_DESTDIR)/usr"; \
+		LANG=C /usr/bin/python$$ver $(cdbs_pkgsrcdir)/setup.py install --prefix="$(DEB_DESTDIR)/usr"; \
 	done
 
 $(patsubst %,binary-install/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: binary-install/%:
@@ -73,14 +78,16 @@ else
 	dh_pycentral -p$(cdbs_curpkg)
 endif
 
+reverse-config:: $(patsubst %,cleanpythonsugar-reverse-config/%,$(DEB_PYTHON_SUGAR_PACKAGES))
+$(patsubst %,cleanpythonsugar-reverse-config/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: cleanpythonsugar-reverse-config/% : 
+	[ ! -e $(cdbs_pkgsrcdir)/MANIFEST.upstream ] || mv -f $(cdbs_pkgsrcdir)/MANIFEST.upstream $(cdbs_pkgsrcdir)/MANIFEST
+
 clean:: $(patsubst %,cleanpythonsugar/%,$(DEB_PYTHON_SUGAR_PACKAGES))
 ifeq (, $(cdbs_selected_pycompat))
 	echo "$(cdbs_pycompat)" >debian/pycompat
 endif # use pycompat
 
 $(patsubst %,cleanpythonsugar/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: cleanpythonsugar/% : 
-	-find "$(cdbs_pkgsrcdir)/dist" -maxdepth 1 -type f -name '*.xo' -exec rm -f '{}' ';'
-	-rmdir --ignore-fail-on-non-empty "$(cdbs_pkgsrcdir)/dist"
 	-IFS="`printf '\n'`" find "$(cdbs_pkgsrcdir)/locale" -type f \( -name '*.mo' -or -name 'activity.linfo' \) | while read path; do \
 		rm -f "$$path"; \
 		rmdir --ignore-fail-on-non-empty "`dirname "$$path"`"; \
