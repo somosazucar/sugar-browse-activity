@@ -7,7 +7,7 @@ Build-Depends: cdbs (>= 0.4.39), debhelper (>= 5.0.44), python-sugar, python-sug
 Standards-Version: 3.7.3
 Vcs-Git: git://git.debian.org/git/collab-maint/sugar-web-activity.git
 Vcs-Browser: http://git.debian.org/?p=collab-maint/sugar-web-activity.git;a=summary
-Homepage: http://wiki.laptop.org/go/Browse
+Homepage: http://sugarlabs.org/go/Activities#Browse
 XS-Python-Version: all
 
 Package: sugar-web-activity
