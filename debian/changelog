@@ -1,8 +1,18 @@
 sugar-web-activity (102-1) unstable; urgency=low
 
   * New upstream release.
+  * Update CDBS snippets:
+    + Simplify internal variables
+    + Ignore no files by default in copyright-check.mk
+    + Correct and update copyright hints of the snippets themselves
+  * Update debian/copyright and copyright hints:
+    + Add info on CDBS snippets (new owners, no new licenses)
+    + Bump to version 413 of new format (no structural changes)
+    + Add Simon Schampijer as upstream maintainer.
+    + Refer to LGPL as "GNU Library..." (not Lesser).
+    + Refer to "Debian GNU systems" (not only GNU/Linux).
 
- -- Jonas Smedegaard <dr@jones.dk>  Fri, 19 Dec 2008 12:50:09 +0100
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 19 Dec 2008 13:26:03 +0100
 
 sugar-web-activity (101-1) unstable; urgency=low
 
