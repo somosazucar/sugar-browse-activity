@@ -21,8 +21,8 @@ _cdbs_scripts_path ?= /usr/lib/cdbs
 _cdbs_rules_path ?= /usr/share/cdbs/1/rules
 _cdbs_class_path ?= /usr/share/cdbs/1/class
 
-ifndef _cdbs_rules_upstream_tarball
-_cdbs_rules_upstream_tarball := 1
+ifndef _cdbs_rules_upstream-tarball
+_cdbs_rules_upstream-tarball := 1
 
 include $(_cdbs_rules_path)/buildvars.mk$(_cdbs_makefile_suffix)
 

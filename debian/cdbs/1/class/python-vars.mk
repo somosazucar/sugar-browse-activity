@@ -1,6 +1,5 @@
 # -*- mode: makefile; coding: utf-8 -*-
-# Copyright © 2008 Jonas Smedegaard <dr@jones.dk>
-# Copyright © 2008 Jonas Smedegaard <dr@jones.dk>
+# Copyright © 2003,2008 Jonas Smedegaard <dr@jones.dk>
 # Description: Defines useful variables for Python packages
 #
 # This program is free software; you can redistribute it and/or
@@ -24,8 +23,8 @@ _cdbs_scripts_path ?= /usr/lib/cdbs
 _cdbs_rules_path ?= /usr/share/cdbs/1/rules
 _cdbs_class_path ?= /usr/share/cdbs/1/class
 
-ifndef _cdbs_class_python_vars
-_cdbs_class_python_vars = 1
+ifndef _cdbs_class_python-vars
+_cdbs_class_python-vars = 1
 
 include $(_cdbs_rules_path)/buildvars.mk$(_cdbs_makefile_suffix)
 

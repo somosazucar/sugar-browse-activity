@@ -33,7 +33,8 @@ CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), devscripts (>= 2.10.7)
 
 # Single regular expression for files to include or ignore
 DEB_COPYRIGHT_CHECK_REGEX = .*
-DEB_COPYRIGHT_CHECK_IGNORE_REGEX = ^(debian/.*|(.*/)?config\.(guess|sub|rpath)(\..*)?)$
+#DEB_COPYRIGHT_CHECK_IGNORE_REGEX = ^(debian/.*|(.*/)?config\.(guess|sub|rpath)(\..*)?)$
+DEB_COPYRIGHT_CHECK_IGNORE_REGEX = ^debian/(changelog|copyright(|_hints|_newhints))$
 
 pre-build:: debian/stamp-copyright-check
 

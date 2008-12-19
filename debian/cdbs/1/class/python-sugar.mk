@@ -22,8 +22,8 @@ _cdbs_scripts_path ?= /usr/lib/cdbs
 _cdbs_rules_path ?= /usr/share/cdbs/1/rules
 _cdbs_class_path ?= /usr/share/cdbs/1/class
 
-ifndef _cdbs_class_python_sugar
-_cdbs_class_python_sugar = 1
+ifndef _cdbs_class_python-sugar
+_cdbs_class_python-sugar = 1
 
 #include $(_cdbs_class_path)/python-vars.mk$(_cdbs_makefile_suffix)
 include debian/cdbs/1/class/python-vars.mk
