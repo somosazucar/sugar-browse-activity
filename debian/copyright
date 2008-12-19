@@ -2,7 +2,7 @@ Format-Specification: http://wiki.debian.org/Proposals/CopyrightFormat?action=re
 Upstream-Name: Browse
 Upstream-Maintainer: Simon Schampijer <simon@schampijer.de>
 Upstream-Source: http://download.sugarlabs.org/sources/sucrose/Browse/
- git://git.sugarlabs.org/browse/mainline
+	git://git.sugarlabs.org/browse/mainline
 
 Files: *
 Copyright: © 2007 One Laptop Per Child
@@ -42,11 +42,6 @@ Files: debian/*
 Copyright: © 2008 Jonas Smedegaard <dr@jones.dk>
 License: GPL-2+
  The Debian packaging information is under the GPL, version 2 or later.
-
-Files: debian/cdbs/1/class/python-sugar.mk
-	debian/cdbs/1/rules/package-relations.mk
-Copyright: 2008, Jonas Smedegaard <dr@jones.dk>
-License: GPL-2+
 
 Files: debian/cdbs/1/class/python-vars.mk
 Copyright: 2003,2008, Jonas Smedegaard <dr@jones.dk>
