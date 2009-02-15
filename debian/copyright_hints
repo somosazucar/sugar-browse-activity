@@ -7,19 +7,25 @@ Files: po/Web.pot
 	po/ar.po
 	po/ay.po
 	po/bg.po
+	po/bi.po
 	po/bn.po
 	po/bn_IN.po
 	po/ca.po
+	po/cs.po
 	po/dz.po
 	po/el.po
 	po/en.po
+	po/en_US.po
 	po/fa.po
 	po/fa_AF.po
 	po/ff.po
+	po/fi.po
 	po/gu.po
 	po/ha.po
+	po/he.po
 	po/hi.po
 	po/ht.po
+	po/hu.po
 	po/ig.po
 	po/is.po
 	po/it.po
@@ -47,13 +53,17 @@ Files: po/Web.pot
 	po/rw.po
 	po/sd.po
 	po/si.po
+	po/sk.po
 	po/sl.po
+	po/sv.po
+	po/sw.po
 	po/te.po
 	po/th.po
 	po/tpi.po
 	po/tr.po
 	po/ur.po
 	po/vi.po
+	po/wa.po
 	po/yo.po
 Copyright: YEAR THE PACKAGE'S HOLDER
 License: UNKNOWN
