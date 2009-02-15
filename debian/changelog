@@ -1,8 +1,10 @@
-sugar-web-activity (103~git20090120-1) UNRELEASED; urgency=low
+sugar-web-activity (103~git20090120-1) unstable; urgency=low
 
   * New upstream (Git-based pre-)release.
+  * Build-depend on python-cjson (and not python-simplejson).
+  * Update copyright hints (no new licenses or authors.
 
- -- Jonas Smedegaard <dr@jones.dk>  Tue, 20 Jan 2009 03:05:01 +0100
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 15 Feb 2009 18:56:59 +0100
 
 sugar-web-activity (102-1) unstable; urgency=low
 
