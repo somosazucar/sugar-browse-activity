@@ -1,63 +1,27 @@
-Format-Specification: http://wiki.debian.org/Proposals/CopyrightFormat?action=recall&rev=420
+Format-Specification: http://wiki.debian.org/Proposals/CopyrightFormat?action=recall&rev=440
 Upstream-Name: Browse
 Upstream-Maintainer: Simon Schampijer <simon@schampijer.de>
 Upstream-Source: http://download.sugarlabs.org/sources/sucrose/fructose/Browse/
 	git://git.sugarlabs.org/browse/mainline
 
 Files: *
-Copyright: © 2007 One Laptop Per Child
-License: GPL-2+
-
-Files: browser.py
-	progresslistener.py
-	webtoolbar.py
-Copyright: 2007, One Laptop Per Child
-	2006, Red Hat, Inc
-License: GPL-2+
-
-Files: setup.py
-	webactivity.py
-Copyright: 2006, Red Hat, Inc
-License: GPL-2+
-
-Files: edittoolbar.py
-	palettes.py
-Copyright: 2008, One Laptop Per Child
-License: GPL-2+
-
-Files: globalhistory.py
-	places.py
-Copyright: 2008, Red Hat, Inc
-License: GPL-2+
-
-Files: model.py
-Copyright: 2006-2007, One Laptop Per Child
+Copyright: © 2006-2008 One Laptop Per Child
+	2006, 2008, Red Hat, Inc
 License: GPL-2+
 
 Files: linkbutton.py
 Copyright: 2007, One Laptop Per Child
 License: LGPL-2+
 
+Files: webactivity.py
+Copyright: 2009, Martin Langhoff, Simon Schampijer, Daniel Drake
+	2006, Red Hat, Inc
+License: GPL-2+
+
 Files: debian/*
-Copyright: © 2008 Jonas Smedegaard <dr@jones.dk>
+Copyright: © 2003-2009 Jonas Smedegaard <dr@jones.dk>
 License: GPL-2+
  The Debian packaging information is under the GPL, version 2 or later.
-
-Files: debian/cdbs/1/class/python-vars.mk
-Copyright: 2003,2008, Jonas Smedegaard <dr@jones.dk>
-License: GPL-2+
-
-Files: debian/cdbs/1/rules/buildinfo.mk
-Copyright: 2004-2007, Jonas Smedegaard <dr@jones.dk>
-License: GPL-2+
-
-Files: debian/cdbs/1/rules/upstream-tarball.mk
-Copyright: 2007-2008, Jonas Smedegaard <dr@jones.dk>
-License: GPL-2+
-
-Files: debian/cdbs/1/rules/copyright-check.mk
-Copyright: 2005-2008, Jonas Smedegaard <dr@jones.dk>
-License: GPL-2+
 
 License: GPL-2+
  On Debian GNU systems, the complete text of GNU General Public License

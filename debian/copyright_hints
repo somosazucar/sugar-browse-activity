@@ -11,6 +11,7 @@ Files: po/Web.pot
 	po/bn.po
 	po/bn_IN.po
 	po/ca.po
+	po/cpp.po
 	po/cs.po
 	po/dz.po
 	po/el.po
@@ -32,10 +33,12 @@ Files: po/Web.pot
 	po/ja.po
 	po/km.po
 	po/ko.po
+	po/mi.po
 	po/mk.po
 	po/ml.po
 	po/mn.po
 	po/mr.po
+	po/ms.po
 	po/mvo.po
 	po/nb.po
 	po/ne.po
@@ -61,6 +64,7 @@ Files: po/Web.pot
 	po/th.po
 	po/tpi.po
 	po/tr.po
+	po/ug.po
 	po/ur.po
 	po/vi.po
 	po/wa.po
@@ -80,6 +84,7 @@ Files: AUTHORS
 	debian/compat
 	debian/control
 	debian/control.in
+	debian/patches/1002_fix_sqlite3_on_python24.patch
 	debian/patches/README
 	debian/patches/series
 	debian/pycompat
@@ -115,11 +120,6 @@ Files: debian/cdbs/1/class/python-sugar.mk
 Copyright: 2008, Jonas Smedegaard <dr@jones.dk>
 License: GPL
 
-Files: setup.py
-	webactivity.py
-Copyright: 2006, Red Hat, Inc
-License: GPL-2+
-
 Files: edittoolbar.py
 	palettes.py
 Copyright: 2008, One Laptop Per Child
@@ -133,11 +133,6 @@ License: GPL-2+
 Files: po/es.po
 	po/pt.po
 Copyright: 2007, THE PACKAGE'S HOLDER
-License: UNKNOWN
-
-Files: debian/patches/1001_danish_l10n.patch
-	debian/rules
-Copyright: 2008, Jonas Smedegaard <dr@jones.dk>
 License: UNKNOWN
 
 Files: debian/cdbs/1/class/python-vars.mk
@@ -156,8 +151,17 @@ Files: debian/cdbs/1/rules/copyright-check.mk
 Copyright: \s*(\S.*?)\s*\
 License: GPL
 
+Files: setup.py
+Copyright: 2006, Red Hat, Inc
+License: GPL-2+
+
 Files: model.py
 Copyright: 2006-2007, One Laptop Per Child
+License: GPL-2+
+
+Files: webactivity.py
+Copyright: 2009, Martin Langhoff, Simon Schampijer, Daniel Drake
+	2006, Red Hat, Inc
 License: GPL-2+
 
 Files: linkbutton.py
@@ -171,5 +175,13 @@ License: UNKNOWN
 
 Files: po/fr.po
 Copyright: 2007, The package's holder
+License: UNKNOWN
+
+Files: debian/patches/1001_danish_l10n.patch
+Copyright: 2008, Jonas Smedegaard <dr@jones.dk>
+License: UNKNOWN
+
+Files: debian/rules
+Copyright: 2008-2009, Jonas Smedegaard <dr@jones.dk>
 License: UNKNOWN
 
