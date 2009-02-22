@@ -1,7 +1,7 @@
 Format-Specification: http://wiki.debian.org/Proposals/CopyrightFormat?action=recall&rev=420
 Upstream-Name: Browse
 Upstream-Maintainer: Simon Schampijer <simon@schampijer.de>
-Upstream-Source: http://download.sugarlabs.org/sources/sucrose/Browse/
+Upstream-Source: http://download.sugarlabs.org/sources/sucrose/fructose/Browse/
 	git://git.sugarlabs.org/browse/mainline
 
 Files: *
