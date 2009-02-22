@@ -12,7 +12,7 @@ XS-Python-Version: all
 
 Package: sugar-web-activity
 Architecture: all
-Depends: ${shlibs:Depends}, ${python:Depends}, ${misc:Depends}, python-gobject, python-gtk2, python-dbus, python-gnome2-desktop (>= 2.16), python-cjson, python-xpcom, python-hulahop, python-olpc-datastore, python-sugar, python-sugar-toolkit
+Depends: ${shlibs:Depends}, ${python:Depends}, ${misc:Depends}, python-gobject, python-gtk2, python-dbus, python-gnome2-desktop (>= 2.16), python-cjson, python (>= 2.5) || python-pysqlite2, python-xpcom, python-hulahop, python-olpc-datastore, python-sugar, python-sugar-toolkit
 Recommends: sugar, sugar-artwork
 Provides: ${python:Provides}
 XB-Python-Version: ${python:Versions}
