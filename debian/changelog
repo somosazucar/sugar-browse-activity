@@ -1,8 +1,16 @@
 sugar-web-activity (104-1) UNRELEASED; urgency=low
 
   * New upstream release.
+  * Update upstream source URL (moved to subdir fructose).
+  * Add patch 1002 to support importing sqlite3 on Python 2.4, and
+    build-depend (as fallback for recent Python) on python-pysqlite2.
+  * Update debian/copyright:
+    + Add author (no new licenses)
+    + Bump licensing years of both upstream source and debian packaging
+    + Update syntax to proposal v440 (no changes needed)
+    + Merge entries with same authors and copyrights
 
- -- Jonas Smedegaard <dr@jones.dk>  Sun, 22 Feb 2009 23:54:59 +0100
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 23 Feb 2009 01:10:57 +0100
 
 sugar-web-activity (103~git20090120-1) unstable; urgency=low
 
