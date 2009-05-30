@@ -31,6 +31,10 @@ import sqlite3
 import cjson
 import gconf
 
+# HACK: Needed by http://dev.sugarlabs.org/ticket/456
+import gnome
+gnome.init('Hulahop', '1.0')
+
 from sugar.activity import activity
 from sugar.graphics import style
 import telepathy
@@ -153,6 +157,8 @@ from edittoolbar import EditToolbar
 from webtoolbar import WebToolbar
 from viewtoolbar import ViewToolbar
 import downloadmanager
+import globalhistory
+import filepicker
 
 _LIBRARY_PATH = '/usr/share/library-common/index.html'
 
@@ -180,6 +186,12 @@ class WebActivity(activity.Activity):
 
         _set_accept_languages()
         _seed_xs_cookie()
+        
+        # don't pick up the sugar theme - use the native mozilla one instead
+        cls = components.classes['@mozilla.org/preferences-service;1']
+        pref_service = cls.getService(components.interfaces.nsIPrefService)
+        branch = pref_service.getBranch("mozilla.widget.")
+        branch.setBoolPref("disable-native-theme", True)
 
         toolbox = activity.ActivityToolbox(self)
 
@@ -355,7 +367,9 @@ class WebActivity(activity.Activity):
         if os.path.isfile(_LIBRARY_PATH):
             self._browser.load_uri('file://' + _LIBRARY_PATH)
         else:
-            self._browser.load_uri('about:blank')
+            default_page = os.path.join(activity.get_bundle_path(), 
+                                        "data/index.html")
+            self._browser.load_uri(default_page)
 
     def _session_history_changed_cb(self, session_history, link):
         _logger.debug('NewPage: %s.' %link)
