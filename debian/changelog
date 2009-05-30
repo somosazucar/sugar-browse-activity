@@ -1,4 +1,4 @@
-sugar-web-activity (104-1) UNRELEASED; urgency=low
+sugar-web-activity (108-1) UNRELEASED; urgency=low
 
   * New upstream release.
   * Update upstream source URL (moved to subdir fructose).
