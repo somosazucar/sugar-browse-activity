@@ -16,7 +16,7 @@ include debian/cdbs/1/rules/buildinfo.mk
 
 # Comment out when all current branches are supported
 # FIXME: really make this plural - only a single branch handled for now
-#pkgbranches = 0.84
+pkgbranches = 0.84
 
 DEB_UPSTREAM_PACKAGE = Browse
 DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/fructose/$(DEB_UPSTREAM_PACKAGE)
