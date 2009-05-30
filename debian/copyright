@@ -1,11 +1,12 @@
-Format-Specification: http://wiki.debian.org/Proposals/CopyrightFormat?action=recall&rev=440
-Upstream-Name: Browse
-Upstream-Maintainer: Simon Schampijer <simon@schampijer.de>
+Format-Specification: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=48
+Name: Browse
+Maintainer: Sugarlabs <sugar-devel@lists.sugarlabs.org>
+	http://lists.sugarlabs.org/listinfo/sugar-devel
+	irc://irc.freenode.net/sugar
 Upstream-Source: http://download.sugarlabs.org/sources/sucrose/fructose/Browse/
 	git://git.sugarlabs.org/browse/mainline
 
-Files: *
-Copyright: © 2006-2008 One Laptop Per Child
+Copyright: 2006-2008, One Laptop Per Child
 	2006, 2008, Red Hat, Inc
 License: GPL-2+
 
@@ -14,12 +15,14 @@ Copyright: 2007, One Laptop Per Child
 License: LGPL-2+
 
 Files: webactivity.py
-Copyright: 2009, Martin Langhoff, Simon Schampijer, Daniel Drake
-	2006, Red Hat, Inc
+Copyright: 2006, Red Hat, Inc
+	2009, Martin Langhoff
+	2009, Simon Schampijer
+	2009, Daniel Drake
 License: GPL-2+
 
 Files: debian/*
-Copyright: © 2003-2009 Jonas Smedegaard <dr@jones.dk>
+Copyright: 2003-2009, Jonas Smedegaard <dr@jones.dk>
 License: GPL-2+
  The Debian packaging information is under the GPL, version 2 or later.
 
@@ -28,6 +31,6 @@ License: GPL-2+
  (GPL) version 2 can be found at /usr/share/common-licenses/GPL-2.
 
 License: LGPL-2+
- On Debian GNU systems, the complete text of GNU Library General Public
- License (LGPL) version 2 can be found at
+ On Debian GNU systems, the complete text of the GNU Library General
+ Public License (LGPL) version 2 can be found at
  /usr/share/common-licenses/LGPL-2.
