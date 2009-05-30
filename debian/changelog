@@ -4,11 +4,20 @@ sugar-web-activity (104-1) UNRELEASED; urgency=low
   * Update upstream source URL (moved to subdir fructose).
   * Add patch 1002 to support importing sqlite3 on Python 2.4, and
     build-depend (as fallback for recent Python) on python-pysqlite2.
+  * Add README.source (and drop CDBS hints and README.packaging).
+  * Update CDBS snippets:
+    + Minor updates to copyright-check.mk and upstream-tarball.mk
+    + Enhance package-relations.mk to support all binary package
+      relations (except -indep ones)
+    + Extend package-relation.mk to handle debhelper 6 and 7.0.1
+  * Add git-buildpackage configfile, enabling signed tags and use of
+    pristine-tar.
   * Update debian/copyright:
+    + Rewrite to use DEP5 r48 proposed machine-readable format
     + Add author (no new licenses)
     + Bump licensing years of both upstream source and debian packaging
-    + Update syntax to proposal v440 (no changes needed)
     + Merge entries with same authors and copyrights
+  * Handle binary (not only source) dependencies in rules file.
 
  -- Jonas Smedegaard <dr@jones.dk>  Mon, 23 Feb 2009 01:10:57 +0100
 

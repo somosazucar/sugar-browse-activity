@@ -79,11 +79,11 @@ Files: AUTHORS
 	browser.dtd
 	cert8.db
 	clickToView.xml
-	debian/README.cdbs-tweaks
-	debian/README.packaging
+	debian/README.source
 	debian/compat
 	debian/control
 	debian/control.in
+	debian/gbp.conf
 	debian/patches/1002_fix_sqlite3_on_python24.patch
 	debian/patches/README
 	debian/patches/series
