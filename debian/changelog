@@ -1,9 +1,7 @@
-sugar-web-activity (108-1) UNRELEASED; urgency=low
+sugar-web-activity (108-1) unstable; urgency=low
 
   * New upstream release.
   * Update upstream source URL (moved to subdir fructose).
-  * Add patch 1002 to support importing sqlite3 on Python 2.4, and
-    build-depend (as fallback for recent Python) on python-pysqlite2.
   * Add README.source (and drop CDBS hints and README.packaging).
   * Update CDBS snippets:
     + Minor updates to copyright-check.mk and upstream-tarball.mk
@@ -12,14 +10,21 @@ sugar-web-activity (108-1) UNRELEASED; urgency=low
     + Extend package-relation.mk to handle debhelper 6 and 7.0.1
   * Add git-buildpackage configfile, enabling signed tags and use of
     pristine-tar.
-  * Update debian/copyright:
+  * Update copyright info:
     + Rewrite to use DEP5 r48 proposed machine-readable format
     + Add author (no new licenses)
+    + Add verbatim license texts
     + Bump licensing years of both upstream source and debian packaging
     + Merge entries with same authors and copyrights
+    + Add proper licensing header to debian/rules
   * Handle binary (not only source) dependencies in rules file.
+  * Limit Sugar-related dependencies to current branch (0.84).
+  * Limit Python support til 2.5 and newer (sqlite3 problem on 2.4).
+  * Add patch 1002 reverting upstream xulrunner workaround expected to
+    not apply here.
+  * Bump policy compliance to Standards-Version 3.8.1.
 
- -- Jonas Smedegaard <dr@jones.dk>  Mon, 23 Feb 2009 01:10:57 +0100
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 31 May 2009 17:03:37 +0200
 
 sugar-web-activity (103~git20090120-1) unstable; urgency=low
 

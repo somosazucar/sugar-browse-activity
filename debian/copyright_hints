@@ -79,12 +79,24 @@ Files: AUTHORS
 	browser.dtd
 	cert8.db
 	clickToView.xml
+	data/favicon_01.png
+	data/index.html
+	data/logo_white_01.png
+	data/logo_white_02.png
+	data/logo_white_03.png
+	data/logo_white_04.png
+	data/logo_white_06.png
+	data/logo_white_08.png
+	data/logo_white_09.png
+	data/logo_white_10.png
+	data/logo_white_11.png
+	data/logo_white_12.png
 	debian/README.source
 	debian/compat
 	debian/control
 	debian/control.in
 	debian/gbp.conf
-	debian/patches/1002_fix_sqlite3_on_python24.patch
+	debian/patches/1002_revert_gnome_hack.patch
 	debian/patches/README
 	debian/patches/series
 	debian/pycompat
@@ -147,6 +159,10 @@ Files: debian/cdbs/1/rules/upstream-tarball.mk
 Copyright: 2007-2008, Jonas Smedegaard <dr@jones.dk>
 License: GPL
 
+Files: debian/rules
+Copyright: 2008-2009, Jonas Smedegaard <dr@jones.dk>
+License: GPL
+
 Files: debian/cdbs/1/rules/copyright-check.mk
 Copyright: \s*(\S.*?)\s*\
 License: GPL
@@ -181,7 +197,11 @@ Files: debian/patches/1001_danish_l10n.patch
 Copyright: 2008, Jonas Smedegaard <dr@jones.dk>
 License: UNKNOWN
 
-Files: debian/rules
-Copyright: 2008-2009, Jonas Smedegaard <dr@jones.dk>
+Files: data/logo_white_05.png
+Copyright: ?{:?L|Shj=Qmk/0VWMK.nj.Au\Z)Qc~a;~BYohR9uU6+n12^X}EvM<AfOYjSTw46EZ*_ 8pktSg&D.MFd(hpS{
+License: UNKNOWN
+
+Files: data/logo_white_07.png
+Copyright: d^{?cpsNy^~>)zI'!2>{,8_qP=q0-=W|`'54.KeBhW/~y|Ul*8 %{XJ|uCnp1utx^_nk_k}BaYzE)Ud9zL(7Wl7,;gxgw^mYp^df/>dK&0 #{Vb~4pE1e&8S5{v#5a.^~f"ipb{Ke8tiNlDUM{NY@97lU{h(^| U{+VMO*OsgEvgu3>e6Gk.~?g3W |{Z:^%Qz5?=ZevXtr8"qY-yn&UxcU?73#~t/J%&ab2}Z$kk3W~-i?Mk25w3wO$Kq7aoh%~m20Txh^K}}lw24dDA`w
 License: UNKNOWN
 
