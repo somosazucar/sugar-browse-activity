@@ -1,3 +1,9 @@
+sugar-web-activity (108-2) unstable; urgency=low
+
+  * Fix depend on python-carquinyol (not python-olpc-datastore.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 31 May 2009 17:12:26 +0200
+
 sugar-web-activity (108-1) unstable; urgency=low
 
   * New upstream release.
