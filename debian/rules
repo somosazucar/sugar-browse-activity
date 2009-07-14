@@ -40,8 +40,10 @@ DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
 DEB_UPSTREAM_TARBALL_MD5 = 148b5bfbe7f51749b51515a6009ded28
 
 # Needed (always/seldom) at runtime
+#  python-rsvg fallbacks unneeded since python-rsvg 2.24.0-2: can be dropped after Squeeze+1
 CDBS_DEPENDS = python-sugar$(pkgbranches:%=-%), python-sugar-toolkit$(pkgbranches:%=-%), python-carquinyol$(pkgbranches:%=-%)
-CDBS_DEPENDS += , python-gobject, python-gtk2, python-dbus, python-gnome2-desktop (>= 2.16), python-cjson, python-xpcom, python-hulahop
+CDBS_DEPENDS += , python-rsvg | python-gnome2-desktop (<= 2.24.0-1), python-rsvg | librsvg2-common
+CDBS_DEPENDS += , python-gobject, python-gtk2, python-dbus, python-cjson, python-xpcom, python-hulahop
 CDBS_RECOMMENDS = sugar$(pkgbranches:%=-%), sugar-artwork$(pkgbranches:%=-%)
 
 # Resolve, cleanup and apply CDBS-declared dependencies
