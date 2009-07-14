@@ -1,3 +1,10 @@
+sugar-web-activity (108-3) unstable; urgency=low
+
+  * Depend on python-rsvg (only fallback on older but not too old
+    python-gnome2-desktop and librsvg2-common).
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 14 Jul 2009 15:59:40 +0200
+
 sugar-web-activity (108-2) unstable; urgency=low
 
   * Fix depend on python-carquinyol (not python-olpc-datastore.
