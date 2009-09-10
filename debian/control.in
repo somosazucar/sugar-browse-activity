@@ -19,5 +19,9 @@ XB-Python-Version: ${python:Versions}
 Description: web browsing activity for the Sugar graphical shell
  Sugar is a graphical user interface aimed at children.
  .
+ Originating as intregral part of the OLPC "XO" a.k.a. the $100 laptop,
+ Sugar has since grown into a more widely usable low-ressource desktop
+ environment for kids.
+ .
  This package contains the Browse activity, providing a simple web
  browser based on the Mozilla Gecko engine.
