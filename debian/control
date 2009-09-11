@@ -3,8 +3,8 @@ Section: x11
 Priority: optional
 Maintainer: Debian OLPC <debian-olpc-devel@lists.alioth.debian.org>
 Uploaders: Jonas Smedegaard <dr@jones.dk>
-Build-Depends: cdbs, cdbs (>= 0.4.39), debhelper (>= 6), python-sugar, python-sugar-toolkit (>= 0.82.5), unzip, python-dev (>= 2.3.5-11), python-central (>= 0.5.6), devscripts (>= 2.10.7), quilt, patchutils (>= 0.2.25), dh-buildinfo
-Standards-Version: 3.8.1
+Build-Depends: cdbs (>= 0.4.39), debhelper (>= 6), python-sugar, python-sugar-toolkit (>= 0.82.5), unzip, python-dev (>= 2.3.5-11), python-central (>= 0.5.6), devscripts (>= 2.10.7), quilt, patchutils (>= 0.2.25), dh-buildinfo
+Standards-Version: 3.8.3
 Vcs-Git: git://git.debian.org/git/collab-maint/sugar-web-activity.git
 Vcs-Browser: http://git.debian.org/?p=collab-maint/sugar-web-activity.git;a=summary
 Homepage: http://sugarlabs.org/go/Activities#Browse
@@ -18,6 +18,10 @@ Provides: ${python:Provides}
 XB-Python-Version: ${python:Versions}
 Description: web browsing activity for the Sugar graphical shell
  Sugar is a graphical user interface aimed at children.
+ .
+ Originating as intregral part of the OLPC "XO" a.k.a. the $100 laptop,
+ Sugar has since grown into a more widely usable low-ressource desktop
+ environment for kids.
  .
  This package contains the Browse activity, providing a simple web
  browser based on the Mozilla Gecko engine.

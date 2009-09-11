@@ -1,3 +1,19 @@
+sugar-web-activity (108-4) UNRELEASED; urgency=low
+
+  * Update CDBS snippets:
+    + Enhance package-relations.mk to support all binary package
+      relations (except -indep ones).
+    + Improve package-relation.mk cleanup to cover debhelper 6 and 7,
+      strip more whitespace and cover mixture of unversioned+versioned
+      dependencies.
+    + Silence applying dependencies in package-relation.mk.
+    + Implement fail-source-not-repackaged rule in upstream-tarball.mk.
+    + Update URL to draft DEP5 format in copyright-check.mk output.
+  * Fix double build-dependency on cdbs.
+  * Update debian/control format to DEP5 rev54.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 11 Sep 2009 23:57:56 +0200
+
 sugar-web-activity (108-3) unstable; urgency=low
 
   * Depend on python-rsvg (only fallback on older but not too old
