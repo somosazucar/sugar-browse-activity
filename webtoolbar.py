@@ -1,5 +1,6 @@
 # Copyright (C) 2006, Red Hat, Inc.
 # Copyright (C) 2007, One Laptop Per Child
+# Copyright (C) 2009, Tomeu Vizoso
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,6 +27,10 @@ from xpcom import components
 from sugar.graphics.toolbutton import ToolButton
 from sugar.graphics.menuitem import MenuItem
 from sugar._sugarext import AddressEntry
+from sugar.graphics.toolbarbox import ToolbarBox
+from sugar.activity.widgets import ActivityToolbarButton
+from sugar.activity.widgets import StopButton
+from sugar.activity import activity
 
 import filepicker
 import places
@@ -211,8 +216,8 @@ class WebEntry(AddressEntry):
         else:
             self._search_popup()
 
-class WebToolbar(gtk.Toolbar):
-    __gtype_name__ = 'WebToolbar'
+class PrimaryToolbar(ToolbarBox):
+    __gtype_name__ = 'PrimaryToolbar'
 
     __gsignals__ = {
         'add-link': (gobject.SIGNAL_RUN_FIRST,
@@ -220,30 +225,21 @@ class WebToolbar(gtk.Toolbar):
                      ([]))
     }
 
-    def __init__(self, browser):
-        gtk.Toolbar.__init__(self)
+    def __init__(self, tabbed_view, act):
+        ToolbarBox.__init__(self)
 
-        self._browser = browser
+        self._activity = act
+
+        self._tabbed_view = tabbed_view
         
         self._loading = False
 
-        self._back = ToolButton('go-previous-paired')
-        self._back.set_tooltip(_('Back'))
-        self._back.props.sensitive = False
-        self._back.connect('clicked', self._go_back_cb)
-        self.insert(self._back, -1)
-        self._back.show()
-
-        self._forward = ToolButton('go-next-paired')
-        self._forward.set_tooltip(_('Forward'))
-        self._forward.props.sensitive = False
-        self._forward.connect('clicked', self._go_forward_cb)
-        self.insert(self._forward, -1)
-        self._forward.show()
+        activity_button = ActivityToolbarButton(self._activity)
+        self.toolbar.insert(activity_button, 0)
 
         self._stop_and_reload = ToolButton('media-playback-stop')
         self._stop_and_reload.connect('clicked', self._stop_and_reload_cb)
-        self.insert(self._stop_and_reload, -1)
+        self.toolbar.insert(self._stop_and_reload, -1)
         self._stop_and_reload.show()
 
         self.entry = WebEntry()
@@ -254,58 +250,117 @@ class WebToolbar(gtk.Toolbar):
         entry_item.add(self.entry)
         self.entry.show()
         
-        self.insert(entry_item, -1)
+        self.toolbar.insert(entry_item, -1)
         entry_item.show()
+
+        self._back = ToolButton('go-previous-paired')
+        self._back.set_tooltip(_('Back'))
+        self._back.props.sensitive = False
+        self._back.connect('clicked', self._go_back_cb)
+        self.toolbar.insert(self._back, -1)
+        self._back.show()
+        
+        self._forward = ToolButton('go-next-paired')
+        self._forward.set_tooltip(_('Forward'))
+        self._forward.props.sensitive = False
+        self._forward.connect('clicked', self._go_forward_cb)
+        self.toolbar.insert(self._forward, -1)
+        self._forward.show()
 
         self._link_add = ToolButton('emblem-favorite')
         self._link_add.set_tooltip(_('Bookmark'))
         self._link_add.connect('clicked', self._link_add_clicked_cb)
-        self.insert(self._link_add, -1)
+        self.toolbar.insert(self._link_add, -1)
         self._link_add.show()
-        
-        progress_listener = browser.progress
-        progress_listener.connect('location-changed', 
-                                  self._location_changed_cb)
-        progress_listener.connect('loading-start', self._loading_start_cb)
-        progress_listener.connect('loading-stop', self._loading_stop_cb)
-        progress_listener.connect('loading-progress', 
-                                  self._loading_progress_cb)
 
-        self._browser.history.connect('session-history-changed', 
-                                      self._session_history_changed_cb)
+        stop_button = StopButton(self._activity)
+        self.toolbar.insert(stop_button, -1)
 
-        self._browser.connect("notify::title", self._title_changed_cb)
+        self._progress_listener = None
+        self._history = None
+        self._browser = None
+
+        self._location_changed_hid = None
+        self._loading_changed_hid = None
+        self._progress_changed_hid = None
+        self._session_history_changed_hid = None
+        self._title_changed_hid = None
+
+        gobject.idle_add(lambda:
+                self._connect_to_browser(tabbed_view.props.current_browser))
+
+        tabbed_view.connect_after('switch-page', self.__switch_page_cb)
+
+    def __switch_page_cb(self, tabbed_view, page, page_num):
+        self._connect_to_browser(tabbed_view.props.current_browser)
+
+    def _connect_to_browser(self, browser):
+        if self._progress_listener is not None:
+            self._progress_listener.disconnect(self._location_changed_hid)
+            self._progress_listener.disconnect(self._loading_changed_hid)
+            self._progress_listener.disconnect(self._progress_changed_hid)
+
+        self._progress_listener = browser.progress
+        self._set_progress(self._progress_listener.progress)
+        if self._progress_listener.location:
+            self._set_address(self._progress_listener.location)
+        else:
+            self._set_address(None)
+        self._set_loading(self._progress_listener.loading)
+        self._update_navigation_buttons()
+
+        self._location_changed_hid = self._progress_listener.connect(
+                'notify::location', self.__location_changed_cb)
+        self._loading_changed_hid = self._progress_listener.connect(
+                'notify::loading', self.__loading_changed_cb)
+        self._progress_changed_hid = self._progress_listener.connect(
+                'notify::progress', self.__progress_changed_cb)
+
+        if self._history is not None:
+            self._history.disconnect(self._session_history_changed_hid)
+
+        self._history = browser.history
+        self._session_history_changed_hid = self._history.connect(
+                'session-history-changed', self._session_history_changed_cb)
+
+        if self._browser is not None:
+            self._browser.disconnect(self._title_changed_hid)
+
+        self._browser = browser
+        self._set_title(self._browser.props.title)
+
+        self._title_changed_hid = self._browser.connect(
+                'notify::title', self._title_changed_cb)
 
     def _session_history_changed_cb(self, session_history, current_page_index):
         # We have to wait until the history info is updated.
         gobject.idle_add(self._reload_session_history, current_page_index)
 
-    def _location_changed_cb(self, progress_listener, uri):
-        cls = components.classes['@mozilla.org/intl/texttosuburi;1']
-        texttosuburi = cls.getService(interfaces.nsITextToSubURI)
-        ui_uri = texttosuburi.unEscapeURIForUI(uri.originCharset, uri.spec)
-
-        self._set_address(ui_uri)
+    def __location_changed_cb(self, progress_listener, pspec):
+        self._set_address(progress_listener.location)
         self._update_navigation_buttons()
         filepicker.cleanup_temp_files()
 
-    def _loading_start_cb(self, progress_listener):
-        self._set_title(None)
-        self._set_loading(True)
+    def __loading_changed_cb(self, progress_listener, pspec):
+        if progress_listener.loading:
+            self._set_title(None)
+        self._set_loading(progress_listener.loading)
         self._update_navigation_buttons()
 
-    def _loading_stop_cb(self, progress_listener):
-        self._set_loading(False)
-        self._update_navigation_buttons()
-
-    def _loading_progress_cb(self, progress_listener, progress):
-        self._set_progress(progress)
+    def __progress_changed_cb(self, progress_listener, pspec):
+        self._set_progress(progress_listener.progress)
 
     def _set_progress(self, progress):
         self.entry.props.progress = progress
 
-    def _set_address(self, address):
-        self.entry.props.address = address
+    def _set_address(self, uri):
+        if uri is not None:
+            cls = components.classes['@mozilla.org/intl/texttosuburi;1']
+            texttosuburi = cls.getService(interfaces.nsITextToSubURI)
+            ui_uri = texttosuburi.unEscapeURIForUI(uri.originCharset, uri.spec)
+        else:
+            ui_uri = None
+        self.entry.props.address = ui_uri
 
     def _set_title(self, title):
         self.entry.props.title = title
@@ -317,32 +372,37 @@ class WebToolbar(gtk.Toolbar):
         self._stop_and_reload.set_icon('view-refresh')
 
     def _update_navigation_buttons(self):
-        can_go_back = self._browser.web_navigation.canGoBack
+        browser = self._tabbed_view.props.current_browser
+
+        can_go_back = browser.web_navigation.canGoBack
         self._back.props.sensitive = can_go_back
 
-        can_go_forward = self._browser.web_navigation.canGoForward
+        can_go_forward = browser.web_navigation.canGoForward
         self._forward.props.sensitive = can_go_forward
 
     def _entry_activate_cb(self, entry):
-        self._browser.load_uri(entry.props.text)
-        self._browser.grab_focus()
+        browser = self._tabbed_view.props.current_browser
+        browser.load_uri(entry.props.text)
+        browser.grab_focus()
 
     def _go_back_cb(self, button):
-        self._browser.web_navigation.goBack()
+        browser = self._tabbed_view.props.current_browser
+        browser.web_navigation.goBack()
     
     def _go_forward_cb(self, button):
-        self._browser.web_navigation.goForward()
+        browser = self._tabbed_view.props.current_browser
+        browser.web_navigation.goForward()
 
     def _title_changed_cb(self, embed, spec):
         self._set_title(embed.props.title)
 
     def _stop_and_reload_cb(self, button):
+        browser = self._tabbed_view.props.current_browser
         if self._loading:
-            self._browser.web_navigation.stop( \
-                    interfaces.nsIWebNavigation.STOP_ALL)
+            browser.web_navigation.stop(interfaces.nsIWebNavigation.STOP_ALL)
         else:
             flags = interfaces.nsIWebNavigation.LOAD_FLAGS_NONE
-            self._browser.web_navigation.reload(flags)
+            browser.web_navigation.reload(flags)
 
     def _set_loading(self, loading):
         self._loading = loading
@@ -355,7 +415,8 @@ class WebToolbar(gtk.Toolbar):
             self._stop_and_reload.set_tooltip(_('Reload'))
 
     def _reload_session_history(self, current_page_index=None):
-        session_history = self._browser.web_navigation.sessionHistory
+        browser = self._tabbed_view.props.current_browser
+        session_history = browser.web_navigation.sessionHistory
         if current_page_index is None:
             current_page_index = session_history.index
 
@@ -391,7 +452,8 @@ class WebToolbar(gtk.Toolbar):
             menu_item.show()
 
     def _history_item_activated_cb(self, menu_item, index):
-        self._browser.web_navigation.gotoIndex(index)
+        browser = self._tabbed_view.props.current_browser
+        browser.web_navigation.gotoIndex(index)
 
     def _link_add_clicked_cb(self, button):
         self.emit('add-link')

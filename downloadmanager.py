@@ -1,4 +1,5 @@
 # Copyright (C) 2007, One Laptop Per Child
+# Copyright (C) 2009, Tomeu Vizoso, Lucian Branescu
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -113,7 +114,7 @@ components.registrar.registerFactory('{64355793-988d-40a5-ba8e-fcde78cac631}',
 
 class Download:
     _com_interfaces_ = interfaces.nsITransfer
-    
+
     def init(self, source, target, display_name, mime_info, start_time,
              temp_file, cancelable):
         self._source = source
@@ -134,7 +135,7 @@ class Download:
         del _dest_to_window[self._target_file.path]
 
         view = hulahop.get_view_for_window(dom_window)
-        print dom_window
+        logging.debug('Download.init dom_window: %r' % dom_window)
         self._activity = view.get_toplevel()
         
         return NS_OK
@@ -175,12 +176,14 @@ class Download:
             self._stop_alert.connect('response', self.__stop_response_cb)
             self._stop_alert.show()
 
-            self.dl_jobject.metadata['title'] = _('File %s from %s.') % \
-                    (self._get_file_name(), self._source.spec)
+            self.dl_jobject.metadata['title'] = self._get_file_name()
+            self.dl_jobject.metadata['description'] = _('From: %s') \
+                % self._source.spec
             self.dl_jobject.metadata['progress'] = '100'
             self.dl_jobject.file_path = self._target_file.path
 
-            if self._mime_type == 'application/octet-stream':
+            if self._mime_type in ['application/octet-stream',
+                                   'application/x-zip']:
                 sniffed_mime_type = mime.get_for_file(self._target_file.path)
                 self.dl_jobject.metadata['mime_type'] = sniffed_mime_type
 
@@ -249,6 +252,8 @@ class Download:
     def _get_file_name(self):
         if self._display_name:
             return self._display_name
+        elif self._source.scheme == 'data':
+            return 'Data URI'
         else:
             path = urlparse.urlparse(self._source.spec).path
             location, file_name = os.path.split(path)
@@ -308,9 +313,12 @@ def save_link(url, text, owner_document):
         interfaces.nsIRequest.LOAD_BYPASS_CACHE | \
         interfaces.nsIChannel.LOAD_CALL_CONTENT_SNIFFERS
 
-    if _implements_interface(channel, interfaces.nsIHttpChannel):
-        channel.referrer = io_service.newURI(owner_document.documentURI, None,
-                                             None)
+    # HACK: when we QI for nsIHttpChannel on objects that implement
+    # just nsIChannel, pyxpcom gets confused trac #1029
+    if uri.scheme == 'http':
+        if _implements_interface(channel, interfaces.nsIHttpChannel):
+            channel.referrer = io_service.newURI(owner_document.documentURI,
+                                                 None, None)
 
     # kick off the channel with our proxy object as the listener
     listener = xpcom.server.WrapObject(
