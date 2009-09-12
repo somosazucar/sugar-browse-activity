@@ -1,4 +1,4 @@
-Source: sugar-web-activity-0.84
+Source: sugar-web-activity-0.86
 Section: x11
 Priority: optional
 Maintainer: Debian OLPC <debian-olpc-devel@lists.alioth.debian.org>
@@ -10,7 +10,7 @@ Vcs-Browser: http://git.debian.org/?p=collab-maint/sugar-web-activity.git;a=summ
 Homepage: http://sugarlabs.org/go/Activities#Browse
 XS-Python-Version: >= 2.5
 
-Package: sugar-web-activity-0.84
+Package: sugar-web-activity-0.86
 Architecture: all
 Depends: ${shlibs:Depends}, ${python:Depends}, ${cdbs:Depends}, ${misc:Depends}
 Recommends: ${cdbs:Recommends}

@@ -32,7 +32,7 @@ include debian/cdbs/1/rules/buildinfo.mk
 
 # Comment out when all current branches are supported
 # FIXME: really make this plural - only a single branch handled for now
-pkgbranches = 0.84
+pkgbranches = 0.86
 pkgbase = $(DEB_SOURCE_PACKAGE:%-$(firstword $(pkgbranches))=%)
 
 DEB_UPSTREAM_PACKAGE = Browse
