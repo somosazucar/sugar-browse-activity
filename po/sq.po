@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-08-22 00:33-0400\n"
-"PO-Revision-Date: 2009-08-25 13:13-0400\n"
-"Last-Translator: Carlo Falciola <cfalciola@yahoo.it>\n"
+"PO-Revision-Date: 2009-06-19 13:18-0400\n"
+"Last-Translator: Edonit Rexhepi <Edi_139@HotMail.Com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: it\n"
+"Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,33 +19,33 @@ msgstr ""
 
 #: activity/activity.info:2
 msgid "Browse"
-msgstr "Naviga"
+msgstr ""
 
 #: downloadmanager.py:153
 msgid "Download started"
-msgstr "Iniziato trasferimento"
+msgstr "Shkarkimi ka filluar"
 
 #: downloadmanager.py:154 downloadmanager.py:167
 #, python-format
 msgid "%s"
-msgstr "%s"
+msgstr ""
 
 #: downloadmanager.py:166
 msgid "Download completed"
-msgstr "Trasferimento terminato"
+msgstr "Shkarkimi ka përfunduar"
 
 #: downloadmanager.py:170
 msgid "Show in Journal"
-msgstr "Mostra nel Diario"
+msgstr ""
 
 #: downloadmanager.py:173
 msgid "Ok"
-msgstr "Ok"
+msgstr "Në Rregull"
 
 #: downloadmanager.py:180
 #, python-format
 msgid "From: %s"
-msgstr "Da: %s"
+msgstr ""
 
 #: downloadmanager.py:265
 #, python-format
@@ -53,128 +53,101 @@ msgid ""
 "Downloading %s from \n"
 "%s."
 msgstr ""
-"Scaricamento %s da \n"
+"Duke shkarkuar %s nga \n"
 "%s."
 
 #: edittoolbar.py:91
 msgid "Previous"
-msgstr "Precendente"
+msgstr ""
 
 #: edittoolbar.py:98
 msgid "Next"
-msgstr "Successivo"
+msgstr "Tjetra"
 
 #: linkbutton.py:94
 msgid "Remove"
-msgstr "Elimina"
+msgstr "Fshi"
 
 #: palettes.py:96
 msgid "Keep link"
-msgstr "Memorizza il collegamento"
+msgstr ""
 
 #: palettes.py:104
 msgid "Copy link"
-msgstr "Copia il collegamento"
+msgstr ""
 
 #: palettes.py:112
 msgid "Follow link"
-msgstr "Segui il collegamento"
+msgstr "Ndiq lidhjen"
 
 #: palettes.py:161
 msgid "Keep image"
-msgstr "Memorizza immagine"
+msgstr ""
 
 #: palettes.py:169
 msgid "Copy image"
-msgstr "Copia immagine"
+msgstr ""
 
 #: viewtoolbar.py:33
 msgid "Zoom out"
-msgstr "Zoom indietro"
+msgstr ""
 
 #: viewtoolbar.py:39
 msgid "Zoom in"
-msgstr "Zoom avanti"
+msgstr "Zmadhoje"
 
 #: viewtoolbar.py:50
 msgid "Fullscreen"
-msgstr "Schermo intero"
+msgstr ""
 
 #: viewtoolbar.py:88
 msgid "Show Tray"
-msgstr "Mostra cestino"
+msgstr ""
 
 #: viewtoolbar.py:92
 msgid "Hide Tray"
-msgstr "Nascondi cestino"
+msgstr ""
 
 #: webactivity.py:535
 msgid "Download in progress"
-msgstr "Scaricamento in corso"
+msgstr "Shkarkimi në progres"
 
 #: webactivity.py:536
 msgid "Stopping now will cancel your download"
-msgstr "Bloccare adesso annullerà il trasferimento"
+msgstr "Nëse e ndalni tani shkarkimi do të anulohet"
 
 #: webactivity.py:538
 msgid "Cancel"
-msgstr "Annulla"
+msgstr "Anulo"
 
-# Alligned to ather act.
 #: webactivity.py:540 webtoolbar.py:412
 msgid "Stop"
-msgstr "Chiudi"
+msgstr "Ndal"
 
 #: webtoolbar.py:241
 msgid "Back"
-msgstr "Indietro"
+msgstr "Prapa"
 
 #: webtoolbar.py:248
 msgid "Forward"
-msgstr "Avanti"
+msgstr "Përpara"
 
 #: webtoolbar.py:271
 msgid "Bookmark"
-msgstr "Segnalibro"
+msgstr ""
 
 #: webtoolbar.py:415
 msgid "Reload"
-msgstr "Ricarica"
-
-#, python-format
-#~ msgid "File %s from %s."
-#~ msgstr "File %s da %s."
+msgstr ""
 
 #~ msgid "Copy"
-#~ msgstr "Copia"
-
-#~ msgid "Download link"
-#~ msgstr "Scarica dal collegamento"
+#~ msgstr "Kopjo"
 
 #~ msgid "Download image"
-#~ msgstr "Scarica immagine"
+#~ msgstr "Shkarko imazhin"
 
 #~ msgid "Edit"
-#~ msgstr "Modifica"
+#~ msgstr "Edito"
 
 #~ msgid "View"
-#~ msgstr "Visualizza"
-
-#~ msgid "blank"
-#~ msgstr "spazio"
-
-#~ msgid "Source"
-#~ msgstr "Sorgente"
-
-#~ msgid "Open"
-#~ msgstr "Aperto"
-
-# Scaricare ? Copiare?
-#, python-format
-#, fuzzy
-#~ msgid ""
-#~ "File %s downloaded from\n"
-#~ "%s."
-#~ msgstr ""
-#~ "File %s scaricato da\n"
-#~ "%s."
+#~ msgstr "Shiko"
