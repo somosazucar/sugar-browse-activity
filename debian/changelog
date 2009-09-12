@@ -1,5 +1,11 @@
-sugar-web-activity (108-4) UNRELEASED; urgency=low
+sugar-browse-activity-0.86 (112-1) unstable; urgency=low
 
+  * New upstream development release.
+  * Drop patch 1001: upstream includes a (different) danish locale now.
+  * Rename package to match upstream rename and make room for multiple
+    branches:
+    + Rename basename sugar-web-activity → sugar-browse-activity.
+    + Append major version (0.86) to binary and source package.
   * Update CDBS snippets:
     + Enhance package-relations.mk to support all binary package
       relations (except -indep ones).
@@ -11,8 +17,10 @@ sugar-web-activity (108-4) UNRELEASED; urgency=low
     + Update URL to draft DEP5 format in copyright-check.mk output.
   * Fix double build-dependency on cdbs.
   * Update debian/control format to DEP5 rev54.
+  * Update debian/copyright (new owners and years, same licenses).
+  * Update Homepage.
 
- -- Jonas Smedegaard <dr@jones.dk>  Fri, 11 Sep 2009 23:57:56 +0200
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 12 Sep 2009 15:09:51 +0200
 
 sugar-web-activity (108-3) unstable; urgency=low
 

@@ -13,6 +13,7 @@ Files: po/Web.pot
 	po/ca.po
 	po/cpp.po
 	po/cs.po
+	po/da.po
 	po/dz.po
 	po/el.po
 	po/en.po
@@ -27,12 +28,15 @@ Files: po/Web.pot
 	po/hi.po
 	po/ht.po
 	po/hu.po
+	po/id.po
 	po/ig.po
 	po/is.po
 	po/it.po
 	po/ja.po
 	po/km.po
 	po/ko.po
+	po/kos.po
+	po/mg.po
 	po/mi.po
 	po/mk.po
 	po/ml.po
@@ -58,12 +62,15 @@ Files: po/Web.pot
 	po/si.po
 	po/sk.po
 	po/sl.po
+	po/sq.po
 	po/sv.po
 	po/sw.po
+	po/ta.po
 	po/te.po
 	po/th.po
 	po/tpi.po
 	po/tr.po
+	po/tzo.po
 	po/ug.po
 	po/ur.po
 	po/vi.po
@@ -109,22 +116,13 @@ Files: AUTHORS
 Copyright: *No copyright*
 License: UNKNOWN
 
-Files: downloadmanager.py
-	filepicker.py
+Files: filepicker.py
 	messenger.py
 	promptservice.py
 	securitydialogs.py
 	sessionhistory.py
 	sessionstore.py
-	viewtoolbar.py
 Copyright: 2007, One Laptop Per Child
-License: GPL-2+
-
-Files: browser.py
-	progresslistener.py
-	webtoolbar.py
-Copyright: 2007, One Laptop Per Child
-	2006, Red Hat, Inc
 License: GPL-2+
 
 Files: debian/cdbs/1/class/python-sugar.mk
@@ -132,9 +130,11 @@ Files: debian/cdbs/1/class/python-sugar.mk
 Copyright: 2008, Jonas Smedegaard <dr@jones.dk>
 License: GPL
 
-Files: edittoolbar.py
-	palettes.py
-Copyright: 2008, One Laptop Per Child
+Files: progresslistener.py
+	webtoolbar.py
+Copyright: 2007, One Laptop Per Child
+	2006, Red Hat, Inc
+	2009, Tomeu Vizoso
 License: GPL-2+
 
 Files: globalhistory.py
@@ -175,9 +175,35 @@ Files: model.py
 Copyright: 2006-2007, One Laptop Per Child
 License: GPL-2+
 
+Files: downloadmanager.py
+Copyright: 2007, One Laptop Per Child
+	2009, Tomeu Vizoso, Lucian Branescu
+License: GPL-2+
+
+Files: viewtoolbar.py
+Copyright: 2007, One Laptop Per Child
+	2009, Tomeu Vizoso
+License: GPL-2+
+
 Files: webactivity.py
-Copyright: 2009, Martin Langhoff, Simon Schampijer, Daniel Drake
+Copyright: 2009, Martin Langhoff, Simon Schampijer, Daniel Drake, Tomeu Vizoso
 	2006, Red Hat, Inc
+License: GPL-2+
+
+Files: edittoolbar.py
+Copyright: 2009, Simon Schampijer
+	2008, One Laptop Per Child
+License: GPL-2+
+
+Files: browser.py
+Copyright: 2009, Tomeu Vizoso, Simon Schampijer
+	2007, One Laptop Per Child
+	2006, Red Hat, Inc
+License: GPL-2+
+
+Files: palettes.py
+Copyright: 2009, Tomeu Vizoso, Simon Schampijer
+	2008, One Laptop Per Child
 License: GPL-2+
 
 Files: linkbutton.py
@@ -191,10 +217,6 @@ License: UNKNOWN
 
 Files: po/fr.po
 Copyright: 2007, The package's holder
-License: UNKNOWN
-
-Files: debian/patches/1001_danish_l10n.patch
-Copyright: 2008, Jonas Smedegaard <dr@jones.dk>
 License: UNKNOWN
 
 Files: data/logo_white_05.png
