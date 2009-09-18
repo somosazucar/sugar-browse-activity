@@ -38,7 +38,7 @@ pkgbase = $(DEB_SOURCE_PACKAGE:%-$(firstword $(pkgbranches))=%)
 DEB_UPSTREAM_PACKAGE = Browse
 DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/fructose/$(DEB_UPSTREAM_PACKAGE)
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
-DEB_UPSTREAM_TARBALL_MD5 = 0a8ff60a9b0fb5efcc650cc4be77500e
+DEB_UPSTREAM_TARBALL_MD5 = 590268217c378c4162bfe05584ac8f5d
 
 # Needed (always/seldom) at runtime
 #  python-rsvg fallbacks unneeded since python-rsvg 2.24.0-2: can be dropped after Squeeze+1
