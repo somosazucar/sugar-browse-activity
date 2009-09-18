@@ -22,15 +22,32 @@ _cdbs_scripts_path ?= /usr/lib/cdbs
 _cdbs_rules_path ?= /usr/share/cdbs/1/rules
 _cdbs_class_path ?= /usr/share/cdbs/1/class
 
-ifndef _cdbs_class_python-sugar
-_cdbs_class_python-sugar = 1
+ifndef _cdbs_class_python_sugar
+_cdbs_class_python_sugar = 1
 
 #include $(_cdbs_class_path)/python-vars.mk$(_cdbs_makefile_suffix)
 include debian/cdbs/1/class/python-vars.mk
 include $(_cdbs_rules_path)/debhelper.mk$(_cdbs_makefile_suffix)
 
+# Space-delimited list of supported branches, lowest listed first
+# (comment out if all current branches are supported)
+# NB! This variable must be declared *above* inclusion of this snippet
+#DEB_SUGAR_BRANCHES = 0.84 0.86
+
+# FIXME: move these to buildvars.mk
+comma = ,
+cdbs_delimit = $(firstword $1)$(foreach word,$(wordlist 2,$(words $1),$1),$2$(word))
+
+# List "packages multiplied with branches", or just packages if no branches
+# FIXME: move this to buildvars.mk
+cdbs_expand_branches = $(subst WORDDELIMITER,$3,$(subst BRANCHDELIMITER,$4,$(call cdbs_delimit,$(if $2,$(foreach pkg,$1,$(call cdbs_delimit,$(foreach branch,$2,$(pkg)$(branch:%=-%)),BRANCHDELIMITER)),$1),WORDDELIMITER)))
+
+# convenience wrappers to expand Sugar branches for package dependencies
+cdbs_sugar_allbranchdeps = $(call cdbs_expand_branches,$1,$(DEB_SUGAR_BRANCHES),$(comma) ,$(comma) )
+cdbs_sugar_anybranchdeps = $(call cdbs_expand_branches,$1,$(DEB_SUGAR_BRANCHES),$(comma) , | )
+
 # Declare Build-Deps for packages using this file
-CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-sugar, python-sugar-toolkit (>= 0.82.5), unzip
+CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), $(call cdbs_sugar_anybranchdeps,python-sugar python-sugar-toolkit), unzip
 # FIXME: Resolve DEB_PYTHON_PACKAGES in build targets only
 ifeq (,$(cdbs_python_pkg_check)$(DEB_PYTHON_ARCH_PACKAGES))
   ifneq (, $(cdbs_python_compile_version))
