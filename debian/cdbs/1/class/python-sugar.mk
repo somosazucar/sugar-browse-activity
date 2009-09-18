@@ -67,7 +67,7 @@ endif
 # Convenience variable for e.g. conflicts/provides/replaces
 DEB_SUGAR_SOURCE_PKGBASE ?= $(DEB_SOURCE_PACKAGE:%-$(firstword $(DEB_SUGAR_BRANCHES))=%)
 
-DEB_PYTHON_SUGAR_PACKAGES = $(filter sugar-%-activity, $(DEB_PACKAGES))
+DEB_PYTHON_SUGAR_PACKAGES ?= $(filter $(call cdbs_expand_branches,sugar-%-activity,$(DEB_SUGAR_BRANCHES)), $(DEB_PACKAGES))
 
 # TODO: Move this to buildvars.mk
 cdbs_pkgsrcdir = $(if $(DEB_PKGSRCDIR_$(cdbs_curpkg)),$(DEB_PKGSRCDIR_$(cdbs_curpkg)),$(DEB_SRCDIR))
