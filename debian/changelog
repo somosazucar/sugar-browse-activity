@@ -8,11 +8,12 @@ sugar-browse-activity-0.86 (113-1) unstable; urgency=low
     + Fix use underscore (not dash) for internal variables.
     + Fix build-depend unversioned on python-sugar-toolkit, to allow
       branched packages.
+    + Fix include branched activities in python-sugar.mk.
     + Build-depend branched/unbranched on python-sugar-toolkit based on
       new variable DEB_SUGAR_BRANCHES in python-sugar.mk.
   * Fix build-depend on branched python-sugar-toolkit.
 
- -- Jonas Smedegaard <dr@jones.dk>  Fri, 18 Sep 2009 20:30:54 +0200
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 18 Sep 2009 20:38:10 +0200
 
 sugar-browse-activity-0.86 (112-1) unstable; urgency=low
 
