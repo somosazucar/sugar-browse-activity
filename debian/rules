@@ -19,6 +19,7 @@
 # 02111-1307 USA.
 
 DEB_PYTHON_SYSTEM = pycentral
+DEB_SUGAR_BRANCHES = 0.86
 ifneq (,$(DEB_MAINTAINER_MODE))
   # Enable stuff not policy compliant (eg. unsuitable for build daemons)
   DEB_COPYRIGHT_CHECK_STRICT = yes
@@ -30,11 +31,6 @@ include debian/cdbs/1/rules/copyright-check.mk
 include /usr/share/cdbs/1/rules/patchsys-quilt.mk
 include debian/cdbs/1/rules/buildinfo.mk
 
-# Comment out when all current branches are supported
-# FIXME: really make this plural - only a single branch handled for now
-pkgbranches = 0.86
-pkgbase = $(DEB_SOURCE_PACKAGE:%-$(firstword $(pkgbranches))=%)
-
 DEB_UPSTREAM_PACKAGE = Browse
 DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/fructose/$(DEB_UPSTREAM_PACKAGE)
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
@@ -42,15 +38,15 @@ DEB_UPSTREAM_TARBALL_MD5 = 590268217c378c4162bfe05584ac8f5d
 
 # Needed (always/seldom) at runtime
 #  python-rsvg fallbacks unneeded since python-rsvg 2.24.0-2: can be dropped after Squeeze+1
-CDBS_DEPENDS = python-sugar$(pkgbranches:%=-%), python-sugar-toolkit$(pkgbranches:%=-%), python-carquinyol$(pkgbranches:%=-%)
+CDBS_DEPENDS = $(call cdbs_sugar_anybranchdeps,python-sugar python-sugar-toolkit python-carquinyol)
 CDBS_DEPENDS += , python-rsvg | python-gnome2-desktop (<= 2.24.0-1), python-rsvg | librsvg2-common
 CDBS_DEPENDS += , python-gobject, python-gtk2, python-dbus, python-cjson, python-xpcom, python-hulahop
-CDBS_RECOMMENDS = sugar$(pkgbranches:%=-%), sugar-artwork$(pkgbranches:%=-%)
+CDBS_RECOMMENDS = $(call cdbs_sugar_anybranchdeps,sugar sugar-artwork)
 
 # Ensure only one variant is installed at a time (Debian Policy 7.6.2)
-CDBS_PROVIDES = $(pkgbase)
-CDBS_CONFLICTS = $(pkgbase)
-CDBS_REPLACES = $(pkgbase)
+CDBS_PROVIDES = $(DEB_SUGAR_SOURCE_PKGBASE)
+CDBS_CONFLICTS = $(DEB_SUGAR_SOURCE_PKGBASE)
+CDBS_REPLACES = $(DEB_SUGAR_SOURCE_PKGBASE)
 
 # Transitional quirk: sugar-web-activity renamed to sugar-browse-activity
 # (unneeded since Squeeze: can be dropped after Squeeze+1)
