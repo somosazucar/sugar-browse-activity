@@ -64,6 +64,9 @@ else
 CDBS_BUILD_DEPENDS := $(CDBS_BUILD_DEPENDS), python-central (>= 0.5.6)
 endif
 
+# Convenience variable for e.g. conflicts/provides/replaces
+DEB_SUGAR_SOURCE_PKGBASE ?= $(DEB_SOURCE_PACKAGE:%-$(firstword $(DEB_SUGAR_BRANCHES))=%)
+
 DEB_PYTHON_SUGAR_PACKAGES = $(filter sugar-%-activity, $(DEB_PACKAGES))
 
 # TODO: Move this to buildvars.mk
