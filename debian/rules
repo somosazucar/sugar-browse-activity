@@ -52,5 +52,11 @@ CDBS_PROVIDES = $(pkgbase)
 CDBS_CONFLICTS = $(pkgbase)
 CDBS_REPLACES = $(pkgbase)
 
+# Transitional quirk: sugar-web-activity renamed to sugar-browse-activity
+# (unneeded since Squeeze: can be dropped after Squeeze+1)
+CDBS_PROVIDES += , sugar-web-activity
+CDBS_CONFLICTS += , sugar-web-activity
+CDBS_REPLACES += , sugar-web-activity
+
 # Resolve, cleanup and apply CDBS-declared dependencies
 include debian/cdbs/1/rules/package-relations.mk
