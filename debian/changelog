@@ -1,3 +1,10 @@
+sugar-browse-activity-0.86 (113-2) unstable; urgency=low
+
+  * Update python-sugar.mk to replace superfluous COPYING files with
+    symlinks.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 19 Sep 2009 13:10:38 +0200
+
 sugar-browse-activity-0.86 (113-1) unstable; urgency=low
 
   * New upstream development release.
