@@ -98,6 +98,12 @@ else
 	dh_pycentral -p$(cdbs_curpkg)
 endif
 
+# Replace superfluous COPYING files with symlinks
+$(patsubst %,binary-post-install/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: binary-post-install/%:
+	! test -f $(DEB_DESTDIR)/usr/share/sugar/activities/*.activity/COPYING \
+	|| ! diff -q /usr/share/common-licenses/GPL-2 $(DEB_DESTDIR)/usr/share/sugar/activities/*.activity/COPYING \
+	|| ln -sfT ../../../common-licenses/GPL-2 $(DEB_DESTDIR)/usr/share/sugar/activities/*.activity/COPYING
+
 reverse-config:: $(patsubst %,cleanpythonsugar-reverse-config/%,$(DEB_PYTHON_SUGAR_PACKAGES))
 $(patsubst %,cleanpythonsugar-reverse-config/%,$(DEB_PYTHON_SUGAR_PACKAGES)) :: cleanpythonsugar-reverse-config/% : 
 	[ ! -e $(cdbs_pkgsrcdir)/MANIFEST.upstream ] || mv -f $(cdbs_pkgsrcdir)/MANIFEST.upstream $(cdbs_pkgsrcdir)/MANIFEST
