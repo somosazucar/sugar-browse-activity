@@ -1,9 +1,8 @@
-diff --git a/webactivity.py b/webactivity.py
 --- a/webactivity.py
 +++ b/webactivity.py
-@@ -31,9 +31,12 @@ import sqlite3
- import cjson
+@@ -32,9 +32,12 @@
  import gconf
+ import locale
  
 -# HACK: Needed by http://dev.sugarlabs.org/ticket/456
 -import gnome
