@@ -21,6 +21,9 @@
 DEB_PYTHON_SYSTEM = pycentral
 DEB_SUGAR_BRANCHES = 0.86 0.88 0.90
 
+# Suppress unneeded auto-resolved build-dependency on python-dev
+CDBS_BUILD_DEPENDS_class_python-sugar_python = python$(cdbs_python_nondefault_version)
+
 # workaround for broken DEB_SUGAR_BRANCHES expansion in cdbs <= 0.4.75
 DEB_PYTHON_SUGAR_PACKAGES = sugar-browse-activity-0.86
 
