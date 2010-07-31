@@ -19,7 +19,7 @@
 # 02111-1307 USA.
 
 DEB_PYTHON_SYSTEM = pycentral
-DEB_SUGAR_BRANCHES = 0.86 0.88
+DEB_SUGAR_BRANCHES = 0.86 0.88 0.90
 
 # workaround for broken DEB_SUGAR_BRANCHES expansion in cdbs <= 0.4.75
 DEB_PYTHON_SUGAR_PACKAGES = sugar-browse-activity-0.86
