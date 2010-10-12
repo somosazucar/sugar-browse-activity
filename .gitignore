@@ -12,3 +12,4 @@ py-compile
 *.pyc
 *.xo
 *~
+/.pc
