@@ -43,9 +43,10 @@ from progresslistener import ProgressListener
 
 _ZOOM_AMOUNT = 0.1
 
+
 class GetSourceListener(object):
     _com_interfaces_ = interfaces.nsIWebProgressListener
-    
+
     def __init__(self, file_path, async_cb, async_err_cb):
         self._file_path = file_path
         self._async_cb = async_cb
@@ -69,8 +70,11 @@ class GetSourceListener(object):
     def onSecurityChange(self, progress, request, state):
         pass
 
+
 class CommandListener(object):
+
     _com_interfaces_ = interfaces.nsIDOMEventListener
+
     def __init__(self, window):
         self._window = window
 
@@ -86,14 +90,15 @@ class CommandListener(object):
         cert_exception = cls.createInstance(interfaces.hulahopAddCertException)
         cert_exception.showDialog(self._window)
 
+
 class TabbedView(gtk.Notebook):
     __gtype_name__ = 'TabbedView'
 
     _com_interfaces_ = interfaces.nsIWindowCreator
 
-    AGENT_SHEET = os.path.join(activity.get_bundle_path(), 
+    AGENT_SHEET = os.path.join(activity.get_bundle_path(),
                                'agent-stylesheet.css')
-    USER_SHEET = os.path.join(env.get_profile_path(), 'gecko', 
+    USER_SHEET = os.path.join(env.get_profile_path(), 'gecko',
                               'user-stylesheet.css')
 
     def __init__(self):
@@ -115,7 +120,7 @@ class TabbedView(gtk.Notebook):
         style_sheet_service = cls.getService(interfaces.nsIStyleSheetService)
 
         if os.path.exists(TabbedView.AGENT_SHEET):
-            agent_sheet_uri = io_service.newURI('file:///' + 
+            agent_sheet_uri = io_service.newURI('file:///' +
                                                 TabbedView.AGENT_SHEET,
                                                 None, None)
             style_sheet_service.loadAndRegisterSheet(agent_sheet_uri,
@@ -147,7 +152,7 @@ class TabbedView(gtk.Notebook):
                 dialog.set_transient_for(parent_view.get_toplevel())
 
             browser = dialog.view.browser
-            
+
             item = browser.queryInterface(interfaces.nsIDocShellTreeItem)
             item.itemType = interfaces.nsIDocShellTreeItem.typeChromeWrapper
 
@@ -189,7 +194,7 @@ class TabbedView(gtk.Notebook):
         if tab_sessions and isinstance(tab_sessions[0], dict):
             # Old format, no tabs
             tab_sessions = [tab_sessions]
-            
+
         while self.get_n_pages():
             self.remove_page(self.get_n_pages() - 1)
 
@@ -198,12 +203,14 @@ class TabbedView(gtk.Notebook):
             self._append_tab(browser)
             sessionstore.set_session(browser, tab_session)
 
+
 gtk.rc_parse_string('''
     style "browse-tab-close" {
         xthickness = 0
         ythickness = 0
     }
     widget "*browse-tab-close" style "browse-tab-close"''')
+
 
 class TabLabel(gtk.HBox):
     __gtype_name__ = 'TabLabel'
@@ -216,7 +223,7 @@ class TabLabel(gtk.HBox):
 
     def __init__(self, browser):
         gobject.GObject.__init__(self)
-        
+
         self._browser = browser
         self._browser.connect('is-setup', self.__browser_is_setup_cb)
 
@@ -245,15 +252,11 @@ class TabLabel(gtk.HBox):
         browser.connect('notify::title', self.__title_changed_cb)
 
     def __location_changed_cb(self, progress_listener, pspec):
-        uri = progress_listener.location
-        cls = components.classes['@mozilla.org/intl/texttosuburi;1']
-        texttosuburi = cls.getService(interfaces.nsITextToSubURI)
-        ui_uri = texttosuburi.unEscapeURIForUI(uri.originCharset, uri.spec)
-
-        self._label.set_text(ui_uri)
+        self._label.set_text(self._browser.get_url_from_nsiuri(progress_listener.location))
 
     def __title_changed_cb(self, browser, pspec):
         self._label.set_text(browser.props.title)
+
 
 class Browser(WebView):
     __gtype_name__ = 'Browser'
@@ -292,6 +295,15 @@ class Browser(WebView):
 
         self.emit('is-setup')
 
+
+    def get_url_from_nsiuri(self, uri):
+        """
+        get a nsIURI object and return a string with the url
+        """
+        cls = components.classes['@mozilla.org/intl/texttosuburi;1']
+        texttosuburi = cls.getService(interfaces.nsITextToSubURI)
+        return texttosuburi.unEscapeURIForUI(uri.originCharset, uri.spec)
+
     def get_session(self):
         return sessionstore.get_session(self)
 
@@ -307,7 +319,7 @@ class Browser(WebView):
                 interfaces.nsIWebBrowserPersist.PERSIST_FLAGS_FROM_CACHE
 
         temp_path = os.path.join(activity.get_activity_root(), 'instance')
-        file_path = os.path.join(temp_path, '%i' % time.time())        
+        file_path = os.path.join(temp_path, '%i' % time.time())
         cls = components.classes["@mozilla.org/file/local;1"]
         local_file = cls.createInstance(interfaces.nsILocalFile)
         local_file.initWithPath(file_path)
@@ -316,7 +328,7 @@ class Browser(WebView):
         persist.progressListener = xpcom.server.WrapObject(
             progresslistener, interfaces.nsIWebProgressListener)
 
-        uri = self.web_navigation.currentURI            
+        uri = self.web_navigation.currentURI
         persist.saveURI(uri, self.doc_shell, None, None, None, local_file)
 
     def zoom_in(self):
@@ -334,6 +346,7 @@ class Browser(WebView):
             markupDocumentViewer = contentViewer.queryInterface( \
                     interfaces.nsIMarkupDocumentViewer)
             markupDocumentViewer.fullZoom -= _ZOOM_AMOUNT
+
 
 class PopupDialog(gtk.Window):
     def __init__(self):
@@ -354,4 +367,3 @@ class PopupDialog(gtk.Window):
         if self.view.props.visibility:
             self.view.show()
             self.show()
-

@@ -34,6 +34,7 @@ from sugar.activity import activity
 
 import downloadmanager
 
+
 class MouseOutListener(gobject.GObject):
     _com_interfaces_ = interfaces.nsIDOMEventListener
 
@@ -100,13 +101,13 @@ class ContentInvoker(Invoker):
             self.notify_right_click()
         else:
             return
-        
-        if self._popdown_handler_id is not None: 
+
+        if self._popdown_handler_id is not None:
             self._popdown_handler_id = self.palette.connect( \
                 'popdown', self.__palette_popdown_cb)
 
         self._mouseout_listener = MouseOutListener(target)
-        wrapper = xpcom.server.WrapObject(self._mouseout_listener, 
+        wrapper = xpcom.server.WrapObject(self._mouseout_listener,
                                           interfaces.nsIDOMEventListener)
         target.addEventListener('mouseout', wrapper, False)
         self._mouseout_listener.connect('mouse-out', self.__moved_out_cb)
@@ -116,7 +117,7 @@ class ContentInvoker(Invoker):
 
     def __palette_popdown_cb(self, palette):
         if self._mouseout_listener is not None:
-            wrapper = xpcom.server.WrapObject(self._mouseout_listener, 
+            wrapper = xpcom.server.WrapObject(self._mouseout_listener,
                                               interfaces.nsIDOMEventListener)
             self._mouseout_listener.target.removeEventListener('mouseout',
                                                                wrapper, False)
@@ -192,6 +193,7 @@ class LinkPalette(Palette):
     def __download_activate_cb(self, menu_item):
         downloadmanager.save_link(self._url, self._title, self._owner_document)
 
+
 class ImagePalette(Palette):
     def __init__(self, title, url, owner_document):
         Palette.__init__(self)
@@ -241,7 +243,7 @@ class ImagePalette(Palette):
         cls = components.classes['@mozilla.org/file/local;1']
         target_file = cls.createInstance(interfaces.nsILocalFile)
         target_file.initWithPath(temp_file)
-		
+
         cls = components.classes[ \
                 '@mozilla.org/embedding/browser/nsWebBrowserPersist;1']
         persist = cls.createInstance(interfaces.nsIWebBrowserPersist)
@@ -253,6 +255,7 @@ class ImagePalette(Palette):
 
     def __download_activate_cb(self, menu_item):
         downloadmanager.save_link(self._url, self._title, self._owner_document)
+
 
 class _ImageProgressListener(object):
     _com_interfaces_ = interfaces.nsIWebProgressListener
@@ -282,10 +285,11 @@ class _ImageProgressListener(object):
                                     _clipboard_clear_func_cb,
                                     self._temp_file)
 
+
 def _clipboard_get_func_cb(clipboard, selection_data, info, temp_file):
     selection_data.set_uris(['file://' + temp_file])
+
 
 def _clipboard_clear_func_cb(clipboard, temp_file):
     if os.path.exists(temp_file):
         os.remove(temp_file)
-

@@ -66,7 +66,7 @@ class WebEntry(AddressEntry):
            recognize changes caused directly by user actions"""
         self.handler_block(self._change_hid)
         try:
-            self.props.text = text            
+            self.props.text = text
         finally:
             self.handler_unblock(self._change_hid)
         self.set_position(-1)
@@ -160,7 +160,7 @@ class WebEntry(AddressEntry):
     def __view_button_press_event_cb(self, view, event):
         model = view.get_model()
 
-        path, col_, x_, y_ = view.get_path_at_pos(event.x, event.y)
+        path, col_, x_, y_ = view.get_path_at_pos(int(event.x), int(event.y))
         if path:
             uri = model[path][self._COL_ADDRESS]
             self.activate(uri)
@@ -175,7 +175,7 @@ class WebEntry(AddressEntry):
             if selected is None:
                 selection.select_iter(model[-1].iter)
                 self._set_text(model[-1][0])
-            else:                    
+            else:
                 index = model.get_path(selected)[0]
                 if index > 0:
                     selection.select_path(index - 1)
@@ -184,10 +184,10 @@ class WebEntry(AddressEntry):
         elif keyname == 'Down':
             if selected is None:
                 down_iter = model.get_iter_first()
-            else:    
+            else:
                 down_iter = model.iter_next(selected)
             if down_iter:
-                selection.select_iter(down_iter)                
+                selection.select_iter(down_iter)
                 self._set_text(model.get(down_iter, 0)[0])
             return True
         elif keyname == 'Return':
@@ -222,16 +222,19 @@ class PrimaryToolbar(ToolbarBox):
     __gsignals__ = {
         'add-link': (gobject.SIGNAL_RUN_FIRST,
                      gobject.TYPE_NONE,
+                     ([])),
+        'add-tab': (gobject.SIGNAL_RUN_FIRST,
+                     gobject.TYPE_NONE,
                      ([]))
     }
 
-    def __init__(self, tabbed_view, act):
+    def __init__(self, tabbed_view, act, disable_multiple_tabs):
         ToolbarBox.__init__(self)
 
         self._activity = act
 
         self._tabbed_view = tabbed_view
-        
+
         self._loading = False
 
         activity_button = ActivityToolbarButton(self._activity)
@@ -249,7 +252,7 @@ class PrimaryToolbar(ToolbarBox):
         entry_item.set_expand(True)
         entry_item.add(self.entry)
         self.entry.show()
-        
+
         self.toolbar.insert(entry_item, -1)
         entry_item.show()
 
@@ -259,13 +262,21 @@ class PrimaryToolbar(ToolbarBox):
         self._back.connect('clicked', self._go_back_cb)
         self.toolbar.insert(self._back, -1)
         self._back.show()
-        
+
         self._forward = ToolButton('go-next-paired')
         self._forward.set_tooltip(_('Forward'))
         self._forward.props.sensitive = False
         self._forward.connect('clicked', self._go_forward_cb)
         self.toolbar.insert(self._forward, -1)
         self._forward.show()
+
+        if not disable_multiple_tabs:
+            self._add_tab = ToolButton('tab-add')
+            self._add_tab.set_tooltip(_('Add a tab'))
+            self._add_tab.props.sensitive = True
+            self._add_tab.connect('clicked', self._add_tab_cb)
+            self.toolbar.insert(self._add_tab, -1)
+            self._add_tab.show()
 
         self._link_add = ToolButton('emblem-favorite')
         self._link_add.set_tooltip(_('Bookmark'))
@@ -355,9 +366,7 @@ class PrimaryToolbar(ToolbarBox):
 
     def _set_address(self, uri):
         if uri is not None:
-            cls = components.classes['@mozilla.org/intl/texttosuburi;1']
-            texttosuburi = cls.getService(interfaces.nsITextToSubURI)
-            ui_uri = texttosuburi.unEscapeURIForUI(uri.originCharset, uri.spec)
+            ui_uri = self._browser.get_url_from_nsiuri(uri)
         else:
             ui_uri = None
         self.entry.props.address = ui_uri
@@ -385,10 +394,13 @@ class PrimaryToolbar(ToolbarBox):
         browser.load_uri(entry.props.text)
         browser.grab_focus()
 
+    def _add_tab_cb(self, button):
+        self.emit('add-tab')
+
     def _go_back_cb(self, button):
         browser = self._tabbed_view.props.current_browser
         browser.web_navigation.goBack()
-    
+
     def _go_forward_cb(self, button):
         browser = self._tabbed_view.props.current_browser
         browser.web_navigation.goForward()
@@ -457,4 +469,3 @@ class PrimaryToolbar(ToolbarBox):
 
     def _link_add_clicked_cb(self, button):
         self.emit('add-link')
-

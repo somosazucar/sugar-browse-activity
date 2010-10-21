@@ -22,20 +22,23 @@ import logging
 from xpcom import components
 from xpcom.components import interfaces
 
+
 def get_session(browser):
     session_history = browser.web_navigation.sessionHistory
-        
+
     if session_history.count == 0:
-        return ''        
-    return _get_history(session_history)            
-    
+        return ''
+    return _get_history(session_history)
+
+
 def set_session(browser, data):
     _set_history(browser.web_navigation.sessionHistory, data)
-        
+
     if data:
         browser.web_navigation.gotoIndex(len(data) - 1)
     else:
         browser.load_uri('about:blank')
+
 
 def _get_history(history):
     logging.debug('%r' % history.count)
@@ -49,9 +52,10 @@ def _get_history(history):
 
     return entries_dest
 
+
 def _set_history(history, history_data):
     history_internal = history.queryInterface(interfaces.nsISHistoryInternal)
-    
+
     if history_internal.count > 0:
         history_internal.purgeHistory(history_internal.count)
 
@@ -60,7 +64,7 @@ def _set_history(history, history_data):
         entry_class = components.classes[ \
                 "@mozilla.org/browser/session-history-entry;1"]
         entry = entry_class.createInstance(interfaces.nsISHEntry)
-                  
+
         io_service_class = components.classes[ \
                 "@mozilla.org/network/io-service;1"]
         io_service = io_service_class.getService(interfaces.nsIIOService)
@@ -68,4 +72,3 @@ def _set_history(history, history_data):
         entry.setTitle(entry_dict['title'])
 
         history_internal.addEntry(entry, True)
-
