@@ -31,6 +31,7 @@ import sqlite3
 import cjson
 import gconf
 import locale
+import cairo
 
 # HACK: Needed by http://dev.sugarlabs.org/ticket/456
 import gnome
@@ -48,7 +49,7 @@ from sugar.graphics.icon import Icon
 from sugar.graphics.toolbarbox import ToolbarButton
 from sugar import mime
 
-PROFILE_VERSION = 1
+PROFILE_VERSION = 2
 
 _profile_version = 0
 _profile_path = os.path.join(activity.get_activity_root(), 'data/gecko')
@@ -69,6 +70,7 @@ if _profile_version < PROFILE_VERSION:
     f = open(_version_file, 'w')
     f.write(str(PROFILE_VERSION))
     f.close()
+
 
 def _seed_xs_cookie():
     ''' Create a HTTP Cookie to authenticate with the Schoolserver
@@ -92,7 +94,7 @@ def _seed_xs_cookie():
         c = cookies_db.cursor()
 
         c.execute('''CREATE TABLE IF NOT EXISTS
-                     moz_cookies 
+                     moz_cookies
                      (id INTEGER PRIMARY KEY,
                       name TEXT,
                       value TEXT,
@@ -107,13 +109,13 @@ def _seed_xs_cookie():
                      FROM moz_cookies
                      WHERE name=? AND host=? AND path=?''',
                   ('xoid', jabber_server, '/'))
-        
+
         if c.fetchone():
             _logger.debug('seed_xs_cookie: Cookie exists already')
             return
 
         expire = int(time.time()) + 10*365*24*60*60
-        c.execute('''INSERT INTO moz_cookies (name, value, host, 
+        c.execute('''INSERT INTO moz_cookies (name, value, host,
                                               path, expiry, lastAccessed,
                                               isSecure, isHttpOnly)
                      VALUES(?,?,?,?,?,?,?,?)''',
@@ -132,6 +134,7 @@ hulahop.set_app_version(os.environ['SUGAR_BUNDLE_VERSION'])
 hulahop.startup(_profile_path)
 
 from xpcom import components
+
 
 def _set_accept_languages():
     ''' Set intl.accept_languages based on the locale
@@ -152,6 +155,7 @@ def _set_accept_languages():
     logging.debug('LANG set')
 
 from browser import TabbedView
+from browser import Browser
 from webtoolbar import PrimaryToolbar
 from edittoolbar import EditToolbar
 from viewtoolbar import ViewToolbar
@@ -172,6 +176,7 @@ PATH = "/org/laptop/WebActivity"
 
 _logger = logging.getLogger('web-activity')
 
+
 class WebActivity(activity.Activity):
     def __init__(self, handle):
         activity.Activity.__init__(self, handle)
@@ -182,15 +187,30 @@ class WebActivity(activity.Activity):
 
         _set_accept_languages()
         _seed_xs_cookie()
-        
+
         # don't pick up the sugar theme - use the native mozilla one instead
         cls = components.classes['@mozilla.org/preferences-service;1']
         pref_service = cls.getService(components.interfaces.nsIPrefService)
         branch = pref_service.getBranch("mozilla.widget.")
         branch.setBoolPref("disable-native-theme", True)
 
-        self._primary_toolbar = PrimaryToolbar(self._tabbed_view, self)
+        # HACK
+        # Currently, the multiple tabs feature crashes the Browse activity
+        # on cairo versions 1.8.10 or later. The exact cause for this
+        # isn't exactly known. Thus, disable the multiple tabs feature
+        # if we come across cairo versions >= 1.08.10
+        # More information can be found here:
+        # [1] http://lists.sugarlabs.org/archive/sugar-devel/2010-July/025187.html
+        self._disable_multiple_tabs = cairo.cairo_version() >= 10810
+        if self._disable_multiple_tabs:
+            logging.warning('Not enabling the multiple tabs feature due'
+                ' to a bug in cairo/mozilla')
+
+        self._primary_toolbar = PrimaryToolbar(self._tabbed_view, self,
+                self._disable_multiple_tabs)
         self._primary_toolbar.connect('add-link', self._link_add_button_cb)
+
+        self._primary_toolbar.connect('add-tab', self._new_tab_cb)
 
         self._tray = HTray()
         self.set_tray(self._tray, gtk.POS_BOTTOM)
@@ -202,7 +222,7 @@ class WebActivity(activity.Activity):
                 icon_name='toolbar-edit')
         self._primary_toolbar.toolbar.insert(
                 self._edit_toolbar_button, 1)
-        
+
         self._view_toolbar = ViewToolbar(self)
         view_toolbar_button = ToolbarButton(
                 page=self._view_toolbar,
@@ -222,7 +242,7 @@ class WebActivity(activity.Activity):
         self.connect('key-press-event', self._key_press_cb)
 
         if handle.uri:
-            self._tabbed_view.current_browser.load_uri(handle.uri)        
+            self._tabbed_view.current_browser.load_uri(handle.uri)
         elif not self._jobject.file_path:
             # TODO: we need this hack until we extend the activity API for
             # opening URIs and default docs.
@@ -231,7 +251,7 @@ class WebActivity(activity.Activity):
         self.messenger = None
         self.connect('shared', self._shared_cb)
 
-        # Get the Presence Service        
+        # Get the Presence Service
         self.pservice = presenceservice.get_instance()
         try:
             name, path = self.pservice.get_preferred_connection()
@@ -241,28 +261,31 @@ class WebActivity(activity.Activity):
         except TypeError:
             _logger.debug('Offline')
         self.initiating = None
-            
+
         if self._shared_activity is not None:
             _logger.debug('shared:  %s' %self._shared_activity.props.joined)
 
         if self._shared_activity is not None:
             # We are joining the activity
-            _logger.debug('Joined activity')                      
+            _logger.debug('Joined activity')
             self.connect('joined', self._joined_cb)
             if self.get_shared():
                 # We've already joined
                 self._joined_cb()
-        else:   
+        else:
             _logger.debug('Created activity')
-    
+
+    def _new_tab_cb(self, gobject):
+        self._load_homepage(new_tab=True)
+
     def _shared_cb(self, activity_):
-        _logger.debug('My activity was shared')        
-        self.initiating = True                        
+        _logger.debug('My activity was shared')
+        self.initiating = True
         self._setup()
 
         _logger.debug('This is my activity: making a tube...')
         self.tubes_chan[telepathy.CHANNEL_TYPE_TUBES].OfferDBusTube(SERVICE, {})
-                
+
     def _setup(self):
         if self._shared_activity is None:
             _logger.debug('Failed to share or join activity')
@@ -279,7 +302,7 @@ class WebActivity(activity.Activity):
             channel = telepathy.client.Channel(bus_name, channel_path)
             htype, handle = channel.GetHandle()
             if htype == telepathy.HANDLE_TYPE_ROOM:
-                _logger.debug('Found our room: it has handle#%d "%s"' 
+                _logger.debug('Found our room: it has handle#%d "%s"'
                     %(handle, self.conn.InspectHandles(htype, [handle])[0]))
                 room = handle
                 ctype = channel.GetChannelType()
@@ -301,7 +324,7 @@ class WebActivity(activity.Activity):
         if tubes_chan is None:
             _logger.debug("Didn't find our Tubes channel, requesting one...")
             tubes_chan = self.conn.request_channel(telepathy.CHANNEL_TYPE_TUBES,
-                                                   telepathy.HANDLE_TYPE_ROOM, 
+                                                   telepathy.HANDLE_TYPE_ROOM,
                                                    room, True)
 
         self.tubes_chan = tubes_chan
@@ -322,18 +345,18 @@ class WebActivity(activity.Activity):
             return
 
         _logger.debug('Joined an existing shared activity')
-        
+
         self.initiating = False
         self._setup()
-                
+
         _logger.debug('This is not my activity: waiting for a tube...')
         self.tubes_chan[telepathy.CHANNEL_TYPE_TUBES].ListTubes(
-            reply_handler=self._list_tubes_reply_cb, 
+            reply_handler=self._list_tubes_reply_cb,
             error_handler=self._list_tubes_error_cb)
 
     def _new_tube_cb(self, identifier, initiator, type, service, params, state):
         _logger.debug('New tube: ID=%d initator=%d type=%d service=%s '
-                      'params=%r state=%d' %(identifier, initiator, type, 
+                      'params=%r state=%d' %(identifier, initiator, type,
                                              service, params, state))
 
         if (type == telepathy.TUBE_TYPE_DBUS and
@@ -342,21 +365,27 @@ class WebActivity(activity.Activity):
                 self.tubes_chan[telepathy.CHANNEL_TYPE_TUBES].AcceptDBusTube(
                         identifier)
 
-            self.tube_conn = TubeConnection(self.conn, 
-                self.tubes_chan[telepathy.CHANNEL_TYPE_TUBES], 
+            self.tube_conn = TubeConnection(self.conn,
+                self.tubes_chan[telepathy.CHANNEL_TYPE_TUBES],
                 identifier, group_iface = self.text_chan[
                     telepathy.CHANNEL_INTERFACE_GROUP])
-            
-            _logger.debug('Tube created')
-            self.messenger = Messenger(self.tube_conn, self.initiating, 
-                                       self.model)         
 
-    def _load_homepage(self):
-        browser = self._tabbed_view.current_browser
+            _logger.debug('Tube created')
+            self.messenger = Messenger(self.tube_conn, self.initiating,
+                                       self.model)
+
+    def _load_homepage(self, new_tab=False):
+        # If new_tab is True, open the homepage in a new tab.
+        if new_tab:
+            browser = Browser()
+            self._tabbed_view._append_tab(browser)
+        else:
+            browser = self._tabbed_view.current_browser
+
         if os.path.isfile(_LIBRARY_PATH):
             browser.load_uri('file://' + _LIBRARY_PATH)
         else:
-            default_page = os.path.join(activity.get_bundle_path(), 
+            default_page = os.path.join(activity.get_bundle_path(),
                                         "data/index.html")
             browser.load_uri(default_page)
 
@@ -372,7 +401,7 @@ class WebActivity(activity.Activity):
         if self.metadata['mime_type'] == 'text/plain':
             data = self._get_data_from_file_path(file_path)
             self.model.deserialize(data)
-            
+
             for link in self.model.data['shared_links']:
                 _logger.debug('read: url=%s title=%s d=%s' % (link['url'],
                                                               link['title'],
@@ -380,7 +409,7 @@ class WebActivity(activity.Activity):
                 self._add_link_totray(link['url'],
                                       base64.b64decode(link['thumb']),
                                       link['color'], link['title'],
-                                      link['owner'], -1, link['hash'])      
+                                      link['owner'], -1, link['hash'])
             logging.debug('########## reading %s' % data)
             self._tabbed_view.set_session(self.model.data['history'])
             self._tabbed_view.set_current_page(self.model.data['current_tab'])
@@ -390,11 +419,24 @@ class WebActivity(activity.Activity):
             if len(uris) == 1:
                 self._tabbed_view.props.current_browser.load_uri(uris[0])
             else:
-                _logger.error('Open uri-list: Does not support' 
-                              'list of multiple uris by now.') 
+                _logger.error('Open uri-list: Does not support'
+                              'list of multiple uris by now.')
         else:
             self._tabbed_view.props.current_browser.load_uri(file_path)
-        
+        self._load_urls()
+
+    def _load_urls(self):
+        if self.model.data['currents'] != None:
+            first = True
+            for current_tab in self.model.data['currents']:
+                if first:
+                    browser = self._tabbed_view.current_browser
+                    first = False
+                else:
+                    browser = Browser()
+                    self._tabbed_view._append_tab(browser)
+                browser.load_uri(current_tab['url'])
+
     def write_file(self, file_path):
         if not self.metadata['mime_type']:
             self.metadata['mime_type'] = 'text/plain'
@@ -410,6 +452,13 @@ class WebActivity(activity.Activity):
             self.model.data['history'] = self._tabbed_view.get_session()
             self.model.data['current_tab'] = self._tabbed_view.get_current_page()
 
+            self.model.data['currents'] = []
+            for n in range(0, self._tabbed_view.get_n_pages()):
+                n_browser = self._tabbed_view.get_nth_page(n)
+                if n_browser != None:
+                    ui_uri = browser.get_url_from_nsiuri(browser.progress.location)
+                    self.model.data['currents'].append({'title':browser.props.title,'url':ui_uri})
+
             f = open(file_path, 'w')
             try:
                 logging.debug('########## writing %s' % self.model.serialize())
@@ -419,40 +468,50 @@ class WebActivity(activity.Activity):
 
     def _link_add_button_cb(self, button):
         self._add_link()
-            
+
     def _key_press_cb(self, widget, event):
+        key_name = gtk.gdk.keyval_name(event.keyval)
+        browser = self._tabbed_view.props.current_browser
+
         if event.state & gtk.gdk.CONTROL_MASK:
-            if gtk.gdk.keyval_name(event.keyval) == "d":
-                self._add_link()                
-                return True
-            elif gtk.gdk.keyval_name(event.keyval) == "f":
+
+            if key_name == 'd':
+                self._add_link()
+            elif key_name == 'f':
                 _logger.debug('keyboard: Find')
                 self._edit_toolbar_button.set_expanded(True)
-                self._edit_toolbar.search_entry.grab_focus()                
-                return True
-            elif gtk.gdk.keyval_name(event.keyval) == "l":
+                self._edit_toolbar.search_entry.grab_focus()
+            elif key_name == 'l':
                 _logger.debug('keyboard: Focus url entry')
                 self._primary_toolbar.entry.grab_focus()
-                return True
-            elif gtk.gdk.keyval_name(event.keyval) == "minus":
+            elif key_name == 'minus':
                 _logger.debug('keyboard: Zoom out')
-                self._tabbed_view.props.current_browser.zoom_out()
-                return True
-            elif gtk.gdk.keyval_name(event.keyval) == "plus" \
-                     or gtk.gdk.keyval_name(event.keyval) == "equal" :
+                browser.zoom_out()
+            elif key_name in ['plus', 'equal']:
                 _logger.debug('keyboard: Zoom in')
-                self._tabbed_view.props.current_browser.zoom_in()
-                return True
+                browser.zoom_in()
+            elif key_name == 'Left':
+                browser.web_navigation.goBack()
+            elif key_name == 'Right':
+                browser.web_navigation.goForward()
+            elif key_name == 'r':
+                flags = components.interfaces.nsIWebNavigation.LOAD_FLAGS_NONE
+                browser.web_navigation.reload(flags)
+            elif gtk.gdk.keyval_name(event.keyval) == "t":
+                if not self._disable_multiple_tabs:
+                    self._load_homepage(new_tab=True)
+            else:
+                return False
+
+            return True
+
         return False
 
     def _add_link(self):
         ''' take screenshot and add link info to the model '''
 
         browser = self._tabbed_view.props.current_browser
-        uri = browser.progress.location
-        cls = components.classes['@mozilla.org/intl/texttosuburi;1']
-        texttosuburi = cls.getService(components.interfaces.nsITextToSubURI)
-        ui_uri = texttosuburi.unEscapeURIForUI(uri.originCharset, uri.spec)
+        ui_uri = browser.get_url_from_nsiuri(browser.progress.location)
 
         for link in self.model.data['shared_links']:
             if link['hash'] == sha.new(ui_uri).hexdigest():
@@ -466,7 +525,7 @@ class WebActivity(activity.Activity):
                             profile.get_color().to_string(), timestamp)
 
         if self.messenger is not None:
-            self.messenger._add_link(ui_uri, browser.props.title,       
+            self.messenger._add_link(ui_uri, browser.props.title,
                                      profile.get_color().to_string(),
                                      profile.get_nick_name(),
                                      base64.b64encode(buf), timestamp)
@@ -486,9 +545,9 @@ class WebActivity(activity.Activity):
         self._tray.add_item(item, index) # use index to add to the tray
         item.show()
         if self._tray.props.visible is False:
-            self._tray.show()        
+            self._tray.show()
         self._view_toolbar.traybutton.props.sensitive = True
-        
+
     def _link_removed_cb(self, button, hash):
         ''' remove a link from tray and delete it in the model '''
         self.model.remove_link(hash)
@@ -540,7 +599,7 @@ class WebActivity(activity.Activity):
             stop_icon.show()
             self.add_alert(alert)
             alert.connect('response', self.__inprogress_response_cb)
-            alert.show()            
+            alert.show()
             self.present()
 
     def __inprogress_response_cb(self, alert, response_id):
@@ -555,4 +614,3 @@ class WebActivity(activity.Activity):
     def get_document_path(self, async_cb, async_err_cb):
         browser = self._tabbed_view.props.current_browser
         browser.get_source(async_cb, async_err_cb)
-
