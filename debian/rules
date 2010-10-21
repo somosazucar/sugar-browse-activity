@@ -54,7 +54,3 @@ CDBS_REPLACES = $(DEB_SUGAR_SOURCE_PKGBASE)
 CDBS_PROVIDES += , sugar-web-activity
 CDBS_CONFLICTS += , sugar-web-activity
 CDBS_REPLACES += , sugar-web-activity
-
-clean::
-	# locale is generated on each build, and its binary contents break rebuilds
-	rm -rf locale
