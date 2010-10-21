@@ -1,8 +1,8 @@
 --- a/webactivity.py
 +++ b/webactivity.py
-@@ -32,9 +32,12 @@
- import gconf
+@@ -33,9 +33,12 @@
  import locale
+ import cairo
  
 -# HACK: Needed by http://dev.sugarlabs.org/ticket/456
 -import gnome
