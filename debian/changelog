@@ -1,3 +1,23 @@
+sugar-browse-activity-0.86 (115-3) unstable; urgency=low
+
+  * Bump Policy compliance to standards-version 3.9.1.
+  * Suppress unneeded auto-resolved build-dependency on python-dev.
+    Thanks to lintian.
+  * Shorten Vcs-* stanzas.
+  * Ease building with git-buildpackage: Git-ignore quilt .pc dir, and
+    add source local-options.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 12 Oct 2010 23:27:22 +0200
+
+sugar-browse-activity-0.86 (115-2) unstable; urgency=low
+
+  * Include Sugar 0.90 as supported branch.
+  * Bump Policy compliance to standards-version 3.9.1.
+  * Suppress unneeded auto-resolved build-dependency on python-dev.
+    Thanks to lintian.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 31 Jul 2010 12:25:53 -0400
+
 sugar-browse-activity-0.86 (115-1) unstable; urgency=low
 
   * New upstream release.
