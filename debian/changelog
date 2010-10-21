@@ -1,13 +1,17 @@
-sugar-browse-activity-0.86 (115-3) unstable; urgency=low
+sugar-browse-activity-0.86 (119-1) unstable; urgency=low
 
+  * New upstream release.
+    Thanks to Ishan Bansal for encouraging this!
+  * Refresh patch.
   * Bump Policy compliance to standards-version 3.9.1.
   * Suppress unneeded auto-resolved build-dependency on python-dev.
     Thanks to lintian.
   * Shorten Vcs-* stanzas.
   * Ease building with git-buildpackage: Git-ignore quilt .pc dir, and
     add source local-options.
+  * Build-depend on python-cairo. Needed since v116.
 
- -- Jonas Smedegaard <dr@jones.dk>  Tue, 12 Oct 2010 23:27:22 +0200
+ -- Jonas Smedegaard <dr@jones.dk>  Thu, 21 Oct 2010 22:21:25 +0200
 
 sugar-browse-activity-0.86 (115-2) unstable; urgency=low
 
