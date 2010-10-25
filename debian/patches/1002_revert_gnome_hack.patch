@@ -1,8 +1,8 @@
 --- a/webactivity.py
 +++ b/webactivity.py
 @@ -33,9 +33,12 @@
- import locale
  import cairo
+ from hashlib import sha1
  
 -# HACK: Needed by http://dev.sugarlabs.org/ticket/456
 -import gnome
