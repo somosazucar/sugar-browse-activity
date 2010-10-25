@@ -35,7 +35,7 @@ include /usr/share/cdbs/1/rules/debhelper.mk
 DEB_UPSTREAM_PACKAGE = Browse
 DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/fructose/$(DEB_UPSTREAM_PACKAGE)
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
-DEB_UPSTREAM_TARBALL_MD5 = 4e841742fb531e6508daf8dca80dd70c
+DEB_UPSTREAM_TARBALL_MD5 = c9a93fad156c56a5ec0b9c61b9ce8822
 
 # Needed (always/seldom) at runtime
 #  python-rsvg fallbacks unneeded since python-rsvg 2.24.0-2: can be dropped after Squeeze+1
