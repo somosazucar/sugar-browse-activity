@@ -1,3 +1,10 @@
+sugar-browse-activity-0.86 (120-1) unstable; urgency=low
+
+  * New upstream release.
+  * Refresh patch.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 25 Oct 2010 09:38:22 +0200
+
 sugar-browse-activity-0.86 (119-1) unstable; urgency=low
 
   * New upstream release.
