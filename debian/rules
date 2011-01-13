@@ -37,6 +37,9 @@ DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/fructose/$(DEB_
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
 DEB_UPSTREAM_TARBALL_MD5 = c9a93fad156c56a5ec0b9c61b9ce8822
 
+# Suppress binary files to not upset dpkg
+DEB_COPYRIGHT_CHECK_IGNORE_REGEX = ^data/logo_.*\.png|debian/(changelog|copyright(|_hints|_newhints))$
+
 # Needed (always/seldom) at runtime
 #  python-rsvg fallbacks unneeded since python-rsvg 2.24.0-2: can be dropped after Squeeze+1
 CDBS_DEPENDS = $(call cdbs_sugar_anybranchdeps,python-sugar python-sugar-toolkit python-carquinyol)
