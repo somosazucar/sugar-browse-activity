@@ -1,6 +1,6 @@
 Source: sugar-browse-activity-0.86
 Section: x11
-Priority: optional
+Priority: extra
 Maintainer: Debian OLPC <debian-olpc-devel@lists.alioth.debian.org>
 Uploaders: Jonas Smedegaard <dr@jones.dk>
 Build-Depends: cdbs (>= 0.4.70~),
