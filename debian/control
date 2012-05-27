@@ -1,4 +1,4 @@
-Source: sugar-browse-activity-0.86
+Source: sugar-browse-activity
 Section: x11
 Priority: extra
 Maintainer: Debian OLPC <debian-olpc-devel@lists.alioth.debian.org>
@@ -8,15 +8,15 @@ Build-Depends: devscripts,
  cdbs (>= 0.4.97~),
  debhelper,
  dh-buildinfo,
- python-sugar-0.86 | python-sugar-0.88,
- python-sugar-toolkit-0.86 | python-sugar-toolkit-0.88,
+ python-sugar,
+ python-sugar-toolkit,
  unzip
 Standards-Version: 3.9.3
 Vcs-Git: git://git.debian.org/git/collab-maint/sugar-browse-activity
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/sugar-browse-activity.git
 Homepage: http://wiki.sugarlabs.org/go/Activities/Browse
 
-Package: sugar-browse-activity-0.86
+Package: sugar-browse-activity
 Architecture: all
 Depends: ${shlibs:Depends}, ${python:Depends}, ${cdbs:Depends}, ${misc:Depends}
 Recommends: ${cdbs:Recommends}

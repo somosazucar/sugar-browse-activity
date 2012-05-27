@@ -1,4 +1,4 @@
-sugar-browse-activity-0.86 (120-2) UNRELEASED; urgency=low
+sugar-browse-activity (120-2) UNRELEASED; urgency=low
 
   * Lower Priority to extra: Depends on similarly prioritized
     python-xpcom.
@@ -20,6 +20,7 @@ sugar-browse-activity-0.86 (120-2) UNRELEASED; urgency=low
     + Stop build-depending on python-central: No longer used.
     + Relax build-depend unversioned on debhelper and devscripts: Needed
       versions satisfied even in oldstable.
+  * Switch packaging to unversioned package naming.
 
  -- Jonas Smedegaard <dr@jones.dk>  Thu, 13 Jan 2011 02:13:08 +0100
 
