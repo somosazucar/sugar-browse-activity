@@ -18,13 +18,11 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA.
 
-DEB_SUGAR_BRANCHES = 0.86 0.88
-
 # Suppress unneeded auto-resolved build-dependency on python-dev
 CDBS_BUILD_DEPENDS_class_python-sugar_python = python$(cdbs_python_nondefault_version)
 
 # workaround for broken DEB_SUGAR_BRANCHES expansion in cdbs <= 0.4.75
-DEB_PYTHON_SUGAR_PACKAGES = sugar-browse-activity-0.86
+DEB_PYTHON_SUGAR_PACKAGES = sugar-browse-activity
 
 include /usr/share/cdbs/1/rules/upstream-tarball.mk
 include /usr/share/cdbs/1/rules/utils.mk
@@ -47,7 +45,7 @@ CDBS_DEPENDS += , python-gobject, python-gtk2, python-dbus, python-cjson, python
 CDBS_RECOMMENDS = $(call cdbs_sugar_anybranchdeps,sugar sugar-artwork)
 
 # Ensure only one variant is installed at a time (Debian Policy 7.6.2)
-CDBS_PROVIDES = $(DEB_SUGAR_SOURCE_PKGBASE)
+# (unneeded since Wheezy: can be dropped after Wheezy+1)
 CDBS_CONFLICTS = $(DEB_SUGAR_SOURCE_PKGBASE)
 CDBS_REPLACES = $(DEB_SUGAR_SOURCE_PKGBASE)
 
