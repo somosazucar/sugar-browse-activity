@@ -4,7 +4,22 @@ sugar-browse-activity-0.86 (120-2) UNRELEASED; urgency=low
     python-xpcom.
   * Suppress unneeded auto-resolved build-dependency on python-dev.
     Thanks to lintian.
-  * Rewrite copyright file using Subversion r157 draft of DEP5 format.
+  * Bump debhelper compatibility level to 7.
+  * Bump standards-version to 3.9.3.
+  * Use Python helper python2 (not python-support).
+  * Use anonscm.debian.org for Vcs-Browser field.
+  * Update copyright file:
+    + Rewrite using format 1.0.
+    + Extend copyright coverage of some files to include recent years.
+  * Fix typo in long description.
+  * Remove debian/source/local-options: abort-on-upstream-changes and
+    unapply-patches are default in dpkg-source since 1.16.1.
+  * Update package relations:
+    + Tighten build-dependency on cdbs and python: Needed for python2
+      helper.
+    + Stop build-depending on python-central: No longer used.
+    + Relax build-depend unversioned on debhelper and devscripts: Needed
+      versions satisfied even in oldstable.
 
  -- Jonas Smedegaard <dr@jones.dk>  Thu, 13 Jan 2011 02:13:08 +0100
 
