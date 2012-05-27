@@ -37,11 +37,10 @@ DEB_UPSTREAM_TARBALL_MD5 = b0924d962421eee0ce38ae82df27a2ab
 # Suppress binary files to not upset dpkg
 DEB_COPYRIGHT_CHECK_IGNORE_REGEX = ^data/logo_.*\.png|debian/(changelog|copyright(|_hints|_newhints))$
 
-# Needed (always/seldom) at runtime
-#  python-rsvg fallbacks unneeded since python-rsvg 2.24.0-2: can be dropped after Squeeze+1
-CDBS_DEPENDS = $(call cdbs_sugar_anybranchdeps,python-sugar python-sugar-toolkit python-carquinyol)
-CDBS_DEPENDS += , python-rsvg | python-gnome2-desktop (<= 2.24.0-1), python-rsvg | librsvg2-common
-CDBS_DEPENDS += , python-gobject, python-gtk2, python-dbus, python-cjson, python-xpcom, python-hulahop, python-cairo
+# Needed (always/often) at runtime
+CDBS_DEPENDS = python-sugar3, python-gi, python-dbus, python-cairo
+gir-deps = glib-2.0 gtk-3.0 gdkpixbuf-2.0 pango-1.0 rsvg-2.0 webkit-3.0 soup-2.4 evince-3.0
+CDBS_DEPENDS += , $(patsubst %,$(comma) gir1.2-%,$(gir-deps))
 CDBS_RECOMMENDS = $(call cdbs_sugar_anybranchdeps,sugar sugar-artwork)
 
 # Ensure only one variant is installed at a time (Debian Policy 7.6.2)
