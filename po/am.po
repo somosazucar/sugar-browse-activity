@@ -2,132 +2,189 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-16 00:30+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2012-02-04 00:33-0500\n"
+"PO-Revision-Date: 2011-04-13 02:49+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: am\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.0.1\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Pootle 2.0.1\n"
 
-#: activity/activity.info:2 webactivity.py:105
+#: activity/activity.info:2
 msgid "Browse"
 msgstr ""
 
-#: browser.py:132
-msgid "Source"
+#: browser.py:138
+#, python-format
+msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 msgstr ""
 
-#: downloadmanager.py:140
+#: browser.py:337
+msgid "Loading..."
+msgstr ""
+
+#: browser.py:339
+#, python-format
+msgid "Loading %s..."
+msgstr ""
+
+#: browser.py:367 webactivity.py:415 webtoolbar.py:317
+msgid "Untitled"
+msgstr ""
+
+#: downloadmanager.py:102
 msgid "Download started"
 msgstr ""
 
-#: downloadmanager.py:142 downloadmanager.py:156
+#: downloadmanager.py:103 downloadmanager.py:114
 #, python-format
 msgid "%s"
 msgstr ""
 
-#: downloadmanager.py:154
+#: downloadmanager.py:112
 msgid "Download completed"
 msgstr ""
 
-#: downloadmanager.py:158
-msgid "Open"
+#: downloadmanager.py:117
+msgid "Show in Journal"
 msgstr ""
 
-#: downloadmanager.py:161
+#: downloadmanager.py:120
 msgid "Ok"
-msgstr ""
+msgstr "እሺ"
 
-#: downloadmanager.py:162
+#: downloadmanager.py:128
 #, python-format
-msgid ""
-"File %s downloaded from\n"
-"%s."
-msgstr ""
+msgid "From: %s"
+msgstr "ከ፦  %s  "
 
-#: downloadmanager.py:243
+#: downloadmanager.py:202
 #, python-format
 msgid ""
 "Downloading %s from \n"
 "%s."
 msgstr ""
 
-#: linkbutton.py:96
+#: edittoolbar.py:65
+msgid "Previous"
+msgstr "ቀድሞ"
+
+#: edittoolbar.py:72
+msgid "Next"
+msgstr "ቀጥል"
+
+#: linkbutton.py:103
 msgid "Remove"
+msgstr "አስወግደው"
+
+#: palettes.py:140
+msgid "Follow link"
 msgstr ""
 
-#: webactivity.py:113
-msgid "View"
+#: palettes.py:145
+msgid "Follow link in new tab"
 msgstr ""
 
-#: webactivity.py:131 webactivity.py:132
-msgid "blank"
+#: palettes.py:151
+msgid "Keep link"
 msgstr ""
 
-#: webactivity.py:440
-msgid "Download in progress"
+#: palettes.py:159
+msgid "Copy link"
 msgstr ""
 
-#: webactivity.py:441
-msgid "Stopping now will cancel your download"
+#: palettes.py:215
+msgid "Keep image"
 msgstr ""
 
-#: webactivity.py:443
-msgid "Cancel"
+#: palettes.py:223
+msgid "Copy image"
 msgstr ""
 
-#: webactivity.py:445 webtoolbar.py:171
-msgid "Stop"
-msgstr ""
-
-#: webtoolbar.py:53
-msgid "Back"
-msgstr ""
-
-#: webtoolbar.py:60
-msgid "Forward"
-msgstr ""
-
-#: webtoolbar.py:83
-msgid "Bookmark"
-msgstr ""
-
-#: webtoolbar.py:174
-msgid "Reload"
-msgstr ""
-
-#: downloadmanager.py:167
-#, python-format
-msgid "File %s from %s."
-msgstr ""
-
-#: viewtoolbar.py:34
+#: viewtoolbar.py:35
 msgid "Zoom out"
-msgstr ""
+msgstr "ከርቀት ዕይታ"
 
-#: viewtoolbar.py:40
+#: viewtoolbar.py:41
 msgid "Zoom in"
-msgstr ""
+msgstr "ከቅርበት ዕይታ"
 
-#: viewtoolbar.py:51
+#: viewtoolbar.py:52
 msgid "Fullscreen"
-msgstr ""
+msgstr "ሙሉ እስክሪን"
 
-#: viewtoolbar.py:87
+#: viewtoolbar.py:90
 msgid "Show Tray"
 msgstr ""
 
-#: viewtoolbar.py:91
+#: viewtoolbar.py:94
 msgid "Hide Tray"
 msgstr ""
 
-#: downloadmanager.py:158
-msgid "Show in Journal"
+#: webactivity.py:569
+msgid "Download in progress"
+msgid_plural "Downloads in progress"
+msgstr[0] ""
+msgstr[1] ""
+
+#: webactivity.py:572
+msgid "Stopping now will erase your download"
+msgid_plural "Stopping now will erase your downloads"
+msgstr[0] ""
+msgstr[1] ""
+
+#: webactivity.py:577
+msgid "Continue download"
+msgid_plural "Continue downloads"
+msgstr[0] ""
+msgstr[1] ""
+
+#: webactivity.py:582
+msgid "Stop"
+msgstr "ቁም ቁሚ አቁም አቁሚ"
+
+#: webtoolbar.py:247
+msgid "Home page"
 msgstr ""
+
+#: webtoolbar.py:267
+msgid "Back"
+msgstr "ኋላ"
+
+#: webtoolbar.py:274
+msgid "Forward"
+msgstr ""
+
+#: webtoolbar.py:281
+msgid "Bookmark"
+msgstr "መለያ ምልክት"
+
+#~ msgid "Cancel"
+#~ msgstr "ተወው ሻር"

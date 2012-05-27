@@ -16,23 +16,23 @@
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
-import cjson
+import json
 import sha
-import gobject
+from gi.repository import GObject
 import base64
 
 
-class Model(gobject.GObject):
+class Model(GObject.GObject):
     ''' The model of web-activity which uses json to serialize its data
     to a file and deserealize from it.
     '''
     __gsignals__ = {
-        'add_link': (gobject.SIGNAL_RUN_FIRST,
-                     gobject.TYPE_NONE, ([int]))
+        'add_link': (GObject.SignalFlags.RUN_FIRST,
+                     None, ([int])),
         }
 
     def __init__(self):
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
         self.data = {}
         self.data['shared_links'] = []
         self.data['deleted'] = []
@@ -44,13 +44,11 @@ class Model(gobject.GObject):
                 index = self.data['shared_links'].index(item)
                 break
 
-        self.data['shared_links'].insert(index,
-                                         {'hash':sha.new(str(url)).hexdigest(),
-                                          'url':str(url), 'title':str(title),
-                                          'thumb':base64.b64encode(thumb),
-                                          'owner':str(owner),
-                                          'color':str(color),
-                                          'timestamp':float(timestamp)})
+        info = {'hash': sha.new(str(url)).hexdigest(), 'url': str(url),
+                'title': str(title), 'thumb': base64.b64encode(thumb),
+                'owner': str(owner), 'color': str(color),
+                'timestamp': float(timestamp)}
+        self.data['shared_links'].insert(index, info)
         self.emit('add_link', index)
 
     def remove_link(self, hash):
@@ -61,14 +59,12 @@ class Model(gobject.GObject):
                 break
 
     def serialize(self):
-        return cjson.encode(self.data)
+        return json.dumps(self.data)
 
     def deserialize(self, data):
-        self.data = cjson.decode(data)
-        if not self.data.has_key('shared_links'):
-            self.data['shared_links'] = []
-        if not self.data.has_key('deleted'):
-            self.data['deleted'] = []
+        self.data = json.loads(data)
+        self.data.setdefault('shared_links', [])
+        self.data.setdefault('deleted', [])
 
     def get_links_ids(self):
         ids = []

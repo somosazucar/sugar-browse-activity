@@ -20,32 +20,29 @@ import tempfile
 import urlparse
 from gettext import gettext as _
 
-import gtk
-import gobject
-import xpcom
-from xpcom import components
-from xpcom.components import interfaces
+from gi.repository import Gtk
+from gi.repository import GObject
 
-from sugar.graphics.palette import Palette, Invoker
-from sugar.graphics.menuitem import MenuItem
-from sugar.graphics.icon import Icon
-from sugar import profile
-from sugar.activity import activity
+from sugar3.graphics.palette import Palette, Invoker
+from sugar3.graphics.menuitem import MenuItem
+from sugar3.graphics.icon import Icon
+from sugar3 import profile
+from sugar3.activity import activity
 
 import downloadmanager
 
 
-class MouseOutListener(gobject.GObject):
+class MouseOutListener(GObject.GObject):
     _com_interfaces_ = interfaces.nsIDOMEventListener
 
     __gsignals__ = {
-        'mouse-out': (gobject.SIGNAL_RUN_FIRST,
-                      gobject.TYPE_NONE,
-                      ([]))
+        'mouse-out': (GObject.SignalFlags.RUN_FIRST,
+                      None,
+                      ([])),
     }
 
     def __init__(self, target):
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
         self.target = target
 
     def handleEvent(self, event):
@@ -66,7 +63,7 @@ class ContentInvoker(Invoker):
         return self.AT_CURSOR
 
     def get_rect(self):
-        return gtk.gdk.Rectangle()
+        return ()
 
     def get_toplevel(self):
         return None
@@ -97,7 +94,8 @@ class ContentInvoker(Invoker):
             else:
                 title = os.path.basename(urlparse.urlparse(target.src).path)
 
-            self.palette = ImagePalette(title, target.src, target.ownerDocument)
+            self.palette = ImagePalette(title, target.src,
+                                        target.ownerDocument)
             self.notify_right_click()
         else:
             return
@@ -139,9 +137,20 @@ class LinkPalette(Palette):
         else:
             self.props.primary_text = url
 
+        menu_item = MenuItem(_('Follow link'), 'browse-follow-link')
+        menu_item.connect('activate', self.__follow_activate_cb)
+        self.menu.append(menu_item)
+        menu_item.show()
+
+        menu_item = MenuItem(_('Follow link in new tab'),
+                             'browse-follow-link-new-tab')
+        menu_item.connect('activate', self.__follow_activate_cb, True)
+        self.menu.append(menu_item)
+        menu_item.show()
+
         menu_item = MenuItem(_('Keep link'))
         icon = Icon(icon_name='document-save', xo_color=profile.get_color(),
-                    icon_size=gtk.ICON_SIZE_MENU)
+                    icon_size=Gtk.IconSize.MENU)
         menu_item.set_image(icon)
         menu_item.connect('activate', self.__download_activate_cb)
         self.menu.append(menu_item)
@@ -149,25 +158,23 @@ class LinkPalette(Palette):
 
         menu_item = MenuItem(_('Copy link'))
         icon = Icon(icon_name='edit-copy', xo_color=profile.get_color(),
-                    icon_size=gtk.ICON_SIZE_MENU)
+                    icon_size=Gtk.IconSize.MENU)
         menu_item.set_image(icon)
         menu_item.connect('activate', self.__copy_activate_cb)
         self.menu.append(menu_item)
         menu_item.show()
 
-        menu_item = MenuItem(_('Follow link'), 'edit-copy')
-        menu_item.connect('activate', self.__follow_activate_cb)
-        self.menu.append(menu_item)
-        menu_item.show()
-
-    def __follow_activate_cb(self, menu_item):
-        self._browser.load_uri(self._url)
-        self._browser.grab_focus()
+    def __follow_activate_cb(self, menu_item, new_tab=False):
+        if new_tab:
+            new_browser = self._browser.open_new_tab(self._url)
+        else:
+            self._browser.load_uri(self._url)
+            self._browser.grab_focus()
 
     def __copy_activate_cb(self, menu_item):
-        clipboard = gtk.Clipboard()
-        targets = gtk.target_list_add_uri_targets()
-        targets = gtk.target_list_add_text_targets(targets)
+        clipboard = Gtk.Clipboard()
+        targets = Gtk.target_list_add_uri_targets()
+        targets = Gtk.target_list_add_text_targets(targets)
         targets.append(('text/x-moz-url', 0, 0))
 
         clipboard.set_with_data(targets,
@@ -176,9 +183,9 @@ class LinkPalette(Palette):
 
     def __clipboard_get_func_cb(self, clipboard, selection_data, info, data):
         uri_targets = \
-            [target[0] for target in gtk.target_list_add_uri_targets()]
+            [target[0] for target in Gtk.target_list_add_uri_targets()]
         text_targets = \
-            [target[0] for target in gtk.target_list_add_text_targets()]
+            [target[0] for target in Gtk.target_list_add_text_targets()]
 
         if selection_data.target in uri_targets:
             selection_data.set_uris([self._url])
@@ -207,7 +214,7 @@ class ImagePalette(Palette):
 
         menu_item = MenuItem(_('Keep image'))
         icon = Icon(icon_name='document-save', xo_color=profile.get_color(),
-                    icon_size=gtk.ICON_SIZE_MENU)
+                    icon_size=Gtk.IconSize.MENU)
         menu_item.set_image(icon)
         menu_item.connect('activate', self.__download_activate_cb)
         self.menu.append(menu_item)
@@ -215,7 +222,7 @@ class ImagePalette(Palette):
 
         menu_item = MenuItem(_('Copy image'))
         icon = Icon(icon_name='edit-copy', xo_color=profile.get_color(),
-                    icon_size=gtk.ICON_SIZE_MENU)
+                    icon_size=Gtk.IconSize.MENU)
         menu_item.set_image(icon)
         menu_item.connect('activate', self.__copy_activate_cb)
         self.menu.append(menu_item)
@@ -247,7 +254,7 @@ class ImagePalette(Palette):
         cls = components.classes[ \
                 '@mozilla.org/embedding/browser/nsWebBrowserPersist;1']
         persist = cls.createInstance(interfaces.nsIWebBrowserPersist)
-        persist.persistFlags = 1 # PERSIST_FLAGS_FROM_CACHE
+        persist.persistFlags = 1  # PERSIST_FLAGS_FROM_CACHE
         listener = xpcom.server.WrapObject(_ImageProgressListener(temp_file),
                                            interfaces.nsIWebProgressListener)
         persist.progressListener = listener
@@ -277,9 +284,9 @@ class _ImageProgressListener(object):
         pass
 
     def onStateChange(self, webProgress, request, stateFlags, status):
-        if stateFlags & interfaces.nsIWebProgressListener.STATE_IS_REQUEST and \
-                stateFlags & interfaces.nsIWebProgressListener.STATE_STOP:
-            clipboard = gtk.Clipboard()
+        if (stateFlags & interfaces.nsIWebProgressListener.STATE_IS_REQUEST and
+            stateFlags & interfaces.nsIWebProgressListener.STATE_STOP):
+            clipboard = Gtk.Clipboard()
             clipboard.set_with_data([('text/uri-list', 0, 0)],
                                     _clipboard_get_func_cb,
                                     _clipboard_clear_func_cb,

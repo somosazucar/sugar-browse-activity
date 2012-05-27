@@ -1,5 +1,6 @@
 # Copyright (C) 2006, Red Hat, Inc.
-# Copyright (C) 2009 Martin Langhoff, Simon Schampijer, Daniel Drake, Tomeu Vizoso
+# Copyright (C) 2009 Martin Langhoff, Simon Schampijer, Daniel Drake,
+#                    Tomeu Vizoso
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,45 +16,51 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-import os
 import logging
 from gettext import gettext as _
+from gettext import ngettext
+import os
 
-import gobject
-gobject.threads_init()
+from gi.repository import GObject
+GObject.threads_init()
 
-import gtk
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
+from gi.repository import WebKit
+from gi.repository import Soup
+from gi.repository import SoupGNOME
+
 import base64
 import time
 import shutil
 import sqlite3
-import cjson
-import gconf
+import json
+from gi.repository import GConf
 import locale
 import cairo
+import StringIO
 from hashlib import sha1
 
-# HACK: Needed by http://dev.sugarlabs.org/ticket/456
-import gnome
-gnome.init('Hulahop', '1.0')
-
-from sugar.activity import activity
-from sugar.graphics import style
+from sugar3.activity import activity
+from sugar3.graphics import style
 import telepathy
 import telepathy.client
-from sugar.presence import presenceservice
-from sugar.graphics.tray import HTray
-from sugar import profile
-from sugar.graphics.alert import Alert
-from sugar.graphics.icon import Icon
-from sugar.graphics.toolbarbox import ToolbarButton
-from sugar import mime
+from sugar3.presence import presenceservice
+from sugar3.graphics.tray import HTray
+from sugar3 import profile
+from sugar3.graphics.alert import Alert
+from sugar3.graphics.icon import Icon
+from sugar3 import mime
+
+from sugar3.graphics.toolbarbox import ToolbarButton
 
 PROFILE_VERSION = 2
 
 _profile_version = 0
 _profile_path = os.path.join(activity.get_activity_root(), 'data/gecko')
 _version_file = os.path.join(_profile_path, 'version')
+_cookies_db_path = os.path.join(_profile_path, 'cookies.sqlite')
 
 if os.path.exists(_version_file):
     f = open(_version_file)
@@ -72,101 +79,65 @@ if _profile_version < PROFILE_VERSION:
     f.close()
 
 
-def _seed_xs_cookie():
-    ''' Create a HTTP Cookie to authenticate with the Schoolserver
-    '''
-    client = gconf.client_get_default()
+def _seed_xs_cookie(cookie_jar):
+    """Create a HTTP Cookie to authenticate with the Schoolserver.
+
+    Do nothing if the laptop is not registered with Schoolserver, or
+    if the cookie already exists.
+
+    """
+    client = GConf.Client.get_default()
     backup_url = client.get_string('/desktop/sugar/backup_url')
-    if not backup_url:
+    if backup_url == '':
         _logger.debug('seed_xs_cookie: Not registered with Schoolserver')
         return
 
     jabber_server = client.get_string(
         '/desktop/sugar/collaboration/jabber_server')
 
+    soup_uri = Soup.URI()
+    soup_uri.set_scheme('xmpp')
+    soup_uri.set_host(jabber_server)
+    soup_uri.set_path('/')
+    xs_cookie = cookie_jar.get_cookies(soup_uri, for_http=False)
+    if xs_cookie is not None:
+        _logger.debug('seed_xs_cookie: Cookie exists already')
+        return
+
     pubkey = profile.get_profile().pubkey
     cookie_data = {'color': profile.get_color().to_string(),
                    'pkey_hash': sha1(pubkey).hexdigest()}
 
-    db_path = os.path.join(_profile_path, 'cookies.sqlite')
-    try:
-        cookies_db = sqlite3.connect(db_path)
-        c = cookies_db.cursor()
+    expire = int(time.time()) + 10 * 365 * 24 * 60 * 60
 
-        c.execute('''CREATE TABLE IF NOT EXISTS
-                     moz_cookies
-                     (id INTEGER PRIMARY KEY,
-                      name TEXT,
-                      value TEXT,
-                      host TEXT,
-                      path TEXT,
-                      expiry INTEGER,
-                      lastAccessed INTEGER,
-                      isSecure INTEGER,
-                      isHttpOnly INTEGER)''')
-
-        c.execute('''SELECT id
-                     FROM moz_cookies
-                     WHERE name=? AND host=? AND path=?''',
-                  ('xoid', jabber_server, '/'))
-
-        if c.fetchone():
-            _logger.debug('seed_xs_cookie: Cookie exists already')
-            return
-
-        expire = int(time.time()) + 10*365*24*60*60
-        c.execute('''INSERT INTO moz_cookies (name, value, host,
-                                              path, expiry, lastAccessed,
-                                              isSecure, isHttpOnly)
-                     VALUES(?,?,?,?,?,?,?,?)''',
-                  ('xoid', cjson.encode(cookie_data), jabber_server,
-                   '/', expire, 0, 0, 0 ))
-        cookies_db.commit()
-        cookies_db.close()
-    except sqlite3.Error, e:
-        _logger.error('seed_xs_cookie: %s' % e)
-    else:
-        _logger.debug('seed_xs_cookie: Updated cookie successfully')
+    xs_cookie = Soup.Cookie()
+    xs_cookie.set_name('xoid')
+    xs_cookie.set_value(json.dumps(cookie_data))
+    xs_cookie.set_domain(jabber_server)
+    xs_cookie.set_path('/')
+    xs_cookie.set_max_age(expire)
+    cookie_jar.add_cookie(xs_cookie)
+    _logger.debug('seed_xs_cookie: Updated cookie successfully')
 
 
-import hulahop
-hulahop.set_app_version(os.environ['SUGAR_BUNDLE_VERSION'])
-hulahop.startup(_profile_path)
-
-from xpcom import components
-
-
-def _set_accept_languages():
-    ''' Set intl.accept_languages based on the locale
-    '''
-
-    lang = locale.getdefaultlocale()[0]
-    if not lang:
-        _logger.debug("Set_Accept_language: unrecognised LANG format")
-        return
-    lang = lang.split('_')
-
-    # e.g. es-uy, es
-    pref = lang[0] + "-" + lang[1].lower()  + ", " + lang[0]
+def _set_char_preference(name, value):
     cls = components.classes["@mozilla.org/preferences-service;1"]
     prefService = cls.getService(components.interfaces.nsIPrefService)
     branch = prefService.getBranch('')
-    branch.setCharPref('intl.accept_languages', pref)
-    logging.debug('LANG set')
+    branch.setCharPref(name, value)
+
 
 from browser import TabbedView
-from browser import Browser
 from webtoolbar import PrimaryToolbar
 from edittoolbar import EditToolbar
 from viewtoolbar import ViewToolbar
 import downloadmanager
-import globalhistory
-import filepicker
 
-_LIBRARY_PATH = '/usr/share/library-common/index.html'
+# TODO: make the registration clearer SL #3087
+# import filepicker  # pylint: disable=W0611
 
 from model import Model
-from sugar.presence.tubeconn import TubeConnection
+from sugar3.presence.tubeconn import TubeConnection
 from messenger import Messenger
 from linkbutton import LinkButton
 
@@ -183,47 +154,43 @@ class WebActivity(activity.Activity):
 
         _logger.debug('Starting the web activity')
 
+        session = WebKit.get_default_session()
+        session.set_property('accept-language-auto', True)
+
+        # By default, cookies are not stored persistently, we have to
+        # add a cookie jar so that they get saved to disk.  We use one
+        # with a SQlite database:
+        cookie_jar = SoupGNOME.CookieJarSqlite(filename=_cookies_db_path,
+                                               read_only=False)
+        session.add_feature(cookie_jar)
+
+        _seed_xs_cookie(cookie_jar)
+
+        # FIXME
+        # downloadmanager.remove_old_parts()
+
+        self._force_close = False
         self._tabbed_view = TabbedView()
-
-        _set_accept_languages()
-        _seed_xs_cookie()
-
-        # don't pick up the sugar theme - use the native mozilla one instead
-        cls = components.classes['@mozilla.org/preferences-service;1']
-        pref_service = cls.getService(components.interfaces.nsIPrefService)
-        branch = pref_service.getBranch("mozilla.widget.")
-        branch.setBoolPref("disable-native-theme", True)
-
-        # HACK
-        # Currently, the multiple tabs feature crashes the Browse activity
-        # on cairo versions 1.8.10 or later. The exact cause for this
-        # isn't exactly known. Thus, disable the multiple tabs feature
-        # if we come across cairo versions >= 1.08.10
-        # More information can be found here:
-        # [1] http://lists.sugarlabs.org/archive/sugar-devel/2010-July/025187.html
-        self._disable_multiple_tabs = cairo.cairo_version() >= 10810
-        if self._disable_multiple_tabs:
-            logging.warning('Not enabling the multiple tabs feature due'
-                ' to a bug in cairo/mozilla')
-
-        self._primary_toolbar = PrimaryToolbar(self._tabbed_view, self,
-                self._disable_multiple_tabs)
-        self._primary_toolbar.connect('add-link', self._link_add_button_cb)
-
-        self._primary_toolbar.connect('add-tab', self._new_tab_cb)
+        self._tabbed_view.connect('focus-url-entry', self._on_focus_url_entry)
 
         self._tray = HTray()
-        self.set_tray(self._tray, gtk.POS_BOTTOM)
+        self.set_tray(self._tray, Gtk.PositionType.BOTTOM)
         self._tray.show()
 
+        self._primary_toolbar = PrimaryToolbar(self._tabbed_view, self)
         self._edit_toolbar = EditToolbar(self)
+        self._view_toolbar = ViewToolbar(self)
+
+        self._primary_toolbar.connect('add-link', self._link_add_button_cb)
+
+        self._primary_toolbar.connect('go-home', self._go_home_button_cb)
+
         self._edit_toolbar_button = ToolbarButton(
                 page=self._edit_toolbar,
                 icon_name='toolbar-edit')
         self._primary_toolbar.toolbar.insert(
                 self._edit_toolbar_button, 1)
 
-        self._view_toolbar = ViewToolbar(self)
         view_toolbar_button = ToolbarButton(
                 page=self._view_toolbar,
                 icon_name='toolbar-view')
@@ -246,7 +213,7 @@ class WebActivity(activity.Activity):
         elif not self._jobject.file_path:
             # TODO: we need this hack until we extend the activity API for
             # opening URIs and default docs.
-            self._load_homepage()
+            self._tabbed_view.load_homepage()
 
         self.messenger = None
         self.connect('shared', self._shared_cb)
@@ -262,10 +229,8 @@ class WebActivity(activity.Activity):
             _logger.debug('Offline')
         self.initiating = None
 
-        if self._shared_activity is not None:
-            _logger.debug('shared:  %s' %self._shared_activity.props.joined)
-
-        if self._shared_activity is not None:
+        if self.get_shared_activity() is not None:
+            _logger.debug('shared: %s', self.get_shared())
             # We are joining the activity
             _logger.debug('Joined activity')
             self.connect('joined', self._joined_cb)
@@ -275,8 +240,8 @@ class WebActivity(activity.Activity):
         else:
             _logger.debug('Created activity')
 
-    def _new_tab_cb(self, gobject):
-        self._load_homepage(new_tab=True)
+    def _on_focus_url_entry(self, gobject):
+        self._primary_toolbar.entry.grab_focus()
 
     def _shared_cb(self, activity_):
         _logger.debug('My activity was shared')
@@ -284,15 +249,16 @@ class WebActivity(activity.Activity):
         self._setup()
 
         _logger.debug('This is my activity: making a tube...')
-        self.tubes_chan[telepathy.CHANNEL_TYPE_TUBES].OfferDBusTube(SERVICE, {})
+        self.tubes_chan[telepathy.CHANNEL_TYPE_TUBES].OfferDBusTube(SERVICE,
+                                                                    {})
 
     def _setup(self):
-        if self._shared_activity is None:
+        if self.get_shared_activity() is None:
             _logger.debug('Failed to share or join activity')
             return
 
         bus_name, conn_path, channel_paths = \
-                self._shared_activity.get_channels()
+                self.get_shared_activity().get_channels()
 
         # Work out what our room is called and whether we have Tubes already
         room = None
@@ -302,15 +268,18 @@ class WebActivity(activity.Activity):
             channel = telepathy.client.Channel(bus_name, channel_path)
             htype, handle = channel.GetHandle()
             if htype == telepathy.HANDLE_TYPE_ROOM:
-                _logger.debug('Found our room: it has handle#%d "%s"'
-                    %(handle, self.conn.InspectHandles(htype, [handle])[0]))
+                _logger.debug('Found our room: it has handle#%d "%s"',
+                              handle,
+                              self.conn.InspectHandles(htype, [handle])[0])
                 room = handle
                 ctype = channel.GetChannelType()
                 if ctype == telepathy.CHANNEL_TYPE_TUBES:
-                    _logger.debug('Found our Tubes channel at %s'%channel_path)
+                    _logger.debug('Found our Tubes channel at %s',
+                                  channel_path)
                     tubes_chan = channel
                 elif ctype == telepathy.CHANNEL_TYPE_TEXT:
-                    _logger.debug('Found our Text channel at %s'%channel_path)
+                    _logger.debug('Found our Text channel at %s',
+                                  channel_path)
                     text_chan = channel
 
         if room is None:
@@ -323,9 +292,9 @@ class WebActivity(activity.Activity):
         # Make sure we have a Tubes channel - PS doesn't yet provide one
         if tubes_chan is None:
             _logger.debug("Didn't find our Tubes channel, requesting one...")
-            tubes_chan = self.conn.request_channel(telepathy.CHANNEL_TYPE_TUBES,
-                                                   telepathy.HANDLE_TYPE_ROOM,
-                                                   room, True)
+            tubes_chan = self.conn.request_channel(
+                telepathy.CHANNEL_TYPE_TUBES, telepathy.HANDLE_TYPE_ROOM,
+                room, True)
 
         self.tubes_chan = tubes_chan
         self.text_chan = text_chan
@@ -338,10 +307,10 @@ class WebActivity(activity.Activity):
             self._new_tube_cb(*tube_info)
 
     def _list_tubes_error_cb(self, e):
-        _logger.debug('ListTubes() failed: %s'%e)
+        _logger.debug('ListTubes() failed: %s', e)
 
     def _joined_cb(self, activity_):
-        if not self._shared_activity:
+        if not self.get_shared_activity():
             return
 
         _logger.debug('Joined an existing shared activity')
@@ -354,10 +323,11 @@ class WebActivity(activity.Activity):
             reply_handler=self._list_tubes_reply_cb,
             error_handler=self._list_tubes_error_cb)
 
-    def _new_tube_cb(self, identifier, initiator, type, service, params, state):
+    def _new_tube_cb(self, identifier, initiator, type, service, params,
+                     state):
         _logger.debug('New tube: ID=%d initator=%d type=%d service=%s '
-                      'params=%r state=%d' %(identifier, initiator, type,
-                                             service, params, state))
+                      'params=%r state=%d', identifier, initiator, type,
+                      service, params, state)
 
         if (type == telepathy.TUBE_TYPE_DBUS and
             service == SERVICE):
@@ -367,27 +337,12 @@ class WebActivity(activity.Activity):
 
             self.tube_conn = TubeConnection(self.conn,
                 self.tubes_chan[telepathy.CHANNEL_TYPE_TUBES],
-                identifier, group_iface = self.text_chan[
+                identifier, group_iface=self.text_chan[
                     telepathy.CHANNEL_INTERFACE_GROUP])
 
             _logger.debug('Tube created')
             self.messenger = Messenger(self.tube_conn, self.initiating,
                                        self.model)
-
-    def _load_homepage(self, new_tab=False):
-        # If new_tab is True, open the homepage in a new tab.
-        if new_tab:
-            browser = Browser()
-            self._tabbed_view._append_tab(browser)
-        else:
-            browser = self._tabbed_view.current_browser
-
-        if os.path.isfile(_LIBRARY_PATH):
-            browser.load_uri('file://' + _LIBRARY_PATH)
-        else:
-            default_page = os.path.join(activity.get_bundle_path(),
-                                        "data/index.html")
-            browser.load_uri(default_page)
 
     def _get_data_from_file_path(self, file_path):
         fd = open(file_path, 'r')
@@ -410,8 +365,12 @@ class WebActivity(activity.Activity):
                                       base64.b64decode(link['thumb']),
                                       link['color'], link['title'],
                                       link['owner'], -1, link['hash'])
-            logging.debug('########## reading %s' % data)
-            self._tabbed_view.set_session(self.model.data['history'])
+            logging.debug('########## reading %s', data)
+            self._tabbed_view.set_history(self.model.data['history'])
+            for number, tab in enumerate(self.model.data['currents']):
+                tab_page = self._tabbed_view.get_nth_page(number)
+                tab_page.browser.set_history_index(tab['history_index'])
+
             self._tabbed_view.set_current_page(self.model.data['current_tab'])
         elif self.metadata['mime_type'] == 'text/uri-list':
             data = self._get_data_from_file_path(file_path)
@@ -422,20 +381,8 @@ class WebActivity(activity.Activity):
                 _logger.error('Open uri-list: Does not support'
                               'list of multiple uris by now.')
         else:
-            self._tabbed_view.props.current_browser.load_uri(file_path)
-        self._load_urls()
-
-    def _load_urls(self):
-        if self.model.data['currents'] != None:
-            first = True
-            for current_tab in self.model.data['currents']:
-                if first:
-                    browser = self._tabbed_view.current_browser
-                    first = False
-                else:
-                    browser = Browser()
-                    self._tabbed_view._append_tab(browser)
-                browser.load_uri(current_tab['url'])
+            file_uri = 'file://' + file_path
+            self._tabbed_view.props.current_browser.load_uri(file_uri)
 
     def write_file(self, file_path):
         if not self.metadata['mime_type']:
@@ -446,22 +393,30 @@ class WebActivity(activity.Activity):
             browser = self._tabbed_view.current_browser
 
             if not self._jobject.metadata['title_set_by_user'] == '1':
-                if browser.props.title:
+                if browser.props.title is None:
+                    self.metadata['title'] = _('Untitled')
+                else:
                     self.metadata['title'] = browser.props.title
 
-            self.model.data['history'] = self._tabbed_view.get_session()
-            self.model.data['current_tab'] = self._tabbed_view.get_current_page()
+            self.model.data['history'] = self._tabbed_view.get_history()
+            current_tab = self._tabbed_view.get_current_page()
+            self.model.data['current_tab'] = current_tab
 
             self.model.data['currents'] = []
             for n in range(0, self._tabbed_view.get_n_pages()):
-                n_browser = self._tabbed_view.get_nth_page(n)
+                tab_page = self._tabbed_view.get_nth_page(n)
+                n_browser = tab_page.browser
                 if n_browser != None:
-                    ui_uri = browser.get_url_from_nsiuri(browser.progress.location)
-                    self.model.data['currents'].append({'title':browser.props.title,'url':ui_uri})
+                    uri = n_browser.get_uri()
+                    history_index = n_browser.get_history_index()
+                    info = {'title': n_browser.props.title, 'url': uri,
+                            'history_index': history_index}
+
+                    self.model.data['currents'].append(info)
 
             f = open(file_path, 'w')
             try:
-                logging.debug('########## writing %s' % self.model.serialize())
+                logging.debug('########## writing %s', self.model.serialize())
                 f.write(self.model.serialize())
             finally:
                 f.close()
@@ -469,11 +424,14 @@ class WebActivity(activity.Activity):
     def _link_add_button_cb(self, button):
         self._add_link()
 
+    def _go_home_button_cb(self, button):
+        self._tabbed_view.load_homepage()
+
     def _key_press_cb(self, widget, event):
-        key_name = gtk.gdk.keyval_name(event.keyval)
+        key_name = Gdk.keyval_name(event.keyval)
         browser = self._tabbed_view.props.current_browser
 
-        if event.state & gtk.gdk.CONTROL_MASK:
+        if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
 
             if key_name == 'd':
                 self._add_link()
@@ -491,17 +449,35 @@ class WebActivity(activity.Activity):
                 _logger.debug('keyboard: Zoom in')
                 browser.zoom_in()
             elif key_name == 'Left':
-                browser.web_navigation.goBack()
+                _logger.debug('keyboard: Go back')
+                browser.go_back()
             elif key_name == 'Right':
-                browser.web_navigation.goForward()
+                _logger.debug('keyboard: Go forward')
+                browser.go_forward()
             elif key_name == 'r':
-                flags = components.interfaces.nsIWebNavigation.LOAD_FLAGS_NONE
-                browser.web_navigation.reload(flags)
-            elif gtk.gdk.keyval_name(event.keyval) == "t":
-                if not self._disable_multiple_tabs:
-                    self._load_homepage(new_tab=True)
+                _logger.debug('keyboard: Reload')
+                browser.reload()
+            elif Gdk.keyval_name(event.keyval) == "t":
+                self._tabbed_view.add_tab()
             else:
                 return False
+
+            return True
+
+        elif key_name in ('KP_Up', 'KP_Down', 'KP_Left', 'KP_Right'):
+            scrolled_window = browser.get_parent()
+
+            if key_name in ('KP_Up', 'KP_Down'):
+                adjustment = scrolled_window.get_vadjustment()
+            elif key_name in ('KP_Left', 'KP_Right'):
+                adjustment = scrolled_window.get_hadjustment()
+            value = adjustment.get_value()
+            step = adjustment.get_step_increment()
+
+            if key_name in ('KP_Up', 'KP_Left'):
+                adjustment.set_value(value - step)
+            elif key_name in ('KP_Down', 'KP_Right'):
+                adjustment.set_value(value + step)
 
             return True
 
@@ -511,12 +487,12 @@ class WebActivity(activity.Activity):
         ''' take screenshot and add link info to the model '''
 
         browser = self._tabbed_view.props.current_browser
-        ui_uri = browser.get_url_from_nsiuri(browser.progress.location)
+        ui_uri = browser.get_uri()
 
         for link in self.model.data['shared_links']:
             if link['hash'] == sha1(ui_uri).hexdigest():
-                _logger.debug('_add_link: link exist already a=%s b=%s' %(
-                    link['hash'], sha1(ui_uri).hexdigest()))
+                _logger.debug('_add_link: link exist already a=%s b=%s',
+                              link['hash'], sha1(ui_uri).hexdigest())
                 return
         buf = self._get_screenshot()
         timestamp = time.time()
@@ -539,10 +515,11 @@ class WebActivity(activity.Activity):
 
     def _add_link_totray(self, url, buf, color, title, owner, index, hash):
         ''' add a link to the tray '''
-        item = LinkButton(url, buf, color, title, owner, index, hash)
+        item = LinkButton(buf, color, title, owner, hash)
         item.connect('clicked', self._link_clicked_cb, url)
         item.connect('remove_link', self._link_removed_cb)
-        self._tray.add_item(item, index) # use index to add to the tray
+        # use index to add to the tray
+        self._tray.add_item(item, index)
         item.show()
         if self._tray.props.visible is False:
             self._tray.show()
@@ -559,58 +536,68 @@ class WebActivity(activity.Activity):
         ''' an item of the link tray has been clicked '''
         self._tabbed_view.props.current_browser.load_uri(url)
 
-    def _pixbuf_save_cb(self, buf, data):
-        data[0] += buf
-        return True
-
-    def get_buffer(self, pixbuf):
-        data = [""]
-        pixbuf.save_to_callback(self._pixbuf_save_cb, "png", {}, data)
-        return str(data[0])
-
     def _get_screenshot(self):
-        window = self._tabbed_view.props.current_browser.window
-        width, height = window.get_size()
+        browser = self._tabbed_view.props.current_browser
+        window = browser.get_window()
+        width, height = window.get_width(), window.get_height()
 
-        screenshot = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, has_alpha=False,
-                                    bits_per_sample=8, width=width,
-                                    height=height)
-        screenshot.get_from_drawable(window, window.get_colormap(), 0, 0, 0, 0,
-                                     width, height)
+        thumb_width, thumb_height = style.zoom(100), style.zoom(80)
 
-        screenshot = screenshot.scale_simple(style.zoom(100),
-                                                 style.zoom(80),
-                                                 gtk.gdk.INTERP_BILINEAR)
+        thumb_surface = Gdk.Window.create_similar_surface(window,
+            cairo.CONTENT_COLOR, thumb_width, thumb_height)
 
-        buf = self.get_buffer(screenshot)
-        return buf
+        cairo_context = cairo.Context(thumb_surface)
+        thumb_scale_w = thumb_width * 1.0 / width
+        thumb_scale_h = thumb_height * 1.0 / height
+        cairo_context.scale(thumb_scale_w, thumb_scale_h)
+        Gdk.cairo_set_source_window(cairo_context, window, 0, 0)
+        cairo_context.paint()
+
+        thumb_str = StringIO.StringIO()
+        thumb_surface.write_to_png(thumb_str)
+        return thumb_str.getvalue()
 
     def can_close(self):
-        if downloadmanager.can_quit():
+        if self._force_close:
+            return True
+        elif downloadmanager.can_quit():
             return True
         else:
             alert = Alert()
-            alert.props.title = _('Download in progress')
-            alert.props.msg = _('Stopping now will cancel your download')
+            alert.props.title = ngettext('Download in progress',
+                                         'Downloads in progress',
+                                         downloadmanager.num_downloads())
+            message = ngettext('Stopping now will erase your download',
+                               'Stopping now will erase your downloads',
+                               downloadmanager.num_downloads())
+            alert.props.msg = message
             cancel_icon = Icon(icon_name='dialog-cancel')
-            alert.add_button(gtk.RESPONSE_CANCEL, _('Cancel'), cancel_icon)
+            cancel_label = ngettext('Continue download', 'Continue downloads',
+                                    downloadmanager.num_downloads())
+            alert.add_button(Gtk.ResponseType.CANCEL, cancel_label,
+                             cancel_icon)
             stop_icon = Icon(icon_name='dialog-ok')
-            alert.add_button(gtk.RESPONSE_OK, _('Stop'), stop_icon)
+            alert.add_button(Gtk.ResponseType.OK, _('Stop'), stop_icon)
             stop_icon.show()
             self.add_alert(alert)
             alert.connect('response', self.__inprogress_response_cb)
             alert.show()
             self.present()
+            return False
 
     def __inprogress_response_cb(self, alert, response_id):
         self.remove_alert(alert)
-        if response_id is gtk.RESPONSE_CANCEL:
+        if response_id is Gtk.ResponseType.CANCEL:
             logging.debug('Keep on')
-        elif response_id == gtk.RESPONSE_OK:
+        elif response_id == Gtk.ResponseType.OK:
             logging.debug('Stop downloads and quit')
+            self._force_close = True
             downloadmanager.remove_all_downloads()
-            self.close(force=True)
+            self.close()
 
     def get_document_path(self, async_cb, async_err_cb):
         browser = self._tabbed_view.props.current_browser
         browser.get_source(async_cb, async_err_cb)
+
+    def get_canvas(self):
+        return self._tabbed_view

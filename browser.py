@@ -18,63 +18,46 @@
 
 import os
 import time
-import logging
+import re
 from gettext import gettext as _
 
-import gobject
-import gtk
-import hulahop
-import xpcom
-from xpcom.nsError import *
-from xpcom import components
-from xpcom.components import interfaces
-from hulahop.webview import WebView
+from gi.repository import GObject
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import Pango
+from gi.repository import WebKit
+from gi.repository import Soup
 
-from sugar.datastore import datastore
-from sugar import profile
-from sugar import env
-from sugar.activity import activity
-from sugar.graphics import style
+from sugar3 import env
+from sugar3.activity import activity
+from sugar3.graphics import style
+from sugar3.graphics.icon import Icon
 
-import sessionstore
-from palettes import ContentInvoker
-from sessionhistory import HistoryListener
-from progresslistener import ProgressListener
+from widgets import BrowserNotebook
+import globalhistory
+import downloadmanager
+from pdfviewer import PDFTabPage
 
 _ZOOM_AMOUNT = 0.1
+_LIBRARY_PATH = '/usr/share/library-common/index.html'
 
+_WEB_SCHEMES = ['http', 'https', 'ftp', 'file', 'javascript', 'data',
+                'about', 'gopher', 'mailto']
 
-class GetSourceListener(object):
-    _com_interfaces_ = interfaces.nsIWebProgressListener
-
-    def __init__(self, file_path, async_cb, async_err_cb):
-        self._file_path = file_path
-        self._async_cb = async_cb
-        self._async_err_cb = async_err_cb
-
-    def onStateChange(self, webProgress, request, stateFlags, status):
-        if stateFlags & interfaces.nsIWebProgressListener.STATE_IS_REQUEST and \
-                stateFlags & interfaces.nsIWebProgressListener.STATE_STOP:
-            self._async_cb(self._file_path)
-
-    def onProgressChange(self, progress, request, curSelfProgress,
-                         maxSelfProgress, curTotalProgress, maxTotalProgress):
-        pass
-
-    def onLocationChange(self, progress, request, location):
-        pass
-
-    def onStatusChange(self, progress, request, status, message):
-        pass
-
-    def onSecurityChange(self, progress, request, state):
-        pass
+_NON_SEARCH_REGEX = re.compile('''
+    (^localhost(\\.[^\s]+)?(:\\d+)?(/.*)?$|
+    ^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]$|
+    ^::[0-9a-f:]*$|                         # IPv6 literals
+    ^[0-9a-f:]+:[0-9a-f:]*$|                # IPv6 literals
+    ^[^\\.\s]+\\.[^\\.\s]+.*$|              # foo.bar...
+    ^https?://[^/\\.\s]+.*$|
+    ^about:.*$|
+    ^data:.*$|
+    ^file:.*$)
+    ''', re.VERBOSE)
 
 
 class CommandListener(object):
-
-    _com_interfaces_ = interfaces.nsIDOMEventListener
-
     def __init__(self, window):
         self._window = window
 
@@ -91,120 +74,253 @@ class CommandListener(object):
         cert_exception.showDialog(self._window)
 
 
-class TabbedView(gtk.Notebook):
+class TabbedView(BrowserNotebook):
     __gtype_name__ = 'TabbedView'
 
-    _com_interfaces_ = interfaces.nsIWindowCreator
-
-    AGENT_SHEET = os.path.join(activity.get_bundle_path(),
-                               'agent-stylesheet.css')
-    USER_SHEET = os.path.join(env.get_profile_path(), 'gecko',
-                              'user-stylesheet.css')
+    __gsignals__ = {
+        'focus-url-entry': (GObject.SignalFlags.RUN_FIRST,
+                            None,
+                            ([])),
+    }
 
     def __init__(self):
-        gobject.GObject.__init__(self)
+        BrowserNotebook.__init__(self)
 
         self.props.show_border = False
         self.props.scrollable = True
 
-        io_service_class = components.classes[ \
-                "@mozilla.org/network/io-service;1"]
-        io_service = io_service_class.getService(interfaces.nsIIOService)
+        self.connect('size-allocate', self.__size_allocate_cb)
+        self.connect('page-added', self.__page_added_cb)
+        self.connect('page-removed', self.__page_removed_cb)
 
-        # Use xpcom to turn off "offline mode" detection, which disables
-        # access to localhost for no good reason.  (Trac #6250.)
-        io_service2 = io_service_class.getService(interfaces.nsIIOService2)
-        io_service2.manageOfflineStatus = False
+        self.add_tab()
+        self._update_closing_buttons()
+        self._update_tab_sizes()
 
-        cls = components.classes['@mozilla.org/content/style-sheet-service;1']
-        style_sheet_service = cls.getService(interfaces.nsIStyleSheetService)
+    def normalize_or_autosearch_url(self, url):
+        """Normalize the url input or return a url for search.
 
-        if os.path.exists(TabbedView.AGENT_SHEET):
-            agent_sheet_uri = io_service.newURI('file:///' +
-                                                TabbedView.AGENT_SHEET,
-                                                None, None)
-            style_sheet_service.loadAndRegisterSheet(agent_sheet_uri,
-                    interfaces.nsIStyleSheetService.AGENT_SHEET)
+        We use SoupURI as an indication of whether the value given in url
+        is not something we want to search; we only do that, though, if
+        the address has a web scheme, because SoupURI will consider any
+        string: as a valid scheme, and we will end up prepending http://
+        to it.
 
-        if os.path.exists(TabbedView.USER_SHEET):
-            user_sheet_uri = io_service.newURI('file:///' + TabbedView.USER_SHEET,
-                                               None, None)
-            style_sheet_service.loadAndRegisterSheet(user_sheet_uri,
-                    interfaces.nsIStyleSheetService.USER_SHEET)
+        This code is borrowed from Epiphany.
 
-        cls = components.classes['@mozilla.org/embedcomp/window-watcher;1']
-        window_watcher = cls.getService(interfaces.nsIWindowWatcher)
-        window_creator = xpcom.server.WrapObject(self,
-                                                 interfaces.nsIWindowCreator)
-        window_watcher.setWindowCreator(window_creator)
+        url -- input string that can be normalized to an url or serve
+               as search
 
-        browser = Browser()
-        self._append_tab(browser)
+        Return: a string containing a valid url
 
-    def createChromeWindow(self, parent, flags):
-        if flags & interfaces.nsIWebBrowserChrome.CHROME_OPENAS_CHROME:
-            dialog = PopupDialog()
-            dialog.view.is_chrome = True
+        """
+        def has_web_scheme(address):
+            if address == '':
+                return False
 
-            parent_dom_window = parent.webBrowser.contentDOMWindow
-            parent_view = hulahop.get_view_for_window(parent_dom_window)
-            if parent_view:
-                dialog.set_transient_for(parent_view.get_toplevel())
+            scheme, sep, after = address.partition(':')
+            if sep == '':
+                return False
 
-            browser = dialog.view.browser
+            return scheme in _WEB_SCHEMES
 
-            item = browser.queryInterface(interfaces.nsIDocShellTreeItem)
-            item.itemType = interfaces.nsIDocShellTreeItem.typeChromeWrapper
+        soup_uri = None
+        effective_url = None
 
-            return browser.containerWindow
+        if has_web_scheme(url):
+            try:
+                soup_uri = Soup.URI.new(url)
+            except TypeError:
+                pass
+
+        if soup_uri is None and not _NON_SEARCH_REGEX.match(url):
+            # Get the user's LANG to use as default language of
+            # the results
+            locale = os.environ.get('LANG', '')
+            language_location = locale.split('.', 1)[0].lower()
+            language = language_location.split('_')[0]
+            # If the string doesn't look like an URI, let's search it:
+            url_search = 'http://www.google.com/search?' \
+                'q=%(query)s&ie=UTF-8&oe=UTF-8&hl=%(language)s'
+            query_param = Soup.form_encode_hash({'q': url})
+            # [2:] here is getting rid of 'q=':
+            effective_url = url_search % {'query': query_param[2:],
+                                          'language': language}
         else:
-            browser = Browser()
-            self._append_tab(browser)
+            if has_web_scheme(url):
+                effective_url = url
+            else:
+                effective_url = 'http://' + url
 
-            return browser.browser.containerWindow
+        return effective_url
+
+    def __size_allocate_cb(self, widget, allocation):
+        self._update_tab_sizes()
+
+    def __page_added_cb(self, notebook, child, pagenum):
+        self._update_closing_buttons()
+        self._update_tab_sizes()
+
+    def __page_removed_cb(self, notebook, child, pagenum):
+        if self.get_n_pages():
+            self._update_closing_buttons()
+            self._update_tab_sizes()
+
+    def __new_tab_cb(self, browser, url):
+        new_browser = self.add_tab(next_to_current=True)
+        new_browser.load_uri(url)
+        new_browser.grab_focus()
+
+    def __open_pdf_in_new_tab_cb(self, browser, url):
+        tab_page = PDFTabPage()
+        tab_page.browser.connect('new-tab', self.__new_tab_cb)
+        tab_page.browser.connect('tab-close', self.__tab_close_cb)
+
+        label = TabLabel(tab_page.browser)
+        label.connect('tab-close', self.__tab_close_cb, tab_page)
+
+        next_index = self.get_current_page() + 1
+        self.insert_page(tab_page, label, next_index)
+        tab_page.show()
+        label.show()
+        self.set_current_page(next_index)
+        tab_page.setup(url)
+
+    def add_tab(self, next_to_current=False):
+        browser = Browser()
+        browser.connect('new-tab', self.__new_tab_cb)
+        browser.connect('open-pdf', self.__open_pdf_in_new_tab_cb)
+
+        if next_to_current:
+            self._insert_tab_next(browser)
+        else:
+            self._append_tab(browser)
+        self.emit('focus-url-entry')
+        return browser
+
+    def _insert_tab_next(self, browser):
+        tab_page = TabPage(browser)
+        label = TabLabel(browser)
+        label.connect('tab-close', self.__tab_close_cb, tab_page)
+
+        next_index = self.get_current_page() + 1
+        self.insert_page(tab_page, label, next_index)
+        tab_page.show()
+        self.set_current_page(next_index)
 
     def _append_tab(self, browser):
+        tab_page = TabPage(browser)
         label = TabLabel(browser)
-        label.connect('tab-close', self.__tab_close_cb)
+        label.connect('tab-close', self.__tab_close_cb, tab_page)
 
-        self.append_page(browser, label)
-        browser.show()
-
+        self.append_page(tab_page, label)
+        tab_page.show()
         self.set_current_page(-1)
-        self.props.show_tabs = self.get_n_pages() > 1
 
-    def __tab_close_cb(self, label, browser):
-        self.remove_page(self.page_num(browser))
-        browser.destroy()
-        self.props.show_tabs = self.get_n_pages() > 1
+    def on_add_tab(self, gobject):
+        self.add_tab()
+
+    def __tab_close_cb(self, label, tab_page):
+        self.remove_page(self.page_num(tab_page))
+        tab_page.destroy()
+
+    def _update_tab_sizes(self):
+        """Update ta widths based in the amount of tabs."""
+
+        n_pages = self.get_n_pages()
+        canvas_size = self.get_allocation()
+        # FIXME
+        # overlap_size = self.style_get_property('tab-overlap') * n_pages - 1
+        overlap_size = 0
+        allowed_size = canvas_size.width - overlap_size
+
+        tab_new_size = int(allowed_size * 1.0 / (n_pages + 1))
+        # Four tabs ensured:
+        tab_max_size = int(allowed_size * 1.0 / (5))
+        # Eight tabs ensured:
+        tab_min_size = int(allowed_size * 1.0 / (9))
+
+        if tab_new_size < tab_min_size:
+            tab_new_size = tab_min_size
+        elif tab_new_size > tab_max_size:
+            tab_new_size = tab_max_size
+
+        for page_idx in range(n_pages):
+            page = self.get_nth_page(page_idx)
+            label = self.get_tab_label(page)
+            label.update_size(tab_new_size)
+
+    def _update_closing_buttons(self):
+        """Prevent closing the last tab."""
+        first_page = self.get_nth_page(0)
+        first_label = self.get_tab_label(first_page)
+        if self.get_n_pages() == 1:
+            first_label.hide_close_button()
+        else:
+            first_label.show_close_button()
+
+    def load_homepage(self):
+        browser = self.current_browser
+
+        if os.path.isfile(_LIBRARY_PATH):
+            browser.load_uri('file://' + _LIBRARY_PATH)
+        else:
+            default_page = os.path.join(activity.get_bundle_path(),
+                                        "data/index.html")
+            browser.load_uri('file://' + default_page)
 
     def _get_current_browser(self):
-        return self.get_nth_page(self.get_current_page())
+        if self.get_n_pages():
+            return self.get_nth_page(self.get_current_page()).browser
+        else:
+            return None
 
-    current_browser = gobject.property(type=object, getter=_get_current_browser)
+    current_browser = GObject.property(type=object,
+                                       getter=_get_current_browser)
 
-    def get_session(self):
-        tab_sessions = []
+    def get_history(self):
+        tab_histories = []
         for index in xrange(0, self.get_n_pages()):
-            browser = self.get_nth_page(index)
-            tab_sessions.append(sessionstore.get_session(browser))
-        return tab_sessions
+            tab_page = self.get_nth_page(index)
+            tab_histories.append(tab_page.browser.get_history())
+        return tab_histories
 
-    def set_session(self, tab_sessions):
-        if tab_sessions and isinstance(tab_sessions[0], dict):
-            # Old format, no tabs
-            tab_sessions = [tab_sessions]
+    def set_history(self, tab_histories):
+        if tab_histories and isinstance(tab_histories[0], dict):
+           # Old format, no tabs
+            tab_histories = [tab_histories]
 
         while self.get_n_pages():
             self.remove_page(self.get_n_pages() - 1)
 
-        for tab_session in tab_sessions:
-            browser = Browser()
-            self._append_tab(browser)
-            sessionstore.set_session(browser, tab_session)
+        def is_pdf_history(tab_history):
+            return (len(tab_history) == 1 and
+                    tab_history[0]['url'].lower().endswith('pdf'))
+
+        for tab_history in tab_histories:
+            if is_pdf_history(tab_history):
+                url = tab_history[0]['url']
+                tab_page = PDFTabPage()
+                tab_page.browser.connect('new-tab', self.__new_tab_cb)
+                tab_page.browser.connect('tab-close', self.__tab_close_cb)
+
+                label = TabLabel(tab_page.browser)
+                label.connect('tab-close', self.__tab_close_cb, tab_page)
+
+                self.append_page(tab_page, label)
+                tab_page.show()
+                label.show()
+                tab_page.setup(url, title=tab_history[0]['title'])
+
+            else:
+                browser = Browser()
+                browser.connect('new-tab', self.__new_tab_cb)
+                browser.connect('open-pdf', self.__open_pdf_in_new_tab_cb)
+                self._append_tab(browser)
+                browser.set_history(tab_history)
 
 
-gtk.rc_parse_string('''
+Gtk.rc_parse_string('''
     style "browse-tab-close" {
         xthickness = 0
         ythickness = 0
@@ -212,155 +328,268 @@ gtk.rc_parse_string('''
     widget "*browse-tab-close" style "browse-tab-close"''')
 
 
-class TabLabel(gtk.HBox):
-    __gtype_name__ = 'TabLabel'
+class TabPage(Gtk.ScrolledWindow):
+    __gtype_name__ = 'BrowseTabPage'
+
+    def __init__(self, browser):
+        GObject.GObject.__init__(self)
+
+        self._browser = browser
+
+        self.add(browser)
+        browser.show()
+
+    def _get_browser(self):
+        return self._browser
+
+    browser = GObject.property(type=object,
+                               getter=_get_browser)
+
+
+class TabLabel(Gtk.HBox):
+    __gtype_name__ = 'BrowseTabLabel'
 
     __gsignals__ = {
-        'tab-close': (gobject.SIGNAL_RUN_FIRST,
-                      gobject.TYPE_NONE,
-                      ([object]))
+        'tab-close': (GObject.SignalFlags.RUN_FIRST,
+                      None,
+                      ([])),
     }
 
     def __init__(self, browser):
-        gobject.GObject.__init__(self)
+        GObject.GObject.__init__(self)
 
-        self._browser = browser
-        self._browser.connect('is-setup', self.__browser_is_setup_cb)
+        browser.connect('notify::title', self.__title_changed_cb)
+        browser.connect('notify::load-status', self.__load_status_changed_cb)
 
-        self._label = gtk.Label('')
-        self.pack_start(self._label)
+        self._label = Gtk.Label(label=_('Untitled'))
+        self._label.set_ellipsize(Pango.EllipsizeMode.END)
+        self._label.set_alignment(0, 0.5)
+        self.pack_start(self._label, True, True, 0)
         self._label.show()
 
-        button = gtk.Button()
+        close_tab_icon = Icon(icon_name='browse-close-tab')
+        button = Gtk.Button()
+        button.props.relief = Gtk.ReliefStyle.NONE
+        button.props.focus_on_click = False
+        icon_box = Gtk.HBox()
+        icon_box.pack_start(close_tab_icon, True, False, 0)
+        button.add(icon_box)
         button.connect('clicked', self.__button_clicked_cb)
         button.set_name('browse-tab-close')
-        button.props.relief = gtk.RELIEF_NONE
-        button.props.focus_on_click = False
-        self.pack_start(button)
+        self.pack_start(button, False, True, 0)
+        close_tab_icon.show()
+        icon_box.show()
         button.show()
+        self._close_button = button
 
-        close_image = gtk.image_new_from_stock(gtk.STOCK_CLOSE,
-                                               gtk.ICON_SIZE_MENU)
-        button.add(close_image)
-        close_image.show()
+    def update_size(self, size):
+        self.set_size_request(size, -1)
+
+    def hide_close_button(self):
+        self._close_button.hide()
+
+    def show_close_button(self):
+        self._close_button.show()
 
     def __button_clicked_cb(self, button):
-        self.emit('tab-close', self._browser)
+        self.emit('tab-close')
 
-    def __browser_is_setup_cb(self, browser):
-        browser.progress.connect('notify::location', self.__location_changed_cb)
-        browser.connect('notify::title', self.__title_changed_cb)
+    def __title_changed_cb(self, widget, param):
+        if widget.props.title:
+            self._label.set_text(widget.props.title)
 
-    def __location_changed_cb(self, progress_listener, pspec):
-        self._label.set_text(self._browser.get_url_from_nsiuri(progress_listener.location))
+    def __load_status_changed_cb(self, widget, param):
+        status = widget.get_load_status()
+        if WebKit.LoadStatus.PROVISIONAL <= status \
+                < WebKit.LoadStatus.FINISHED:
+            self._label.set_text(_('Loading...'))
+        elif status == WebKit.LoadStatus.FINISHED:
+            if widget.props.title == None:
+                self._label.set_text(_('Untitled'))
 
-    def __title_changed_cb(self, browser, pspec):
-        self._label.set_text(browser.props.title)
 
-
-class Browser(WebView):
+class Browser(WebKit.WebView):
     __gtype_name__ = 'Browser'
 
     __gsignals__ = {
-        'is-setup': (gobject.SIGNAL_RUN_FIRST,
-                  gobject.TYPE_NONE,
-                  ([]))
+        'new-tab': (GObject.SignalFlags.RUN_FIRST,
+                    None,
+                    ([str])),
+        'open-pdf': (GObject.SignalFlags.RUN_FIRST,
+                     None,
+                     ([str])),
     }
 
+    CURRENT_SUGAR_VERSION = '0.96'
+
     def __init__(self):
-        WebView.__init__(self)
+        WebKit.WebView.__init__(self)
 
-        self.history = HistoryListener()
-        self.progress = ProgressListener()
+        web_settings = self.get_settings()
 
-        cls = components.classes["@mozilla.org/typeaheadfind;1"]
-        self.typeahead = cls.createInstance(interfaces.nsITypeAheadFind)
+        # Add SugarLabs user agent:
+        identifier = ' Sugar Labs/' + self.CURRENT_SUGAR_VERSION
+        web_settings.props.user_agent += identifier
 
-    def do_setup(self):
-        WebView.do_setup(self)
+        # Change font size based in the GtkSettings font size.  The
+        # gtk-font-name property is a string with format '[font name]
+        # [font size]' like 'Sans Serif 10'.
+        gtk_settings = Gtk.Settings.get_default()
+        gtk_font_name = gtk_settings.get_property('gtk-font-name')
+        gtk_font_size = float(gtk_font_name.split()[-1])
+        web_settings.props.default_font_size = gtk_font_size * 1.2
+        web_settings.props.default_monospace_font_size = \
+            gtk_font_size * 1.2 - 2
 
-        listener = xpcom.server.WrapObject(ContentInvoker(self),
-                                           interfaces.nsIDOMEventListener)
-        self.window_root.addEventListener('click', listener, False)
+        self.set_settings(web_settings)
 
-        listener = xpcom.server.WrapObject(CommandListener(self.dom_window),
-                                           interfaces.nsIDOMEventListener)
-        self.window_root.addEventListener('command', listener, False)
+        # Scale text and graphics:
+        self.set_full_content_zoom(True)
 
-        self.progress.setup(self)
+        # Reference to the global history and callbacks to handle it:
+        self._global_history = globalhistory.get_global_history()
+        self.connect('notify::load-status', self.__load_status_changed_cb)
+        self.connect('notify::title', self.__title_changed_cb)
+        self.connect('download-requested', self.__download_requested_cb)
+        self.connect('mime-type-policy-decision-requested',
+                     self.__mime_type_policy_cb)
+        self.connect('new-window-policy-decision-requested',
+                     self.__new_window_policy_cb)
 
-        self.history.setup(self.web_navigation)
+    def get_history(self):
+        """Return the browsing history of this browser."""
+        back_forward_list = self.get_back_forward_list()
+        items_list = self._items_history_as_list(back_forward_list)
 
-        self.typeahead.init(self.doc_shell)
+        # If this is an empty tab, return an empty history:
+        if len(items_list) == 1 and items_list[0] is None:
+            return []
 
-        self.emit('is-setup')
+        history = []
+        for item in items_list:
+            history.append({'url': item.get_uri(),
+                            'title': item.get_title()})
 
+        return history
 
-    def get_url_from_nsiuri(self, uri):
-        """
-        get a nsIURI object and return a string with the url
-        """
-        if uri == None:
-            return ''
-        cls = components.classes['@mozilla.org/intl/texttosuburi;1']
-        texttosuburi = cls.getService(interfaces.nsITextToSubURI)
-        return texttosuburi.unEscapeURIForUI(uri.originCharset, uri.spec)
+    def set_history(self, history):
+        """Restore the browsing history for this browser."""
+        back_forward_list = self.get_back_forward_list()
+        back_forward_list.clear()
+        for entry in history:
+            uri, title = entry['url'], entry['title']
+            history_item = WebKit.WebHistoryItem.new_with_data(uri, title)
+            back_forward_list.add_item(history_item)
 
-    def get_session(self):
-        return sessionstore.get_session(self)
+    def get_history_index(self):
+        """Return the index of the current item in the history."""
+        back_forward_list = self.get_back_forward_list()
+        history_list = self._items_history_as_list(back_forward_list)
+        current_item = back_forward_list.get_current_item()
+        return history_list.index(current_item)
 
-    def set_session(self, data):
-        return sessionstore.set_session(self, data)
+    def set_history_index(self, index):
+        """Go to the item in the history specified by the index."""
+        back_forward_list = self.get_back_forward_list()
+        current_item = index - back_forward_list.get_back_length()
+        item = back_forward_list.get_nth_item(current_item)
+        if item is not None:
+            self.go_to_back_forward_item(item)
+
+    def _items_history_as_list(self, history):
+        """Return a list with the items of a WebKit.WebBackForwardList."""
+        back_items = []
+        for n in reversed(range(1, history.get_back_length() + 1)):
+            item = history.get_nth_item(n * -1)
+            back_items.append(item)
+
+        current_item = [history.get_current_item()]
+
+        forward_items = []
+        for n in range(1, history.get_forward_length() + 1):
+            item = history.get_nth_item(n)
+            forward_items.append(item)
+
+        all_items = back_items + current_item + forward_items
+        return all_items
 
     def get_source(self, async_cb, async_err_cb):
-        cls = components.classes[ \
-                '@mozilla.org/embedding/browser/nsWebBrowserPersist;1']
-        persist = cls.createInstance(interfaces.nsIWebBrowserPersist)
-        # get the source from the cache
-        persist.persistFlags = \
-                interfaces.nsIWebBrowserPersist.PERSIST_FLAGS_FROM_CACHE
-
+        data_source = self.get_main_frame().get_data_source()
+        data = data_source.get_data()
+        if data_source.is_loading() or data is None:
+            async_err_cb()
         temp_path = os.path.join(activity.get_activity_root(), 'instance')
         file_path = os.path.join(temp_path, '%i' % time.time())
-        cls = components.classes["@mozilla.org/file/local;1"]
-        local_file = cls.createInstance(interfaces.nsILocalFile)
-        local_file.initWithPath(file_path)
 
-        progresslistener = GetSourceListener(file_path, async_cb, async_err_cb)
-        persist.progressListener = xpcom.server.WrapObject(
-            progresslistener, interfaces.nsIWebProgressListener)
+        file_handle = file(file_path, 'w')
+        file_handle.write(data.str)
+        file_handle.close()
+        async_cb(file_path)
 
-        uri = self.web_navigation.currentURI
-        persist.saveURI(uri, self.doc_shell, None, None, None, local_file)
+    def open_new_tab(self, url):
+        self.emit('new-tab', url)
 
-    def zoom_in(self):
-        contentViewer = self.doc_shell.queryInterface( \
-                interfaces.nsIDocShell).contentViewer
-        if contentViewer is not None:
-            markupDocumentViewer = contentViewer.queryInterface( \
-                    interfaces.nsIMarkupDocumentViewer)
-            markupDocumentViewer.fullZoom += _ZOOM_AMOUNT
+    def __load_status_changed_cb(self, widget, param):
+        """Add the url to the global history or update it."""
+        status = widget.get_load_status()
+        if status <= WebKit.LoadStatus.COMMITTED:
+            uri = self.get_uri()
+            self._global_history.add_page(uri)
 
-    def zoom_out(self):
-        contentViewer = self.doc_shell.queryInterface( \
-                interfaces.nsIDocShell).contentViewer
-        if contentViewer is not None:
-            markupDocumentViewer = contentViewer.queryInterface( \
-                    interfaces.nsIMarkupDocumentViewer)
-            markupDocumentViewer.fullZoom -= _ZOOM_AMOUNT
+    def __title_changed_cb(self, widget, param):
+        """Update title in global history."""
+        uri = self.get_uri()
+        if self.props.title is not None:
+            title = self.props.title
+            if not isinstance(title, unicode):
+                title = unicode(title, 'utf-8')
+            self._global_history.set_page_title(uri, title)
+
+    def __mime_type_policy_cb(self, webview, frame, request, mimetype,
+                              policy_decision):
+        """Handle downloads and PDF files."""
+        if mimetype == 'application/pdf':
+            self.emit('open-pdf', request.get_uri())
+            policy_decision.ignore()
+            return True
+
+        elif not self.can_show_mime_type(mimetype):
+            policy_decision.download()
+            return True
+
+        return False
+
+    def __new_window_policy_cb(self, webview, webframe, request,
+                               navigation_action, policy_decision):
+        """Open new tab instead of a new window.
+
+        Browse doesn't support many windows, as any Sugar activity.
+        So we will handle the request, ignoring it and returning True
+        to inform WebKit that a decision was made.  And we will open a
+        new tab instead.
+
+        """
+        policy_decision.ignore()
+        uri = request.get_uri()
+        self.open_new_tab(uri)
+        return True
+
+    def __download_requested_cb(self, browser, download):
+        downloadmanager.add_download(download, browser)
+        return True
 
 
-class PopupDialog(gtk.Window):
+class PopupDialog(Gtk.Window):
     def __init__(self):
-        gtk.Window.__init__(self)
+        GObject.GObject.__init__(self)
 
-        self.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 
         border = style.GRID_CELL_SIZE
-        self.set_default_size(gtk.gdk.screen_width() - border * 2,
-                              gtk.gdk.screen_height() - border * 2)
+        self.set_default_size(Gdk.Screen.width() - border * 2,
+                              Gdk.Screen.height() - border * 2)
 
-        self.view = WebView()
+        self.view = WebKit.WebView()
         self.view.connect('notify::visibility', self.__notify_visibility_cb)
         self.add(self.view)
         self.view.realize()

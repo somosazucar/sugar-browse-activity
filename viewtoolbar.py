@@ -17,14 +17,19 @@
 
 from gettext import gettext as _
 
-import gtk
+from gi.repository import Gtk
+from gi.repository import GObject
 
-from sugar.graphics.toolbutton import ToolButton
+from sugar3.graphics.toolbutton import ToolButton
+
+from browser import Browser
 
 
-class ViewToolbar(gtk.Toolbar):
+class ViewToolbar(Gtk.Toolbar):
     def __init__(self, activity):
-        gtk.Toolbar.__init__(self)
+        GObject.GObject.__init__(self)
+
+        self._browser = None
 
         self._activity = activity
         self._activity.tray.connect('unmap', self.__unmap_cb)
@@ -42,7 +47,7 @@ class ViewToolbar(gtk.Toolbar):
         self.insert(self.zoomin, -1)
         self.zoomin.show()
 
-        self.separator = gtk.SeparatorToolItem()
+        self.separator = Gtk.SeparatorToolItem()
         self.separator.set_draw(True)
         self.insert(self.separator, -1)
         self.separator.show()
@@ -58,6 +63,25 @@ class ViewToolbar(gtk.Toolbar):
         self.traybutton.props.sensitive = False
         self.insert(self.traybutton, -1)
         self.traybutton.show()
+
+        tabbed_view = self._activity.get_canvas()
+
+        if tabbed_view.get_n_pages():
+            self._connect_to_browser(tabbed_view.props.current_browser)
+
+        tabbed_view.connect_after('switch-page', self.__switch_page_cb)
+
+    def __switch_page_cb(self, tabbed_view, page, page_num):
+        self._connect_to_browser(tabbed_view.props.current_browser)
+
+    def _connect_to_browser(self, browser):
+        self._browser = browser
+        self._update_zoom_buttons()
+
+    def _update_zoom_buttons(self):
+        is_webkit_browser = isinstance(self._browser, Browser)
+        self.zoomin.set_sensitive(is_webkit_browser)
+        self.zoomout.set_sensitive(is_webkit_browser)
 
     def __zoomin_clicked_cb(self, button):
         tabbed_view = self._activity.get_canvas()

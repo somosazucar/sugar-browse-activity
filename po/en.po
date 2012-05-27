@@ -2,132 +2,213 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#, fuzzy
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-16 00:30+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2012-03-23 00:34-0400\n"
+"PO-Revision-Date: 2012-03-23 10:21+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.0.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.5\n"
 
-#: activity/activity.info:2 webactivity.py:105
+#: activity/activity.info:2
 msgid "Browse"
-msgstr ""
+msgstr "Browse"
 
-#: browser.py:132
-msgid "Source"
-msgstr ""
+#: browser.py:139
+#, python-format
+msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: downloadmanager.py:140
+#: browser.py:383
+msgid "Loading..."
+msgstr "Loading..."
+
+#: browser.py:385
+#, python-format
+#, python-format,
+msgid "Loading %s..."
+msgstr "Loading %s..."
+
+#: browser.py:413 webactivity.py:415 webtoolbar.py:332
+msgid "Untitled"
+msgstr "Untitled"
+
+#: downloadmanager.py:102
 msgid "Download started"
-msgstr ""
+msgstr "Download started"
 
-#: downloadmanager.py:142 downloadmanager.py:156
+#: downloadmanager.py:103 downloadmanager.py:114
 #, python-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
-#: downloadmanager.py:154
+#: downloadmanager.py:112
 msgid "Download completed"
-msgstr ""
+msgstr "Download completed"
 
-#: downloadmanager.py:158
-msgid "Open"
-msgstr ""
-
-#: downloadmanager.py:161
-msgid "Ok"
-msgstr ""
-
-#: downloadmanager.py:162
-#, python-format
-msgid ""
-"File %s downloaded from\n"
-"%s."
-msgstr ""
-
-#: downloadmanager.py:243
-#, python-format
-msgid ""
-"Downloading %s from \n"
-"%s."
-msgstr ""
-
-#: linkbutton.py:96
-msgid "Remove"
-msgstr ""
-
-#: webactivity.py:113
-msgid "View"
-msgstr ""
-
-#: webactivity.py:131 webactivity.py:132
-msgid "blank"
-msgstr ""
-
-#: webactivity.py:440
-msgid "Download in progress"
-msgstr ""
-
-#: webactivity.py:441
-msgid "Stopping now will cancel your download"
-msgstr ""
-
-#: webactivity.py:443
-msgid "Cancel"
-msgstr ""
-
-#: webactivity.py:445 webtoolbar.py:171
-msgid "Stop"
-msgstr ""
-
-#: webtoolbar.py:53
-msgid "Back"
-msgstr ""
-
-#: webtoolbar.py:60
-msgid "Forward"
-msgstr ""
-
-#: webtoolbar.py:83
-msgid "Bookmark"
-msgstr ""
-
-#: webtoolbar.py:174
-msgid "Reload"
-msgstr ""
-
-#: downloadmanager.py:167
-#, python-format
-msgid "File %s from %s."
-msgstr ""
-
-#: viewtoolbar.py:34
-msgid "Zoom out"
-msgstr ""
-
-#: viewtoolbar.py:40
-msgid "Zoom in"
-msgstr ""
-
-#: viewtoolbar.py:51
-msgid "Fullscreen"
-msgstr ""
-
-#: viewtoolbar.py:87
-msgid "Show Tray"
-msgstr ""
-
-#: viewtoolbar.py:91
-msgid "Hide Tray"
-msgstr ""
-
-#: downloadmanager.py:158
+#: downloadmanager.py:117
 msgid "Show in Journal"
+msgstr "Show in Journal"
+
+#: downloadmanager.py:120
+msgid "Ok"
+msgstr "Ok"
+
+#: downloadmanager.py:128 pdfviewer.py:409
+#, python-format
+msgid "From: %s"
+msgstr "From: %s"
+
+#: downloadmanager.py:203
+#, python-format, 
+msgid ""
+"Downloading %(filename)s from \n"
+"%(source)s."
 msgstr ""
+"Downloading %(filename)s from \n"
+"%(source)s."
+
+#: edittoolbar.py:65
+msgid "Previous"
+msgstr "Previous"
+
+#: edittoolbar.py:72
+msgid "Next"
+msgstr "Next"
+
+#: linkbutton.py:103
+msgid "Remove"
+msgstr "Remove"
+
+#: palettes.py:140
+msgid "Follow link"
+msgstr "Follow link"
+
+#: palettes.py:145
+msgid "Follow link in new tab"
+msgstr "Follow link in new tab"
+
+#: palettes.py:151
+msgid "Keep link"
+msgstr "Keep link"
+
+#: palettes.py:159
+msgid "Copy link"
+msgstr "Copy link"
+
+#: palettes.py:215
+msgid "Keep image"
+msgstr "Keep image"
+
+#: palettes.py:223
+msgid "Copy image"
+msgstr "Copy image"
+
+#: pdfviewer.py:87 viewtoolbar.py:39
+msgid "Zoom out"
+msgstr "Zoom out"
+
+#: pdfviewer.py:93 viewtoolbar.py:45
+msgid "Zoom in"
+msgstr "Zoom in"
+
+#: pdfviewer.py:104
+msgid "Previous page"
+msgstr "Previous page"
+
+#: pdfviewer.py:111
+msgid "Next page"
+msgstr "Next page"
+
+#: pdfviewer.py:123
+msgid "Save PDF to Journal"
+msgstr "Save PDF to Journal"
+
+#: viewtoolbar.py:56
+msgid "Fullscreen"
+msgstr "Fullscreen"
+
+#: viewtoolbar.py:113
+msgid "Show Tray"
+msgstr "Show Tray"
+
+#: viewtoolbar.py:117
+msgid "Hide Tray"
+msgstr "Hide Tray"
+
+#: webactivity.py:569
+msgid "Download in progress"
+msgid_plural "Downloads in progress"
+msgstr[0] "Download in progress"
+msgstr[1] "Downloads in progress"
+
+#: webactivity.py:572
+msgid "Stopping now will erase your download"
+msgid_plural "Stopping now will erase your downloads"
+msgstr[0] "Stopping now will erase your download"
+msgstr[1] "Stopping now will erase your downloads"
+
+#: webactivity.py:577
+msgid "Continue download"
+msgid_plural "Continue downloads"
+msgstr[0] "Continue download"
+msgstr[1] "Continue downloads"
+
+#: webactivity.py:582
+msgid "Stop"
+msgstr "Stop"
+
+#: webtoolbar.py:248
+msgid "Home page"
+msgstr "Home page"
+
+#: webtoolbar.py:268
+msgid "Back"
+msgstr "Back"
+
+#: webtoolbar.py:282
+msgid "Forward"
+msgstr "Forward"
+
+#: webtoolbar.py:296
+msgid "Bookmark"
+msgstr "Bookmark"
+
+#, python-format
+#, python-format,
+#~ msgid ""
+#~ "Downloading %s from \n"
+#~ "%s."
+#~ msgstr ""
+#~ "Downloading %s from \n"
+#~ "%s."
+
+#~ msgid "Edit"
+#~ msgstr "Edit"
+
+#~ msgid "View"
+#~ msgstr "View"
+
+#~ msgid "Add a tab"
+#~ msgstr "Add a tab"
+
+#~ msgid "Reload"
+#~ msgstr "Reload"
+
+#~ msgid "Cancel"
+#~ msgstr "Cancel"
