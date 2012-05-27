@@ -2,58 +2,79 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-16 00:30+0000\n"
-"PO-Revision-Date: 2007-12-10 04:43+0000\n"
-"Last-Translator: Manatsawin <manatsawin@gmail.com>\n"
+"POT-Creation-Date: 2012-02-04 00:33-0500\n"
+"PO-Revision-Date: 2012-02-09 03:44+0200\n"
+"Last-Translator: Meechai <malaku38@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Pootle 1.0.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Pootle 2.0.5\n"
 
-#: activity/activity.info:2 webactivity.py:105
+#: activity/activity.info:2
 msgid "Browse"
 msgstr "เรียกดู"
 
-#: browser.py:132
-msgid "Source"
-msgstr "ซอร์ส"
+#: browser.py:138
+#, python-format
+msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
 
-#: downloadmanager.py:140
+#: browser.py:337
+msgid "Loading..."
+msgstr "กำลังทำงาน..."
+
+#: browser.py:339
+#, python-format
+#, python-format, fuzzy
+msgid "Loading %s..."
+msgstr "กำลังทำงาน..."
+
+#: browser.py:367 webactivity.py:415 webtoolbar.py:317
+msgid "Untitled"
+msgstr "ไม่มีชื่อเรื่อง"
+
+#: downloadmanager.py:102
 msgid "Download started"
 msgstr "เริ่มการดาวน์โหลด"
 
-#: downloadmanager.py:142 downloadmanager.py:156
+#: downloadmanager.py:103 downloadmanager.py:114
 #, python-format
 msgid "%s"
 msgstr "%s"
 
-#: downloadmanager.py:154
+#: downloadmanager.py:112
 msgid "Download completed"
 msgstr "ดาวน์โหลดเสร็จสิ้นแล้ว"
 
-#: downloadmanager.py:158
-msgid "Open"
-msgstr "เปิด"
+#: downloadmanager.py:117
+msgid "Show in Journal"
+msgstr "แสดงใน Journal"
 
-#: downloadmanager.py:161
+#: downloadmanager.py:120
 msgid "Ok"
 msgstr "ตกลง"
 
-#: downloadmanager.py:162
+#: downloadmanager.py:128
 #, python-format
-msgid ""
-"File %s downloaded from\n"
-"%s."
-msgstr ""
-"ไฟล์ %s ดาวน์โหลดมาจาก\n"
-"%s"
+msgid "From: %s"
+msgstr "ฟอร์ม: %s"
 
-#: downloadmanager.py:243
+#: downloadmanager.py:202
 #, python-format
 msgid ""
 "Downloading %s from \n"
@@ -62,76 +83,131 @@ msgstr ""
 "กำลังดาวน์โหลด %s จาก\n"
 "%s"
 
-#: linkbutton.py:96
+#: edittoolbar.py:65
+msgid "Previous"
+msgstr "ก่อนหน้า"
+
+#: edittoolbar.py:72
+msgid "Next"
+msgstr "ถัดไป"
+
+#: linkbutton.py:103
 msgid "Remove"
 msgstr "ลบ"
 
-# มุมมอง หรือ ดู ไม่แน่ใจครับ
-#: webactivity.py:113
-msgid "View"
-msgstr "มุมมอง"
+#: palettes.py:140
+msgid "Follow link"
+msgstr "เปิดลิงค์นี้"
 
-#: webactivity.py:131 webactivity.py:132
-msgid "blank"
-msgstr "ว่างเปล่า"
+#: palettes.py:145
+msgid "Follow link in new tab"
+msgstr "เปิดลิงค์นี้ในหน้าใหม่"
 
-#: webactivity.py:440
+#: palettes.py:151
+msgid "Keep link"
+msgstr "เก็บลิงค์นี้ไว้"
+
+#: palettes.py:159
+msgid "Copy link"
+msgstr "คัดลอกลิงก์"
+
+#: palettes.py:215
+msgid "Keep image"
+msgstr "เก็บรูปภาพ"
+
+#: palettes.py:223
+msgid "Copy image"
+msgstr "คัดลอกรูปภาพ"
+
+#: viewtoolbar.py:35
+msgid "Zoom out"
+msgstr "ขยายออก"
+
+#: viewtoolbar.py:41
+msgid "Zoom in"
+msgstr "ขยายเข้า"
+
+#: viewtoolbar.py:52
+msgid "Fullscreen"
+msgstr "เต็มจอ"
+
+#: viewtoolbar.py:90
+msgid "Show Tray"
+msgstr "แสดงแถบสถานนะ"
+
+#: viewtoolbar.py:94
+msgid "Hide Tray"
+msgstr "ซ่อนแถบสถานะ"
+
+#: webactivity.py:569
 msgid "Download in progress"
-msgstr "กำลังดาวน์โหลด"
+msgid_plural "Downloads in progress"
+msgstr[0] "กำลังดาวน์โหลด"
 
-#: webactivity.py:441
-msgid "Stopping now will cancel your download"
-msgstr "หากหยุดตอนนี้จะเป็นการยกเลิกการดาวน์โหลด"
+#: webactivity.py:572
+msgid "Stopping now will erase your download"
+msgid_plural "Stopping now will erase your downloads"
+msgstr[0] "หากหยุดตอนนี้จะเป็นการยกเลิกการดาวน์โหลด"
 
-#: webactivity.py:443
-msgid "Cancel"
-msgstr "ยกเลิก"
+#: webactivity.py:577
+msgid "Continue download"
+msgid_plural "Continue downloads"
+msgstr[0] "ทำการดาวน์โหลดต่อ"
 
-#: webactivity.py:445 webtoolbar.py:171
+#: webactivity.py:582
 msgid "Stop"
 msgstr "หยุด"
 
-#: webtoolbar.py:53
+#: webtoolbar.py:247
+msgid "Home page"
+msgstr "หน้าแรก"
+
+#: webtoolbar.py:267
 msgid "Back"
 msgstr "ย้อนกลับ"
 
-#: webtoolbar.py:60
+#: webtoolbar.py:274
 msgid "Forward"
 msgstr "ไปข้างหน้า"
 
-#: webtoolbar.py:83
+#: webtoolbar.py:281
 msgid "Bookmark"
 msgstr "ที่คั่นหน้า"
 
-#: webtoolbar.py:174
-msgid "Reload"
-msgstr "เรียกใหม่"
-
-#: downloadmanager.py:167
 #, python-format
-msgid "File %s from %s."
-msgstr ""
+#~ msgid ""
+#~ "Downloading %(file)s from \n"
+#~ "%(source)s."
+#~ msgstr ""
+#~ "กำลังดาวน์โหลด %(file)s จาก \n"
+#~ "%(source)s."
 
-#: viewtoolbar.py:34
-msgid "Zoom out"
-msgstr ""
+#~ msgid "Edit"
+#~ msgstr "แก้ไข"
 
-#: viewtoolbar.py:40
-msgid "Zoom in"
-msgstr ""
+# มุมมอง หรือ ดู ไม่แน่ใจครับ
+#~ msgid "View"
+#~ msgstr "มุมมอง"
 
-#: viewtoolbar.py:51
-msgid "Fullscreen"
-msgstr ""
+#~ msgid "Reload"
+#~ msgstr "เรียกใหม่"
 
-#: viewtoolbar.py:87
-msgid "Show Tray"
-msgstr ""
+#~ msgid "Cancel"
+#~ msgstr "ยกเลิก"
 
-#: viewtoolbar.py:91
-msgid "Hide Tray"
-msgstr ""
+#~ msgid "blank"
+#~ msgstr "ว่างเปล่า"
 
-#: downloadmanager.py:158
-msgid "Show in Journal"
-msgstr ""
+#~ msgid "Source"
+#~ msgstr "ซอร์ส"
+
+#~ msgid "Open"
+#~ msgstr "เปิด"
+
+#, python-format
+#~ msgid ""
+#~ "File %s downloaded from\n"
+#~ "%s."
+#~ msgstr ""
+#~ "ไฟล์ %s ดาวน์โหลดมาจาก\n"
+#~ "%s"

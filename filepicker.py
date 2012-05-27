@@ -18,9 +18,8 @@ import logging
 import os
 import tempfile
 import shutil
-import re
 
-import gtk
+from gi.repository import Gtk
 import hulahop
 
 import xpcom
@@ -28,8 +27,8 @@ from xpcom import components
 from xpcom.components import interfaces
 from xpcom.server.factory import Factory
 
-from sugar.graphics.objectchooser import ObjectChooser
-from sugar.activity.activity import get_activity_root
+from sugar3.graphics.objectchooser import ObjectChooser
+from sugar3.activity.activity import get_activity_root
 
 
 _temp_dirs_to_clean = []
@@ -41,8 +40,8 @@ def cleanup_temp_files():
         if os.path.isdir(temp_dir):
             shutil.rmtree(temp_dir, ignore_errors=True)
         else:
-            logging.debug('filepicker.cleanup_temp_files: no file %r'
-                          % temp_dir)
+            logging.debug('filepicker.cleanup_temp_files: no file %r',
+                          temp_dir)
 
 
 class FilePicker:
@@ -75,7 +74,7 @@ class FilePicker:
         jobject = None
         try:
             result = chooser.run()
-            if result == gtk.RESPONSE_ACCEPT:
+            if result == Gtk.ResponseType.ACCEPT:
                 jobject = chooser.get_selected_object()
                 logging.debug('FilePicker.show: %r', jobject)
 
@@ -131,7 +130,7 @@ class FilePicker:
         return None
 
     def get_file(self):
-        logging.debug('FilePicker.get_file: %r' % self._file)
+        logging.debug('FilePicker.get_file: %r', self._file)
         if self._file:
             cls = components.classes["@mozilla.org/file/local;1"]
             local_file = cls.createInstance(interfaces.nsILocalFile)

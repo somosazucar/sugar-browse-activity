@@ -18,15 +18,15 @@ import os
 import sqlite3
 from datetime import datetime, timedelta
 
-from sugar.activity import activity
+from sugar3.activity import activity
 
 _store = None
 
 
 class Place(object):
-    def __init__(self, uri=None):
+    def __init__(self, uri=''):
         self.uri = uri
-        self.title = None
+        self.title = ''
         self.bookmark = False
         self.gecko_flags = 0
         self.visits = 0
@@ -46,6 +46,9 @@ class SqliteStore(object):
 
         cursor.execute('select * from sqlite_master where name == "places"')
         if cursor.fetchone() == None:
+            # Create table to store the visited places.  Note that
+            # bookmark and gecko_flags fields aren't used anymore in
+            # WebKit port, but are kept for backwards compatibility.
             cursor.execute("""create table places (
                                 uri         text,
                                 title       text,
@@ -92,7 +95,7 @@ class SqliteStore(object):
         cursor = self._connection.cursor()
 
         try:
-            cursor.execute('select uri, title, bookmark, gecko_flags,visits, ' \
+            cursor.execute('select uri, title, bookmark, gecko_flags,visits, '
                            'last_visit from places where uri=?', (uri,))
 
             row = cursor.fetchone()
@@ -117,6 +120,14 @@ class SqliteStore(object):
 
     def _place_from_row(self, row):
         place = Place()
+
+        # Return uri and title as empty strings instead of None.
+        # Previous versions of Browse were allowing to store None for
+        # those fields in the places database.  See ticket #3400 .
+        if row[0] == None:
+            row = tuple([''] + list(row[1:]))
+        if row[1] == None:
+            row = tuple([row[0], ''] + list(row[2:]))
 
         place.uri, place.title, place.bookmark, place.gecko_flags, \
             place.visits, place.last_visit = row

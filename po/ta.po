@@ -2,143 +2,203 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-22 00:33-0400\n"
-"PO-Revision-Date: 2010-09-16 20:54+0200\n"
-"Last-Translator: தங்கமணி <thangam.arunx@gmail.com>\n"
+"POT-Creation-Date: 2012-02-04 00:33-0500\n"
+"PO-Revision-Date: 2011-10-27 06:22+0200\n"
+"Last-Translator: Thangamani <thangam.arunx@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.3\n"
+"X-Generator: Pootle 2.0.5\n"
 
 #: activity/activity.info:2
 msgid "Browse"
 msgstr "உவாவு"
 
-#: downloadmanager.py:153
+#: browser.py:138
+#, python-format
+msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+msgstr ""
+
+#: browser.py:337
+msgid "Loading..."
+msgstr "ஏற்றம்..."
+
+#: browser.py:339
+#, python-format
+#, python-format, fuzzy
+msgid "Loading %s..."
+msgstr "ஏற்றம்..."
+
+#: browser.py:367 webactivity.py:415 webtoolbar.py:317
+msgid "Untitled"
+msgstr "தலைப்பிடப்படாதது"
+
+#: downloadmanager.py:102
 msgid "Download started"
 msgstr "பதிவிறக்கம் ஆரம்பம்"
 
-#: downloadmanager.py:154 downloadmanager.py:167
+#: downloadmanager.py:103 downloadmanager.py:114
 #, python-format
 msgid "%s"
 msgstr "%s"
 
-#: downloadmanager.py:166
+#: downloadmanager.py:112
 msgid "Download completed"
 msgstr "பதிவிறக்கம் முடிவுவடைந்தது"
 
-#: downloadmanager.py:170
+#: downloadmanager.py:117
 msgid "Show in Journal"
 msgstr "சஞ்சிகையில் காட்டுக"
 
-#: downloadmanager.py:173
+#: downloadmanager.py:120
 msgid "Ok"
 msgstr "சரி"
 
-#: downloadmanager.py:180
+#: downloadmanager.py:128
 #, python-format
 msgid "From: %s"
 msgstr "%s இருந்து"
 
-#: downloadmanager.py:265
+#: downloadmanager.py:202
 #, python-format
 msgid ""
 "Downloading %s from \n"
 "%s."
 msgstr ""
-"%sத்தில் இருந்து பதிவிறக்கப்படுகிறது\n"
-"%sகள்."
+"%s யிலிருந்து பதிவிறக்கப்படுகிறது\n"
+"%s."
 
-#: edittoolbar.py:91
+#: edittoolbar.py:65
 msgid "Previous"
 msgstr "முன்னைய"
 
-#: edittoolbar.py:98
+#: edittoolbar.py:72
 msgid "Next"
 msgstr "அடுத்தது"
 
-#: linkbutton.py:94
+#: linkbutton.py:103
 msgid "Remove"
 msgstr "அகற்று"
 
-#: palettes.py:96
-msgid "Keep link"
-msgstr "இணைப்பை வைத்திரு"
-
-#: palettes.py:104
-msgid "Copy link"
-msgstr "இணைப்பை பிரதி செய்"
-
-#: palettes.py:112
+#: palettes.py:140
 msgid "Follow link"
 msgstr "இணைப்பை தொடர்க"
 
-#: palettes.py:161
-msgid "Keep image"
-msgstr "படத்தை வைத்திரு "
+#: palettes.py:145
+msgid "Follow link in new tab"
+msgstr "புதிய தாவியில் தொடரும் இணைப்பு"
 
-#: palettes.py:169
+#: palettes.py:151
+msgid "Keep link"
+msgstr "இணைப்பை வைத்திரு"
+
+#: palettes.py:159
+msgid "Copy link"
+msgstr "இணைப்பை பிரதி செய்"
+
+#: palettes.py:215
+msgid "Keep image"
+msgstr "படத்தை வைத்திரு"
+
+#: palettes.py:223
 msgid "Copy image"
 msgstr "படத்தைப் பிரதி செய்"
 
-#: viewtoolbar.py:33
+#: viewtoolbar.py:35
 msgid "Zoom out"
 msgstr "சிறிதாக்கு"
 
-#: viewtoolbar.py:39
+#: viewtoolbar.py:41
 msgid "Zoom in"
 msgstr "பெரிதாக்கு"
 
-#: viewtoolbar.py:50
+#: viewtoolbar.py:52
 msgid "Fullscreen"
 msgstr "முழுத்திரை"
 
-#: viewtoolbar.py:88
+#: viewtoolbar.py:90
 msgid "Show Tray"
 msgstr "தட்டைக் காட்டு"
 
-#: viewtoolbar.py:92
+#: viewtoolbar.py:94
 msgid "Hide Tray"
 msgstr "தட்டை மறை"
 
-#: webactivity.py:535
+#: webactivity.py:569
 msgid "Download in progress"
-msgstr "பதிவிறக்கம் நடைபெறுகிறது"
+msgid_plural "Downloads in progress"
+msgstr[0] "பதிவிறக்கம் நடைபெறுகிறது"
+msgstr[1] "பதிவிறக்கங்கள் நடைபெறுகிறது"
 
-#: webactivity.py:536
-msgid "Stopping now will cancel your download"
-msgstr "உங்கள்பதிவிறக்கத்தினை நிறுத்தி இரத்துசெய்க"
+#: webactivity.py:572
+msgid "Stopping now will erase your download"
+msgid_plural "Stopping now will erase your downloads"
+msgstr[0] "இப்பொழுது நிறுத்துவதால் பதிவிறக்கம் அழிக்கப்படும்"
+msgstr[1] "இப்பொழுது நிறுத்துவதால் பதிவிறக்கங்கள் அழிக்கப்படும்"
 
-#: webactivity.py:538
-msgid "Cancel"
-msgstr "இரத்துசெய்க"
+#: webactivity.py:577
+msgid "Continue download"
+msgid_plural "Continue downloads"
+msgstr[0] "பதிவிறக்கத்தை தொடரவும்"
+msgstr[1] "பதிவிறக்கங்கங்களை தொடரவும்"
 
-#: webactivity.py:540 webtoolbar.py:412
+#: webactivity.py:582
 msgid "Stop"
 msgstr "நிறுத்துக"
 
-#: webtoolbar.py:241
+#: webtoolbar.py:247
+msgid "Home page"
+msgstr "முதற்பக்கம்"
+
+#: webtoolbar.py:267
 msgid "Back"
 msgstr "பின்"
 
-#: webtoolbar.py:248
+#: webtoolbar.py:274
 msgid "Forward"
 msgstr "முன்னேறு"
 
-#: webtoolbar.py:271
+#: webtoolbar.py:281
 msgid "Bookmark"
 msgstr "புத்தகஅடையாளம்"
 
-#: webtoolbar.py:415
-msgid "Reload"
-msgstr "மீள் ஏற்று"
+#, python-format
+#~ msgid ""
+#~ "Downloading %(file)s from \n"
+#~ "%(source)s."
+#~ msgstr ""
+#~ "%(source)s இயிலிருந்து %(file)s \n"
+#~ "பதிவிறக்கப்படுகிறது."
+
+#~ msgid "Edit"
+#~ msgstr "திருத்து"
+
+#~ msgid "View"
+#~ msgstr "நோக்கு"
+
+#~ msgid "Add a tab"
+#~ msgstr "ஒரு பட்டையை சேர்"
+
+#~ msgid "Reload"
+#~ msgstr "மீள் ஏற்று"
+
+#~ msgid "Cancel"
+#~ msgstr "இரத்துசெய்க"
 
 #, python-format
 #~ msgid "File %s from %s."
@@ -152,12 +212,6 @@ msgstr "மீள் ஏற்று"
 
 #~ msgid "Download image"
 #~ msgstr "படம் பதிவிறக்கம்"
-
-#~ msgid "Edit"
-#~ msgstr "திருத்து"
-
-#~ msgid "View"
-#~ msgstr "நோக்கு"
 
 #~ msgid "blank"
 #~ msgstr "இடைவெளி"
