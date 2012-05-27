@@ -32,7 +32,7 @@ include /usr/share/cdbs/1/rules/debhelper.mk
 DEB_UPSTREAM_PACKAGE = Browse
 DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/fructose/$(DEB_UPSTREAM_PACKAGE)
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
-DEB_UPSTREAM_TARBALL_MD5 = c9a93fad156c56a5ec0b9c61b9ce8822
+DEB_UPSTREAM_TARBALL_MD5 = b0924d962421eee0ce38ae82df27a2ab
 
 # Suppress binary files to not upset dpkg
 DEB_COPYRIGHT_CHECK_IGNORE_REGEX = ^data/logo_.*\.png|debian/(changelog|copyright(|_hints|_newhints))$
