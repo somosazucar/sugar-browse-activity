@@ -1,7 +1,8 @@
-sugar-browse-activity (120-2) UNRELEASED; urgency=low
+sugar-browse-activity (137-1) unstable; urgency=low
 
-  * Lower Priority to extra: Depends on similarly prioritized
-    python-xpcom.
+  * New upstream release.
+    + Uses sugar-toolkit-gtk3 and WebKit (not Hulahop or Xulrunner).
+
   * Suppress unneeded auto-resolved build-dependency on python-dev.
     Thanks to lintian.
   * Bump debhelper compatibility level to 7.
@@ -15,14 +16,17 @@ sugar-browse-activity (120-2) UNRELEASED; urgency=low
   * Remove debian/source/local-options: abort-on-upstream-changes and
     unapply-patches are default in dpkg-source since 1.16.1.
   * Update package relations:
+    + Depend on python-sugar3, python-gir and some GIR bindings, instead
+      of some Python libraries: Needed for sugar-toolkit-gtk3 rewrite.
     + Tighten build-dependency on cdbs and python: Needed for python2
       helper.
-    + Stop build-depending on python-central: No longer used.
     + Relax build-depend unversioned on debhelper and devscripts: Needed
       versions satisfied even in oldstable.
+    + Stop build-depending on python-central: No longer used.
   * Switch packaging to unversioned package naming.
+  * Drop patch 1002: Obsolete.
 
- -- Jonas Smedegaard <dr@jones.dk>  Thu, 13 Jan 2011 02:13:08 +0100
+ -- Jonas Smedegaard <dr@jones.dk>  Sun, 27 May 2012 14:57:59 +0200
 
 sugar-browse-activity-0.86 (120-1) unstable; urgency=low
 
