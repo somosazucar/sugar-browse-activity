@@ -18,7 +18,6 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA.
 
-DEB_PYTHON_SYSTEM = pycentral
 DEB_SUGAR_BRANCHES = 0.86 0.88
 
 # Suppress unneeded auto-resolved build-dependency on python-dev
