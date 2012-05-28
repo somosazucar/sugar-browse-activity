@@ -8,8 +8,7 @@ Build-Depends: devscripts,
  cdbs (>= 0.4.97~),
  debhelper,
  dh-buildinfo,
- python-sugar,
- python-sugar-toolkit,
+ python-sugar3,
  unzip
 Standards-Version: 3.9.3
 Vcs-Git: git://git.debian.org/git/collab-maint/sugar-browse-activity
