@@ -42,8 +42,7 @@ DEB_COPYRIGHT_CHECK_IGNORE_REGEX = ^data/logo_.*\.png|debian/(changelog|copyrigh
 CDBS_DEPENDS_$(pkg) = python-sugar3, python-gi, python-dbus, python-cairo
 gir-deps = glib-2.0 gtk-3.0 gconf-2.0 gdkpixbuf-2.0 pango-1.0 rsvg-2.0 webkit-3.0 soup-2.4 evince-3.0 sugarext-1.0
 CDBS_DEPENDS_$(pkg) += , $(patsubst %,$(comma) gir1.2-%,$(gir-deps))
-CDBS_RECOMMENDS_$(pkg) = $(call cdbs_sugar_anybranchdeps,sugar sugar-artwork)
-CDBS_RECOMMENDS_$(pkg) = $(call cdbs_sugar_anybranchdeps,sugar-session)
+CDBS_RECOMMENDS_$(pkg) = $(call cdbs_sugar_anybranchdeps,sugar-artwork sugar-session)
 
 # Ensure only one variant is installed at a time (Debian Policy 7.6.2)
 # (unneeded since Wheezy: can be dropped after Wheezy+1)
