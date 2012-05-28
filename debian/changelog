@@ -1,4 +1,4 @@
-sugar-browse-activity (137-1) UNRELEASED; urgency=low
+sugar-browse-activity (137-1) unstable; urgency=low
 
   * New upstream release.
     + Uses sugar-toolkit-gtk3 and WebKit (not Hulahop or Xulrunner).
@@ -12,7 +12,6 @@ sugar-browse-activity (137-1) UNRELEASED; urgency=low
   * Update copyright file:
     + Rewrite using format 1.0.
     + Extend copyright coverage of some files to include recent years.
-  * Fix typo in long description.
   * Remove debian/source/local-options: abort-on-upstream-changes and
     unapply-patches are default in dpkg-source since 1.16.1.
   * Update package relations:
@@ -20,13 +19,19 @@ sugar-browse-activity (137-1) UNRELEASED; urgency=low
       of some Python libraries: Needed for sugar-toolkit-gtk3 rewrite.
     + Tighten build-dependency on cdbs and python: Needed for python2
       helper.
+    + Recommend sugar-session (not bogus sugar).
+    + Set 0.88 as primary branch, i.e. add append versioned dependencies
+      for unversioned virtual Sugar dependencies.
     + Relax build-depend unversioned on debhelper and devscripts: Needed
       versions satisfied even in oldstable.
     + Stop build-depending on python-central: No longer used.
   * Switch packaging to unversioned package naming.
   * Drop patch 1002: Obsolete.
+  * Modernize long description, based on upstream wiki phrases.
+  * Refer to FSF website (not postal address) in licensing header of
+    rules file.
 
- -- Jonas Smedegaard <dr@jones.dk>  Mon, 28 May 2012 12:44:54 +0200
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 28 May 2012 23:14:45 +0200
 
 sugar-browse-activity-0.86 (120-1) unstable; urgency=low
 
