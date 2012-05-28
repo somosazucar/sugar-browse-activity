@@ -3,10 +3,10 @@
 # Copyright 2008, 2009, 2010, 2012 Jonas Smedegaard <dr@jones.dk>
 # Description: Main Debian packaging script for Browse
 #
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation; either version 2, or (at
-# your option) any later version.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
 #
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,14 +21,12 @@
 # Suppress unneeded auto-resolved build-dependency on python-dev
 CDBS_BUILD_DEPENDS_class_python-sugar_python = python$(cdbs_python_nondefault_version)
 
-# workaround for broken DEB_SUGAR_BRANCHES expansion in cdbs <= 0.4.75
-DEB_PYTHON_SUGAR_PACKAGES = sugar-browse-activity
-
 include /usr/share/cdbs/1/rules/upstream-tarball.mk
 include /usr/share/cdbs/1/rules/utils.mk
 include /usr/share/cdbs/1/class/python-sugar.mk
 include /usr/share/cdbs/1/rules/debhelper.mk
 
+pkg = $(DEB_SOURCE_PACKAGE)
 DEB_SUGAR_PRIMARY_BRANCH = 0.88
 
 DEB_UPSTREAM_PACKAGE = Browse
@@ -43,22 +41,22 @@ CDBS_BUILD_DEPENDS_class_python-sugar_sugar = python-sugar3, unzip
 DEB_COPYRIGHT_CHECK_IGNORE_REGEX = ^data/logo_.*\.png|debian/(changelog|copyright(|_hints|_newhints))$
 
 # Needed (always/often/seldom) at runtime
-CDBS_DEPENDS = python-sugar3, python-gi, python-dbus, python-cairo
+CDBS_DEPENDS_$(pkg) = python-sugar3, python-gi, python-dbus, python-cairo
 gir-deps = glib-2.0 gtk-3.0 gconf-2.0 gdkpixbuf-2.0 pango-1.0 rsvg-2.0 webkit-3.0 soup-2.4 evince-3.0 sugarext-1.0
-CDBS_DEPENDS += , $(patsubst %,$(comma) gir1.2-%,$(gir-deps))
-CDBS_RECOMMENDS = $(call cdbs_sugar_anybranchdeps,sugar sugar-artwork)
-CDBS_RECOMMENDS = $(call cdbs_sugar_anybranchdeps,sugar-session)
+CDBS_DEPENDS_$(pkg) += , $(patsubst %,$(comma) gir1.2-%,$(gir-deps))
+CDBS_RECOMMENDS_$(pkg) = $(call cdbs_sugar_anybranchdeps,sugar sugar-artwork)
+CDBS_RECOMMENDS_$(pkg) = $(call cdbs_sugar_anybranchdeps,sugar-session)
 
 # Ensure only one variant is installed at a time (Debian Policy 7.6.2)
 # (unneeded since Wheezy: can be dropped after Wheezy+1)
-CDBS_CONFLICTS = $(DEB_SUGAR_SOURCE_PKGBASE)
-CDBS_REPLACES = $(DEB_SUGAR_SOURCE_PKGBASE)
+CDBS_CONFLICTS_$(pkg) = $(DEB_SUGAR_SOURCE_PKGBASE)
+CDBS_REPLACES_$(pkg) = $(DEB_SUGAR_SOURCE_PKGBASE)
 
 # Transitional quirk: sugar-web-activity renamed to sugar-browse-activity
 # (unneeded since Squeeze: can be dropped after Squeeze+1)
-CDBS_PROVIDES += , sugar-web-activity
-CDBS_CONFLICTS += , sugar-web-activity
-CDBS_REPLACES += , sugar-web-activity
+CDBS_PROVIDES_$(pkg) += , sugar-web-activity
+CDBS_CONFLICTS_$(pkg) += , sugar-web-activity
+CDBS_REPLACES_$(pkg) += , sugar-web-activity
 
 clean::
 	rm -rf locale
