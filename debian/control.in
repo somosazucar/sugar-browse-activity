@@ -17,11 +17,10 @@ Provides: ${python:Provides}, ${cdbs:Provides}
 Conflicts: ${cdbs:Conflicts}
 Replaces: ${cdbs:Replaces}
 Description: web browsing activity for the Sugar graphical shell
- Sugar is a graphical user interface aimed at children.
+ Sugar is a desktop environment. It is conceived as a platform upon
+ which children learn with Sugar Activities. The platform provides
+ mechanisms for collaboration, reflection, and exploration. Sugar
+ Activities cover a broad range of applications: browsing, drawing,
+ composing, writing, programming, etc.
  .
- Originating as integral part of the OLPC "XO" a.k.a. the $100 laptop,
- Sugar has since grown into a more widely usable low-ressource desktop
- environment for kids.
- .
- This package contains the Browse activity, providing a simple web
- browser based on the Mozilla Gecko engine.
+ The Browse activity provides a web browser based on the WebKit engine.
