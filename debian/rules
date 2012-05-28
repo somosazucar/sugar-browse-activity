@@ -29,6 +29,8 @@ include /usr/share/cdbs/1/rules/utils.mk
 include /usr/share/cdbs/1/class/python-sugar.mk
 include /usr/share/cdbs/1/rules/debhelper.mk
 
+DEB_SUGAR_PRIMARY_BRANCH = 0.88
+
 DEB_UPSTREAM_PACKAGE = Browse
 DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/fructose/$(DEB_UPSTREAM_PACKAGE)
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
@@ -40,11 +42,12 @@ CDBS_BUILD_DEPENDS_class_python-sugar_sugar = python-sugar3, unzip
 # Suppress binary files to not upset dpkg
 DEB_COPYRIGHT_CHECK_IGNORE_REGEX = ^data/logo_.*\.png|debian/(changelog|copyright(|_hints|_newhints))$
 
-# Needed (always/often) at runtime
+# Needed (always/often/seldom) at runtime
 CDBS_DEPENDS = python-sugar3, python-gi, python-dbus, python-cairo
 gir-deps = glib-2.0 gtk-3.0 gconf-2.0 gdkpixbuf-2.0 pango-1.0 rsvg-2.0 webkit-3.0 soup-2.4 evince-3.0 sugarext-1.0
 CDBS_DEPENDS += , $(patsubst %,$(comma) gir1.2-%,$(gir-deps))
 CDBS_RECOMMENDS = $(call cdbs_sugar_anybranchdeps,sugar sugar-artwork)
+CDBS_RECOMMENDS = $(call cdbs_sugar_anybranchdeps,sugar-session)
 
 # Ensure only one variant is installed at a time (Debian Policy 7.6.2)
 # (unneeded since Wheezy: can be dropped after Wheezy+1)
