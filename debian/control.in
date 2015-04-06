@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Debian OLPC <debian-olpc-devel@lists.alioth.debian.org>
 Uploaders: Jonas Smedegaard <dr@jones.dk>
 Build-Depends: @cdbs@
-Standards-Version: 3.9.3
+Standards-Version: 3.9.6
 Vcs-Git: git://git.debian.org/git/collab-maint/sugar-browse-activity
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/sugar-browse-activity.git
 Homepage: http://wiki.sugarlabs.org/go/Activities/Browse
