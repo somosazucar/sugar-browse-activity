@@ -30,7 +30,6 @@ DEB_SUGAR_PRIMARY_BRANCH = 0.88
 DEB_UPSTREAM_PACKAGE = Browse
 DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/fructose/$(DEB_UPSTREAM_PACKAGE)
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
-DEB_UPSTREAM_TARBALL_MD5 = b0924d962421eee0ce38ae82df27a2ab
 
 # Override Sugar toolkit to use
 CDBS_BUILD_DEPENDS_class_python-sugar_sugar = python-sugar3, unzip
