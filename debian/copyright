@@ -4,7 +4,7 @@ Upstream-Contact: Sugarlabs <sugar-devel@lists.sugarlabs.org>
  http://lists.sugarlabs.org/listinfo/sugar-devel
  irc://irc.freenode.net/sugar
 Source: http://download.sugarlabs.org/sources/sucrose/fructose/Browse/
- git://git.sugarlabs.org/browse/mainline
+ git://github.com/sugarlabs/browse-activity
 
 Files: *
 Copyright: 2006-2008,2011-2012, One Laptop Per Child
