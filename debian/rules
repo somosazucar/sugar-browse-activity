@@ -38,7 +38,7 @@ CDBS_BUILD_DEPENDS_class_python-sugar_sugar = python-sugar3, unzip
 DEB_COPYRIGHT_CHECK_IGNORE_REGEX = ^data/logo_.*\.png|debian/(changelog|copyright(|_hints|_newhints))$
 
 # Needed (always/often/seldom) at runtime
-python-deps = sugar3 gi dbus cairo
+python-deps = sugar3 gi dbus cairo telepathy
 gir-deps = glib-2.0 gtk-3.0 gconf-2.0 gdkpixbuf-2.0 pango-1.0 rsvg-2.0
 gir-deps += webkit-3.0 soup-2.4 evince-3.0
 CDBS_DEPENDS_$(pkg) +=, $(patsubst %,$(comma) python-%,$(python-deps))
