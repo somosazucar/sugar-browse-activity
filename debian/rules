@@ -25,7 +25,7 @@ include /usr/share/cdbs/1/class/python-sugar.mk
 include /usr/share/cdbs/1/rules/debhelper.mk
 
 pkg = $(DEB_SOURCE_PACKAGE)
-DEB_SUGAR_PRIMARY_BRANCH = 0.88
+DEB_SUGAR_PRIMARY_BRANCH = 0.104
 
 DEB_UPSTREAM_PACKAGE = Browse
 DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/fructose/$(DEB_UPSTREAM_PACKAGE)
