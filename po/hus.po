@@ -6,78 +6,98 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-04 00:33-0500\n"
-"PO-Revision-Date: 2011-09-18 01:24+0200\n"
-"Last-Translator: <zurisadai_k@hotmail.com>\n"
+"POT-Creation-Date: 2013-06-28 00:32-0400\n"
+"PO-Revision-Date: 2012-07-08 09:07+0200\n"
+"Last-Translator: Chris <cjl@laptop.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hus\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.1\n"
+"X-Generator: Pootle 2.0.5\n"
 
 # Cambié la traducción a "Aliy" porque refleja mejor la idea de explorar internet. (Zurik)
-#: activity/activity.info:2
+#. TRANS: "name" option from activity.info file
 msgid "Browse"
 msgstr "Aliy"
 
-#: browser.py:138
-#, python-format
-msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+#. TRANS: "summary" option from activity.info file
+#. TRANS: "description" option from activity.info file
+msgid ""
+"Surf the world! Here you can do research, watch educational videos, take "
+"online courses, find books, connect with friends and more."
 msgstr ""
 
-#: browser.py:337
-msgid "Loading..."
-msgstr "K'adhbom..."
-
-#: browser.py:339
-#, python-format
-#, python-format, fuzzy
-msgid "Loading %s..."
-msgstr "K'adhbom..."
-
-#: browser.py:367 webactivity.py:415 webtoolbar.py:317
+#: browser.py:472 browser.py:524 browser.py:525 webactivity.py:451
 msgid "Untitled"
 msgstr "Yab bijidh"
 
-#: downloadmanager.py:102
+#: browser.py:521
+msgid "Loading..."
+msgstr "K'adhbom..."
+
+#: browser.py:757 browser.py:758
+msgid "This web page could not be loaded"
+msgstr ""
+
+#: browser.py:759
+#, python-format
+msgid ""
+"\"%s\" could not be loaded. Please check for typing errors, and make sure "
+"you are connected to the Internet."
+msgstr ""
+
+#: browser.py:762 pdfviewer.py:394
+msgid "Try again"
+msgstr ""
+
+#: downloadmanager.py:124
+msgid "Not enough space to download"
+msgstr ""
+
+#: downloadmanager.py:133
+msgid ""
+"Download \"%{filename}\" requires %{total_size_in_mb} MB of free space, only "
+"%{free_space_in_mb} MB is available"
+msgstr ""
+
+#: downloadmanager.py:141 downloadmanager.py:176
+msgid "Ok"
+msgstr "Ne'ets kin t'aja'"
+
+#: downloadmanager.py:157
 msgid "Download started"
 msgstr "Pa'bomtaláb ts'i'kidh"
 
-#: downloadmanager.py:103 downloadmanager.py:114
+#: downloadmanager.py:158 downloadmanager.py:170
 #, python-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
-#: downloadmanager.py:112
+#: downloadmanager.py:168
 msgid "Download completed"
 msgstr "Pa'bomtaláb putundhach"
 
 # chudhel dhuchlab
-#: downloadmanager.py:117
+#: downloadmanager.py:173
 msgid "Show in Journal"
 msgstr "Ka tejwa'medha' ti chudhél dhuchlab"
 
-#: downloadmanager.py:120
-msgid "Ok"
-msgstr "Ne'ets kin t'aja'"
-
 # Ju'taj ti tal., Ju'taj ti ch'enek: %s
-#: downloadmanager.py:128
+#: downloadmanager.py:184 pdfviewer.py:589
 #, python-format
 msgid "From: %s"
 msgstr "Ti: %s"
 
-#: downloadmanager.py:202
+#: downloadmanager.py:292
 #, python-format
-#, python-format,
 msgid ""
-"Downloading %s from \n"
-"%s."
+"Downloading %(filename)s from \n"
+"%(source)s."
 msgstr ""
-"Pa'bál %s ma ti \n"
-"%s."
+"Pa'bál %(filename)s ti \n"
+"%(source)s."
 
 #: edittoolbar.py:65
 msgid "Previous"
@@ -87,92 +107,162 @@ msgstr "Xi ok'xidh"
 msgid "Next"
 msgstr "Xi júnakej"
 
-#: linkbutton.py:103
+#: linkbutton.py:108
 msgid "Remove"
 msgstr "Pakuw"
 
-#: palettes.py:140
+#: palettes.py:184
 msgid "Follow link"
 msgstr "Áyna' an junkux"
 
-#: palettes.py:145
+#: palettes.py:189
 msgid "Follow link in new tab"
 msgstr "Áyna' an junkux al juni it madhidh"
 
-#: palettes.py:151
+#: palettes.py:198
 msgid "Keep link"
 msgstr "Dhaya' an junkux"
 
-#: palettes.py:159
+#: palettes.py:204
 msgid "Copy link"
 msgstr "K'ot'biy an junkux"
 
-#: palettes.py:215
+#: palettes.py:218
+msgid "Copy image"
+msgstr "K'ot'biy an t'iplab"
+
+#: palettes.py:224
 msgid "Keep image"
 msgstr "Dhaya' an t'iplab"
 
-#: palettes.py:223
-msgid "Copy image"
-msgstr "K'o'tbiy an t'iplab"
+#: palettes.py:238
+msgid "Copy text"
+msgstr ""
 
-#: viewtoolbar.py:35
+#: pdfviewer.py:91 viewtoolbar.py:39
 msgid "Zoom out"
 msgstr "Tsipti'méjdha'"
 
-#: viewtoolbar.py:41
+#: pdfviewer.py:97 viewtoolbar.py:45
 msgid "Zoom in"
 msgstr "Puwedha'"
 
-#: viewtoolbar.py:52
+#: pdfviewer.py:103 viewtoolbar.py:51
+msgid "Actual size"
+msgstr ""
+
+#: pdfviewer.py:114
+msgid "Previous page"
+msgstr "an ok'xidh walxeklek"
+
+#: pdfviewer.py:121
+msgid "Next page"
+msgstr "a xi júnakej walxeklek"
+
+#: pdfviewer.py:133
+msgid "Save PDF to Journal"
+msgstr "Dhaya' an PDF ti al an chudhél dhuchlab"
+
+#: pdfviewer.py:341
+msgid "Cancel"
+msgstr ""
+
+#: pdfviewer.py:490
+msgid "Downloading document..."
+msgstr ""
+
+#: pdfviewer.py:546
+msgid "This document could not be loaded"
+msgstr ""
+
+#: pdfviewer.py:554
+msgid "Please make sure you are connected to the Internet."
+msgstr ""
+
+#: viewtoolbar.py:62
 msgid "Fullscreen"
 msgstr "Putat walek"
 
-#: viewtoolbar.py:90
+#: viewtoolbar.py:113
 msgid "Show Tray"
 msgstr "Tejwa'méjdha' an jolát"
 
-#: viewtoolbar.py:94
+#: viewtoolbar.py:116
 msgid "Hide Tray"
 msgstr "Tsina' an jolát"
 
-#: webactivity.py:569
+#: webactivity.py:490
+msgid "The initial page was configured"
+msgstr ""
+
+#: webactivity.py:494
+msgid "The default initial page was configured"
+msgstr ""
+
+#: webactivity.py:655
 msgid "Download in progress"
 msgid_plural "Downloads in progress"
 msgstr[0] "Exom ti pa'il"
 msgstr[1] "Exomchik ti pa'il"
 
-#: webactivity.py:572
+#: webactivity.py:658
 msgid "Stopping now will erase your download"
 msgid_plural "Stopping now will erase your downloads"
-msgstr[0] "Max ka kuba' xuwe'k'ij ne kin t'apts'iy an pa'bomtaláb"
-msgstr[1] "Max ka kuba' xuwe'k'ij ne kin t'apts'iy an pa'bomtalabchik"
+msgstr[0] "Max ka kuba' xowék'ij ne'ets ka t'apts'inchij an pa'bomtaláb"
+msgstr[1] "Max ka kuba' xowék'ij ne'ets ka t'apts'inchijchik an pa'bomtalab"
 
-#: webactivity.py:577
+#: webactivity.py:663
 msgid "Continue download"
 msgid_plural "Continue downloads"
 msgstr[0] "Áynanchij an pa'bomtaláb"
-msgstr[1] "Áynanchij an pa'bomtalabchik"
+msgstr[1] "Áynanchijchik an pa'bomtaláb"
 
-#: webactivity.py:582
+#: webactivity.py:668
 msgid "Stop"
 msgstr "Kuba'"
 
-# Ts'i'kindhom walxeklek da la idea de que es una página que hace iniciar. Para mí es ideal para la palabra Home Page del inglés. (Zurik)
-#: webtoolbar.py:247
+# Ts'i'kindhom walxeklek da la idea de que es una página que hace iniciar. Para mí es ideal para la palabra Home Page del inglés. (Zurik)/ in tujtal i walxeklek.(bek)
+#: webtoolbar.py:288
 msgid "Home page"
-msgstr "Ts'i'kindhom walxeklek"
+msgstr "inTs'i'kintal i walxeklek"
 
-#: webtoolbar.py:267
+#: webtoolbar.py:294
+msgid "Select as initial page"
+msgstr ""
+
+#: webtoolbar.py:299
+msgid "Reset initial page"
+msgstr ""
+
+#: webtoolbar.py:305
+msgid "Library"
+msgstr ""
+
+#: webtoolbar.py:338
 msgid "Back"
 msgstr "Wichiy"
 
-#: webtoolbar.py:274
+#: webtoolbar.py:352
 msgid "Forward"
 msgstr "Ne'etsnanchij"
 
-#: webtoolbar.py:281
+#: webtoolbar.py:366
 msgid "Bookmark"
-msgstr "Pulik tejwa'medhom"
+msgstr "Ólnax walxeklek"
+
+#, python-format
+#, python-format,
+#~ msgid "Loading %s..."
+#~ msgstr "K'adhbom %s..."
+
+#, python-format
+#, python-format,
+#~ msgid ""
+#~ "Downloading %s from \n"
+#~ "%s."
+#~ msgstr ""
+#~ "Pa'bál %s ma ti \n"
+#~ "%s."
 
 #~ msgid "Edit"
 #~ msgstr "Jalk'uy"

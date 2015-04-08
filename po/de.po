@@ -1,65 +1,53 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # This file is distributed under the same license as the PACKAGE package.
 # Fabian Affolter <fab@fedoraproject.org>, 2007.
+# Markus Schlager <m.slg@gmx.de>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: web\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-23 00:34-0400\n"
-"PO-Revision-Date: 2012-03-23 21:28+0100\n"
-"Last-Translator: Markus Schlager <m.slg@gmx.de>\n"
-"Language-Team: German <fedora-trans-de@redhat.com>\n"
+"POT-Creation-Date: 2013-06-28 00:32-0400\n"
+"PO-Revision-Date: 2013-08-07 22:41+0200\n"
+"Last-Translator: Markus <m.slg@gmx.de>\n"
+"Language-Team: Deutsche OLPC-Lokalisierung\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -68,55 +56,85 @@ msgstr ""
 "X-Generator: Pootle 2.0.5\n"
 "X-Poedit-Language: German\n"
 
-#: activity/activity.info:2
+#. TRANS: "name" option from activity.info file
 msgid "Browse"
 msgstr "Browser"
 
-#: browser.py:139
-#, python-format
-msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
-msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+#. TRANS: "summary" option from activity.info file
+#. TRANS: "description" option from activity.info file
+msgid ""
+"Surf the world! Here you can do research, watch educational videos, take "
+"online courses, find books, connect with friends and more."
+msgstr ""
+"Surfe durch die Welt! Hier kannst du forschen, lehrreiche Videos betrachten, "
+"Online-Kurse besucht, Bücher finden, Kontakt mit Freunden aufnehmen und "
+"vieles mehr."
 
-#: browser.py:383
-msgid "Loading..."
-msgstr "Lade..."
-
-#: browser.py:385
-#, python-format
-msgid "Loading %s..."
-msgstr "Lade %s..."
-
-#: browser.py:413 webactivity.py:415 webtoolbar.py:332
+#: browser.py:472 browser.py:524 browser.py:525 webactivity.py:451
 msgid "Untitled"
 msgstr "Unbenannt"
 
-#: downloadmanager.py:102
+#: browser.py:521
+msgid "Loading..."
+msgstr "Lade..."
+
+#: browser.py:757 browser.py:758
+msgid "This web page could not be loaded"
+msgstr "Diese Webseite konnte nicht geladen werden."
+
+#: browser.py:759
+#, python-format
+#, python-format,
+msgid ""
+"\"%s\" could not be loaded. Please check for typing errors, and make sure "
+"you are connected to the Internet."
+msgstr ""
+"\"%s\" konnte nicht geladen werden. Überprüfe bitte etwaige Tippfehler und "
+"stelle sicher, dass du mit dem Internet verbunden bist."
+
+#: browser.py:762 pdfviewer.py:394
+msgid "Try again"
+msgstr "Nochmals versuchen"
+
+#: downloadmanager.py:124
+msgid "Not enough space to download"
+msgstr "Nicht genug Speicherplatz zum Herunterladen"
+
+#: downloadmanager.py:133
+msgid ""
+"Download \"%{filename}\" requires %{total_size_in_mb} MB of free space, only "
+"%{free_space_in_mb} MB is available"
+msgstr ""
+"Das Herunterladen von \"%{filename}\"  benötigt %{total_size_in_mb} MB freien "
+"Speicherplatz, es sind aber nur %{free_space_in_mb} MB verfügbar."
+
+#: downloadmanager.py:141 downloadmanager.py:176
+msgid "Ok"
+msgstr "Ok"
+
+#: downloadmanager.py:157
 msgid "Download started"
 msgstr "Herunterladen gestartet"
 
-#: downloadmanager.py:103 downloadmanager.py:114
+#: downloadmanager.py:158 downloadmanager.py:170
 #, python-format
 msgid "%s"
 msgstr "%s"
 
-#: downloadmanager.py:112
+#: downloadmanager.py:168
 msgid "Download completed"
 msgstr "Herunterladen abgeschlossen"
 
-#: downloadmanager.py:117
+#: downloadmanager.py:173
 msgid "Show in Journal"
 msgstr "Im Tagebuch anzeigen"
 
-#: downloadmanager.py:120
-msgid "Ok"
-msgstr "Ok"
-
-#: downloadmanager.py:128 pdfviewer.py:409
+#: downloadmanager.py:184 pdfviewer.py:589
 #, python-format
 msgid "From: %s"
 msgstr "Von: %s"
 
-#: downloadmanager.py:203
+#: downloadmanager.py:292
 #, python-format
 msgid ""
 "Downloading %(filename)s from \n"
@@ -133,55 +151,79 @@ msgstr "Vorheriges"
 msgid "Next"
 msgstr "Nächstes"
 
-#: linkbutton.py:103
+#: linkbutton.py:108
 msgid "Remove"
 msgstr "Entfernen"
 
-#: palettes.py:140
+#: palettes.py:184
 msgid "Follow link"
 msgstr "Link öffnen"
 
-#: palettes.py:145
+#: palettes.py:189
 msgid "Follow link in new tab"
 msgstr "Link in neuem Reiter öffnen"
 
-#: palettes.py:151
+#: palettes.py:198
 msgid "Keep link"
 msgstr "Link speichern"
 
-#: palettes.py:159
+#: palettes.py:204
 msgid "Copy link"
 msgstr "Link kopieren"
 
-#: palettes.py:215
-msgid "Keep image"
-msgstr "Bild speichern"
-
-#: palettes.py:223
+#: palettes.py:218
 msgid "Copy image"
 msgstr "Bild kopieren"
 
-#: pdfviewer.py:87 viewtoolbar.py:39
+#: palettes.py:224
+msgid "Keep image"
+msgstr "Bild speichern"
+
+#: palettes.py:238
+msgid "Copy text"
+msgstr "Text kopieren"
+
+#: pdfviewer.py:91 viewtoolbar.py:39
 msgid "Zoom out"
 msgstr "Verkleinern"
 
-#: pdfviewer.py:93 viewtoolbar.py:45
+#: pdfviewer.py:97 viewtoolbar.py:45
 msgid "Zoom in"
 msgstr "Vergrößern"
 
-#: pdfviewer.py:104
+#: pdfviewer.py:103 viewtoolbar.py:51
+msgid "Actual size"
+msgstr "Tatsächliche Größe"
+
+#: pdfviewer.py:114
 msgid "Previous page"
 msgstr "Vorige Seite"
 
-#: pdfviewer.py:111
+#: pdfviewer.py:121
 msgid "Next page"
 msgstr "Nächste Seite"
 
-#: pdfviewer.py:123
+#: pdfviewer.py:133
 msgid "Save PDF to Journal"
 msgstr "Als PDF ins Tagebuch speichern"
 
-#: viewtoolbar.py:56
+#: pdfviewer.py:341
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: pdfviewer.py:490
+msgid "Downloading document..."
+msgstr "Dokument wird heruntergeladen..."
+
+#: pdfviewer.py:546
+msgid "This document could not be loaded"
+msgstr "Dieses Dokument konnte nicht geladen werden."
+
+#: pdfviewer.py:554
+msgid "Please make sure you are connected to the Internet."
+msgstr "Stelle bitte sicher, dass du mit dem Internet verbunden bist."
+
+#: viewtoolbar.py:62
 msgid "Fullscreen"
 msgstr "Vollbild"
 
@@ -189,47 +231,82 @@ msgstr "Vollbild"
 msgid "Show Tray"
 msgstr "Ablage anzeigen"
 
-#: viewtoolbar.py:117
+#: viewtoolbar.py:116
 msgid "Hide Tray"
 msgstr "Ablage verbergen"
 
-#: webactivity.py:569
+#: webactivity.py:490
+msgid "The initial page was configured"
+msgstr "Die Startseite wurde angepasst."
+
+#: webactivity.py:494
+msgid "The default initial page was configured"
+msgstr "Die Standard-Startseite wurde angepasst."
+
+#: webactivity.py:655
 msgid "Download in progress"
 msgid_plural "Downloads in progress"
 msgstr[0] "Datei wird heruntergeladen"
 msgstr[1] "Dateien werden heruntergeladen"
 
-#: webactivity.py:572
+#: webactivity.py:658
 msgid "Stopping now will erase your download"
 msgid_plural "Stopping now will erase your downloads"
 msgstr[0] "Jetzt anhalten wird das Herunterladen einer Datei abbrechen"
 msgstr[1] "Jetzt anhalten wird das Herunterladen mehrerer Dateien abbrechen"
 
-#: webactivity.py:577
+#: webactivity.py:663
 msgid "Continue download"
 msgid_plural "Continue downloads"
 msgstr[0] "Herunterladen der Datei fortsetzen"
 msgstr[1] "Herunterladen der Dateien fortsetzen"
 
-#: webactivity.py:582
+#: webactivity.py:668
 msgid "Stop"
 msgstr "Anhalten"
 
-#: webtoolbar.py:248
+#: webtoolbar.py:288
 msgid "Home page"
 msgstr "Startseite"
 
-#: webtoolbar.py:268
+#: webtoolbar.py:294
+msgid "Select as initial page"
+msgstr "Als Startseite wählen"
+
+#: webtoolbar.py:299
+msgid "Reset initial page"
+msgstr "Startseite zurücksetzen"
+
+#: webtoolbar.py:305
+msgid "Library"
+msgstr "Bibliothek"
+
+#: webtoolbar.py:338
 msgid "Back"
 msgstr "Zurück"
 
-#: webtoolbar.py:282
+#: webtoolbar.py:352
 msgid "Forward"
 msgstr "Vor"
 
-#: webtoolbar.py:296
+#: webtoolbar.py:366
 msgid "Bookmark"
 msgstr "Lesezeichen"
+
+#, python-format
+#~ msgid ""
+#~ "Download \"%s\" requires %.2f MB of free space, only %.2f MB is available"
+#~ msgstr ""
+#~ "Das Herunterladen von \"%s\" benötigt %.2f MB freien Speicherplatz, nur %.2f "
+#~ "MB sind verfügbar."
+
+#, python-format
+#~ msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+#~ msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+
+#, python-format
+#~ msgid "Loading %s..."
+#~ msgstr "Lade %s..."
 
 #, python-format
 #~ msgid ""
@@ -250,9 +327,6 @@ msgstr "Lesezeichen"
 
 #~ msgid "Reload"
 #~ msgstr "Neu laden"
-
-#~ msgid "Cancel"
-#~ msgstr "Abbrechen"
 
 #, python-format
 #~ msgid "File %s from %s."

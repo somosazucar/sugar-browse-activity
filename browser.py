@@ -27,19 +27,22 @@ from gi.repository import Gdk
 from gi.repository import Pango
 from gi.repository import WebKit
 from gi.repository import Soup
+from gi.repository import GConf
 
-from sugar3 import env
 from sugar3.activity import activity
 from sugar3.graphics import style
 from sugar3.graphics.icon import Icon
 
 from widgets import BrowserNotebook
+from palettes import ContentInvoker
+from filepicker import FilePicker
 import globalhistory
 import downloadmanager
 from pdfviewer import PDFTabPage
 
+ZOOM_ORIGINAL = 1.0
 _ZOOM_AMOUNT = 0.1
-_LIBRARY_PATH = '/usr/share/library-common/index.html'
+LIBRARY_PATH = '/usr/share/library-common/index.html'
 
 _WEB_SCHEMES = ['http', 'https', 'ftp', 'file', 'javascript', 'data',
                 'about', 'gopher', 'mailto']
@@ -56,22 +59,10 @@ _NON_SEARCH_REGEX = re.compile('''
     ^file:.*$)
     ''', re.VERBOSE)
 
+DEFAULT_ERROR_PAGE = os.path.join(activity.get_bundle_path(),
+                                  'data/error_page.tmpl')
 
-class CommandListener(object):
-    def __init__(self, window):
-        self._window = window
-
-    def handleEvent(self, event):
-        if not event.isTrusted:
-            return
-
-        uri = event.originalTarget.ownerDocument.documentURI
-        if not uri.startswith('about:neterror?e=nssBadCert'):
-            return
-
-        cls = components.classes['@sugarlabs.org/add-cert-exception;1']
-        cert_exception = cls.createInstance(interfaces.hulahopAddCertException)
-        cert_exception.showDialog(self._window)
+HOME_PAGE_GCONF_KEY = '/desktop/sugar/browser/home_page'
 
 
 class TabbedView(BrowserNotebook):
@@ -89,13 +80,31 @@ class TabbedView(BrowserNotebook):
         self.props.show_border = False
         self.props.scrollable = True
 
+        # Used to connect and disconnect functions when 'switch-page'
+        self._browser = None
+        self._load_status_changed_hid = None
+
         self.connect('size-allocate', self.__size_allocate_cb)
         self.connect('page-added', self.__page_added_cb)
         self.connect('page-removed', self.__page_removed_cb)
 
+        self.connect_after('switch-page', self.__switch_page_cb)
+
         self.add_tab()
         self._update_closing_buttons()
         self._update_tab_sizes()
+
+    def __switch_page_cb(self, tabbed_view, page, page_num):
+        if tabbed_view.get_n_pages():
+            self._connect_to_browser(tabbed_view.props.current_browser)
+
+    def _connect_to_browser(self, browser):
+        if self._browser is not None:
+            self._browser.disconnect(self._load_status_changed_hid)
+
+        self._browser = browser
+        self._load_status_changed_hid = self._browser.connect(
+            'notify::load-status', self.__load_status_changed_cb)
 
     def normalize_or_autosearch_url(self, url):
         """Normalize the url input or return a url for search.
@@ -171,6 +180,33 @@ class TabbedView(BrowserNotebook):
         new_browser.load_uri(url)
         new_browser.grab_focus()
 
+    def __create_web_view_cb(self, web_view, frame):
+        new_web_view = Browser()
+        new_web_view.connect('web-view-ready', self.__web_view_ready_cb)
+        return new_web_view
+
+    def __web_view_ready_cb(self, web_view):
+        """
+        Handle new window requested and open it in a new tab.
+
+        This callback is called when the WebKit.WebView request for a
+        new window to open (for example a call to the Javascript
+        function 'window.open()' or target="_blank")
+
+        web_view -- the new browser there the url of the
+                    window.open() call will be loaded.
+
+                    This object is created in the signal callback
+                    'create-web-view'.
+        """
+
+        web_view.connect('new-tab', self.__new_tab_cb)
+        web_view.connect('open-pdf', self.__open_pdf_in_new_tab_cb)
+        web_view.connect('create-web-view', self.__create_web_view_cb)
+        web_view.grab_focus()
+
+        self._insert_tab_next(web_view)
+
     def __open_pdf_in_new_tab_cb(self, browser, url):
         tab_page = PDFTabPage()
         tab_page.browser.connect('new-tab', self.__new_tab_cb)
@@ -186,10 +222,25 @@ class TabbedView(BrowserNotebook):
         self.set_current_page(next_index)
         tab_page.setup(url)
 
+    def __load_status_changed_cb(self, widget, param):
+        if self.get_window() is None:
+            return
+
+        status = widget.get_load_status()
+        if status in (WebKit.LoadStatus.PROVISIONAL,
+                      WebKit.LoadStatus.COMMITTED,
+                      WebKit.LoadStatus.FIRST_VISUALLY_NON_EMPTY_LAYOUT):
+            self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
+        elif status in (WebKit.LoadStatus.FAILED,
+                        WebKit.LoadStatus.FINISHED):
+            self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.LEFT_PTR))
+
     def add_tab(self, next_to_current=False):
         browser = Browser()
         browser.connect('new-tab', self.__new_tab_cb)
         browser.connect('open-pdf', self.__open_pdf_in_new_tab_cb)
+        browser.connect('web-view-ready', self.__web_view_ready_cb)
+        browser.connect('create-web-view', self.__create_web_view_cb)
 
         if next_to_current:
             self._insert_tab_next(browser)
@@ -220,34 +271,48 @@ class TabbedView(BrowserNotebook):
     def on_add_tab(self, gobject):
         self.add_tab()
 
-    def __tab_close_cb(self, label, tab_page):
+    def close_tab(self, tab_page=None):
+        if self.get_n_pages() == 1:
+            return
+
+        if tab_page is None:
+            tab_page = self.get_nth_page(self.get_current_page())
+
+        if isinstance(tab_page, PDFTabPage):
+            if tab_page.props.browser.props.load_status < \
+                    WebKit.LoadStatus.FINISHED:
+                tab_page.cancel_download()
+
         self.remove_page(self.page_num(tab_page))
-        tab_page.destroy()
+
+        current_page = self.get_nth_page(self.get_current_page())
+        current_page.props.browser.grab_focus()
+
+    def __tab_close_cb(self, label, tab_page):
+        self.close_tab(tab_page)
 
     def _update_tab_sizes(self):
-        """Update ta widths based in the amount of tabs."""
+        """Update tab widths based in the amount of tabs."""
 
         n_pages = self.get_n_pages()
         canvas_size = self.get_allocation()
-        # FIXME
-        # overlap_size = self.style_get_property('tab-overlap') * n_pages - 1
-        overlap_size = 0
-        allowed_size = canvas_size.width - overlap_size
-
-        tab_new_size = int(allowed_size * 1.0 / (n_pages + 1))
-        # Four tabs ensured:
-        tab_max_size = int(allowed_size * 1.0 / (5))
-        # Eight tabs ensured:
-        tab_min_size = int(allowed_size * 1.0 / (9))
-
-        if tab_new_size < tab_min_size:
-            tab_new_size = tab_min_size
-        elif tab_new_size > tab_max_size:
-            tab_new_size = tab_max_size
+        allowed_size = canvas_size.width
+        if n_pages == 1:
+            # use half of the whole space
+            tab_expand = False
+            tab_new_size = int(allowed_size / 2)
+        elif n_pages <= 8:  # ensure eight tabs
+            tab_expand = True  # use all the space available by tabs
+            tab_new_size = -1
+        else:
+            # scroll the tab toolbar if there are more than 8 tabs
+            tab_expand = False
+            tab_new_size = (allowed_size / 8)
 
         for page_idx in range(n_pages):
             page = self.get_nth_page(page_idx)
             label = self.get_tab_label(page)
+            self.child_set_property(page, 'tab-expand', tab_expand)
             label.update_size(tab_new_size)
 
     def _update_closing_buttons(self):
@@ -259,15 +324,30 @@ class TabbedView(BrowserNotebook):
         else:
             first_label.show_close_button()
 
-    def load_homepage(self):
+    def load_homepage(self, ignore_gconf=False):
         browser = self.current_browser
-
-        if os.path.isfile(_LIBRARY_PATH):
-            browser.load_uri('file://' + _LIBRARY_PATH)
+        uri_homepage = None
+        if not ignore_gconf:
+            client = GConf.Client.get_default()
+            uri_homepage = client.get_string(HOME_PAGE_GCONF_KEY)
+        if uri_homepage is not None:
+            browser.load_uri(uri_homepage)
+        elif os.path.isfile(LIBRARY_PATH):
+            browser.load_uri('file://' + LIBRARY_PATH)
         else:
             default_page = os.path.join(activity.get_bundle_path(),
                                         "data/index.html")
             browser.load_uri('file://' + default_page)
+        browser.grab_focus()
+
+    def set_homepage(self):
+        uri = self.current_browser.get_uri()
+        client = GConf.Client.get_default()
+        client.set_string(HOME_PAGE_GCONF_KEY, uri)
+
+    def reset_homepage(self):
+        client = GConf.Client.get_default()
+        client.unset(HOME_PAGE_GCONF_KEY)
 
     def _get_current_browser(self):
         if self.get_n_pages():
@@ -287,7 +367,7 @@ class TabbedView(BrowserNotebook):
 
     def set_history(self, tab_histories):
         if tab_histories and isinstance(tab_histories[0], dict):
-           # Old format, no tabs
+            # Old format, no tabs
             tab_histories = [tab_histories]
 
         while self.get_n_pages():
@@ -316,8 +396,15 @@ class TabbedView(BrowserNotebook):
                 browser = Browser()
                 browser.connect('new-tab', self.__new_tab_cb)
                 browser.connect('open-pdf', self.__open_pdf_in_new_tab_cb)
+                browser.connect('web-view-ready', self.__web_view_ready_cb)
+                browser.connect('create-web-view', self.__create_web_view_cb)
                 self._append_tab(browser)
                 browser.set_history(tab_history)
+
+    def is_current_page_pdf(self):
+        index = self.get_current_page()
+        current_page = self.get_nth_page(index)
+        return isinstance(current_page, PDFTabPage)
 
 
 Gtk.rc_parse_string('''
@@ -361,7 +448,8 @@ class TabLabel(Gtk.HBox):
         browser.connect('notify::title', self.__title_changed_cb)
         browser.connect('notify::load-status', self.__load_status_changed_cb)
 
-        self._label = Gtk.Label(label=_('Untitled'))
+        self._title = _('Untitled')
+        self._label = Gtk.Label(label=self._title)
         self._label.set_ellipsize(Pango.EllipsizeMode.END)
         self._label.set_alignment(0, 0.5)
         self.pack_start(self._label, True, True, 0)
@@ -395,17 +483,25 @@ class TabLabel(Gtk.HBox):
         self.emit('tab-close')
 
     def __title_changed_cb(self, widget, param):
-        if widget.props.title:
-            self._label.set_text(widget.props.title)
+        title = widget.props.title
+        if not title:
+            title = os.path.basename(widget.props.uri)
+
+        self._label.set_text(title)
+        self._title = title
 
     def __load_status_changed_cb(self, widget, param):
         status = widget.get_load_status()
-        if WebKit.LoadStatus.PROVISIONAL <= status \
+
+        if status == WebKit.LoadStatus.FAILED:
+            self._label.set_text(self._title)
+        elif WebKit.LoadStatus.PROVISIONAL <= status \
                 < WebKit.LoadStatus.FINISHED:
             self._label.set_text(_('Loading...'))
         elif status == WebKit.LoadStatus.FINISHED:
-            if widget.props.title == None:
+            if widget.props.title is None:
                 self._label.set_text(_('Untitled'))
+                self._title = _('Untitled')
 
 
 class Browser(WebKit.WebView):
@@ -418,9 +514,15 @@ class Browser(WebKit.WebView):
         'open-pdf': (GObject.SignalFlags.RUN_FIRST,
                      None,
                      ([str])),
+        'security-status-changed': (GObject.SignalFlags.RUN_FIRST,
+                                    None,
+                                    ([])),
     }
 
-    CURRENT_SUGAR_VERSION = '0.96'
+    CURRENT_SUGAR_VERSION = '0.100'
+
+    SECURITY_STATUS_SECURE = 1
+    SECURITY_STATUS_INSECURE = 2
 
     def __init__(self):
         WebKit.WebView.__init__(self)
@@ -428,7 +530,7 @@ class Browser(WebKit.WebView):
         web_settings = self.get_settings()
 
         # Add SugarLabs user agent:
-        identifier = ' Sugar Labs/' + self.CURRENT_SUGAR_VERSION
+        identifier = ' SugarLabs/' + self.CURRENT_SUGAR_VERSION
         web_settings.props.user_agent += identifier
 
         # Change font size based in the GtkSettings font size.  The
@@ -446,6 +548,12 @@ class Browser(WebKit.WebView):
         # Scale text and graphics:
         self.set_full_content_zoom(True)
 
+        # This property is used to set the title immediatly the user
+        # presses Enter on the URL Entry
+        self.loading_uri = None
+
+        self.security_status = None
+
         # Reference to the global history and callbacks to handle it:
         self._global_history = globalhistory.get_global_history()
         self.connect('notify::load-status', self.__load_status_changed_cb)
@@ -453,8 +561,17 @@ class Browser(WebKit.WebView):
         self.connect('download-requested', self.__download_requested_cb)
         self.connect('mime-type-policy-decision-requested',
                      self.__mime_type_policy_cb)
-        self.connect('new-window-policy-decision-requested',
-                     self.__new_window_policy_cb)
+        self.connect('load-error', self.__load_error_cb)
+
+        self._inject_media_style = False
+
+        ContentInvoker(self)
+
+        try:
+            self.connect('run-file-chooser', self.__run_file_chooser)
+        except TypeError:
+            # Only present in WebKit1 > 1.9.3 and WebKit2
+            pass
 
     def get_history(self):
         """Return the browsing history of this browser."""
@@ -529,12 +646,40 @@ class Browser(WebKit.WebView):
     def open_new_tab(self, url):
         self.emit('new-tab', url)
 
+    def __run_file_chooser(self, browser, request):
+        picker = FilePicker(self)
+        chosen = picker.run()
+        picker.destroy()
+
+        if chosen:
+            request.select_files([chosen])
+        elif hasattr(request, 'cancel'):
+            # WebKit2 only
+            request.cancel()
+        return True
+
     def __load_status_changed_cb(self, widget, param):
-        """Add the url to the global history or update it."""
         status = widget.get_load_status()
         if status <= WebKit.LoadStatus.COMMITTED:
+            # Add the url to the global history or update it.
             uri = self.get_uri()
             self._global_history.add_page(uri)
+
+        if status == WebKit.LoadStatus.COMMITTED:
+            # Update the security status.
+            response = widget.get_main_frame().get_network_response()
+            message = response.get_message()
+            if message:
+                use_https, certificate, tls_errors = message.get_https_status()
+
+                if use_https:
+                    if tls_errors == 0:
+                        self.security_status = self.SECURITY_STATUS_SECURE
+                    else:
+                        self.security_status = self.SECURITY_STATUS_INSECURE
+                else:
+                    self.security_status = None
+                self.emit('security-status-changed')
 
     def __title_changed_cb(self, widget, param):
         """Update title in global history."""
@@ -553,29 +698,53 @@ class Browser(WebKit.WebView):
             policy_decision.ignore()
             return True
 
+        elif mimetype == 'audio/x-vorbis+ogg' or mimetype == 'audio/mpeg':
+            self._inject_media_style = True
+
         elif not self.can_show_mime_type(mimetype):
             policy_decision.download()
             return True
 
         return False
 
-    def __new_window_policy_cb(self, webview, webframe, request,
-                               navigation_action, policy_decision):
-        """Open new tab instead of a new window.
-
-        Browse doesn't support many windows, as any Sugar activity.
-        So we will handle the request, ignoring it and returning True
-        to inform WebKit that a decision was made.  And we will open a
-        new tab instead.
-
-        """
-        policy_decision.ignore()
-        uri = request.get_uri()
-        self.open_new_tab(uri)
-        return True
-
     def __download_requested_cb(self, browser, download):
         downloadmanager.add_download(download, browser)
+        return True
+
+    def __load_error_cb(self, web_view, web_frame, uri, web_error):
+        """Show Sugar's error page"""
+
+        # Don't show error page if the load was interrupted by policy
+        # change or the request is going to be handled by a
+        # plugin. For example, if a file was requested for download or
+        # an .ogg file is going to be played.
+        if web_error.code in (
+                WebKit.PolicyError.FRAME_LOAD_INTERRUPTED_BY_POLICY_CHANGE,
+                WebKit.PluginError.WILL_HANDLE_LOAD):
+            if self._inject_media_style:
+                css_style_file = open(os.path.join(activity.get_bundle_path(),
+                                                   "data/media-controls.css"))
+                css_style = css_style_file.read().replace('\n', '')
+                inject_style_script = \
+                    "var style = document.createElement('style');" \
+                    "style.innerHTML = '%s';" \
+                    "document.body.appendChild(style);" % css_style
+                web_view.execute_script(inject_style_script)
+            return True
+
+        data = {
+            'page_title': _('This web page could not be loaded'),
+            'title': _('This web page could not be loaded'),
+            'message': _('"%s" could not be loaded. Please check for '
+                         'typing errors, and make sure you are connected '
+                         'to the Internet.') % uri,
+            'btn_value': _('Try again'),
+            'url': uri,
+            }
+
+        html = open(DEFAULT_ERROR_PAGE, 'r').read() % data
+        web_frame.load_alternate_string(html, uri, uri)
+
         return True
 
 
