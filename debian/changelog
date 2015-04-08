@@ -1,6 +1,19 @@
 sugar-browse-activity (137-2) UNRELEASED; urgency=low
 
-  * Stop depending on GIR binding sugarext: Not used directly.
+  * Update package relations:
+    + Fix depend on python-telepathy.
+    + Stop depend on GIR binding sugarext: Not used directly.
+  * Stop track checksum of upstream tarball.
+  * Bump debhelper compatibility level to 8.
+  * Declare compliance with Debian Policy 3.9.6.
+  * Update Vcs-Git field to use canonical URL.
+  * Update Vcs-Browser field to use cgit and https.
+  * Update copyright info:
+    + Update alternate git source URL.
+    + Extend coverage for myself.
+    + Relicense packaging as GPL-3+.
+  * Rewrite README.source to emphasize that control.in file is *not* a
+    show-stopper for contributions, and refer to wiki page for details.
 
  -- Jonas Smedegaard <dr@jones.dk>  Tue, 29 May 2012 12:38:09 +0200
 
