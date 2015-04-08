@@ -1,0 +1,310 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-28 00:32-0400\n"
+"PO-Revision-Date: 2013-07-29 18:38+0200\n"
+"Last-Translator: EdgarQuispeChambi <quispedgar@yahoo.es>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ayc\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.5\n"
+
+#  "Navegar"
+#. TRANS: "name" option from activity.info file
+msgid "Browse"
+msgstr "Internet taypita yatiña"
+
+#. TRANS: "summary" option from activity.info file
+#. TRANS: "description" option from activity.info file
+msgid ""
+"Surf the world! Here you can do research, watch educational videos, take "
+"online courses, find books, connect with friends and more."
+msgstr ""
+"¡Aka pachana thaqma! Akana maya yatxatäwi ch'amanchasma, yatiqaña uñjäwinaka "
+"uñjaña, yatiñanaka ch'amamnchaña katuqaña, pankanaka jakiña, masinakampi "
+"jakisiña ukata juk'ampinakampi."
+
+#: browser.py:472 browser.py:524 browser.py:525 webactivity.py:451
+msgid "Untitled"
+msgstr "Jani p'iqinchiri sutini"
+
+#: browser.py:521
+msgid "Loading..."
+msgstr "Jist'araskiwa..."
+
+#: browser.py:757 browser.py:758
+msgid "This web page could not be loaded"
+msgstr "akïri thaqaña wakichäwixa janiwa qhantayasiti"
+
+#: browser.py:759
+#, python-format
+msgid ""
+"\"%s\" could not be loaded. Please check for typing errors, and make sure "
+"you are connected to the Internet."
+msgstr ""
+"\"%s\" janiwa qhantaña muniti. Qillqaña pantjatacha utji uka suma uñakipma, "
+"Internet wakichäwixa qhantatati."
+
+#: browser.py:762 pdfviewer.py:394
+msgid "Try again"
+msgstr "Mayampi yant'ma"
+
+#: downloadmanager.py:124
+msgid "Not enough space to download"
+msgstr "Wakichatanaka apaqañataki janiwa chanixa utjiti"
+
+#: downloadmanager.py:133
+msgid ""
+"Download \"%{filename}\" requires %{total_size_in_mb} MB of free space, only "
+"%{free_space_in_mb} MB is available"
+msgstr ""
+"Apaqaña \"%{filename}\" wakisiwa %{total_size_in_mb} MB utjiri chani, ukaki %"
+"{free_space_in_mb} MB utjirinaka"
+
+#  "Ok"
+#: downloadmanager.py:141 downloadmanager.py:176
+msgid "Ok"
+msgstr "Ukhamawa"
+
+#  "Descarga iniciada"
+#: downloadmanager.py:157
+msgid "Download started"
+msgstr "Talliqaña qalltata"
+
+#: downloadmanager.py:158 downloadmanager.py:170
+#, python-format
+msgid "%s"
+msgstr "%s chimpu"
+
+#  "Descarga terminada"
+#: downloadmanager.py:168
+msgid "Download completed"
+msgstr "Talliqaña tukuta"
+
+#  "Mostrar en el Diario"
+#: downloadmanager.py:173
+msgid "Show in Journal"
+msgstr "Sapüru luräwiru qananchaña"
+
+#  "De: %s"
+#: downloadmanager.py:184 pdfviewer.py:589
+#, python-format
+msgid "From: %s"
+msgstr "%s ... ukata"
+
+#: downloadmanager.py:292
+#, python-format
+msgid ""
+"Downloading %(filename)s from \n"
+"%(source)s."
+msgstr ""
+"Apaqaskiwa %(filename)s \n"
+" %(source)s wakichatana."
+
+#  "Anterior"
+#: edittoolbar.py:65
+msgid "Previous"
+msgstr "Kutt'aña"
+
+#  "Siguiente"
+#: edittoolbar.py:72
+msgid "Next"
+msgstr "Jutiri"
+
+#  "Eliminar"
+#: linkbutton.py:108
+msgid "Remove"
+msgstr "Chhaqtayaña"
+
+#  "Seguir el enlace"
+#: palettes.py:184
+msgid "Follow link"
+msgstr "Mayachaña arkaña"
+
+#: palettes.py:189
+msgid "Follow link in new tab"
+msgstr "Machaqa wakichata luraña laphi chimpuru arkaña"
+
+#  "Mantener el enlace"
+#: palettes.py:198
+msgid "Keep link"
+msgstr "Mayachata suyt'aña"
+
+#  "Copiar el enlace"
+#: palettes.py:204
+msgid "Copy link"
+msgstr "Mayachaña talliqaña"
+
+#  "Copiar la imagen"
+#: palettes.py:218
+msgid "Copy image"
+msgstr "Uñtasïwi talliqaña"
+
+#  "Mantener la imagen"
+#: palettes.py:224
+msgid "Keep image"
+msgstr "Uñtasïwi arkaña"
+
+#: palettes.py:238
+msgid "Copy text"
+msgstr "qillqata apaqaña"
+
+#  "Reducir"
+#: pdfviewer.py:91 viewtoolbar.py:39
+msgid "Zoom out"
+msgstr "Jisk'aptayaña"
+
+#  "Ampliar"
+#: pdfviewer.py:97 viewtoolbar.py:45
+msgid "Zoom in"
+msgstr "Jach'aptayaña"
+
+#: pdfviewer.py:103 viewtoolbar.py:51
+msgid "Actual size"
+msgstr "Jichha taña"
+
+#: pdfviewer.py:114
+msgid "Previous page"
+msgstr "Nayrïri laphi"
+
+#: pdfviewer.py:121
+msgid "Next page"
+msgstr "Arkiri laphi"
+
+#: pdfviewer.py:133
+msgid "Save PDF to Journal"
+msgstr "Sapüru luräwiru PDF wakichata imaña"
+
+#: pdfviewer.py:341
+msgid "Cancel"
+msgstr "Tukuyaña"
+
+#: pdfviewer.py:490
+msgid "Downloading document..."
+msgstr "wakichata... apaqkasa"
+
+#: pdfviewer.py:546
+msgid "This document could not be loaded"
+msgstr "akïri wakichata janiwa qhantaña muniti"
+
+#: pdfviewer.py:554
+msgid "Please make sure you are connected to the Internet."
+msgstr "Internet wakichäwixa qhantatati."
+
+#  "Pantalla completa"
+#: viewtoolbar.py:62
+msgid "Fullscreen"
+msgstr "Maypacha uñtawi"
+
+#  "Mostrar Bandeja"
+#: viewtoolbar.py:113
+msgid "Show Tray"
+msgstr "Luräwinaka qhanstayaña"
+
+#  "Esconder Bandeja"
+#: viewtoolbar.py:116
+msgid "Hide Tray"
+msgstr "Luräwinaka chhaqtayaña"
+
+#: webactivity.py:490
+msgid "The initial page was configured"
+msgstr "Qallta wakichata laphixa thakinchatäxiwa"
+
+#: webactivity.py:494
+msgid "The default initial page was configured"
+msgstr "Qallta wakichata pantjata laphixa thakinchatäxiwa"
+
+#  "Descarga en curso"
+#  "Descargas en curso"
+#: webactivity.py:655
+msgid "Download in progress"
+msgid_plural "Downloads in progress"
+msgstr[0] "Talliqaña arkaña"
+msgstr[1] "Talliqañanaka arkaña"
+
+#  "Detener ahora cancelará la descarga"
+#  "Detener ahora cancelará las descargas"
+#: webactivity.py:658
+msgid "Stopping now will erase your download"
+msgid_plural "Stopping now will erase your downloads"
+msgstr[0] "Talliqaña arkaña sayt'ayaña"
+msgstr[1] "Talliqañanaka arkaña sayt'ayaña"
+
+#  "Continuar la descarga"
+#  "Continuar las descargas"
+#: webactivity.py:663
+msgid "Continue download"
+msgid_plural "Continue downloads"
+msgstr[0] "Talliqaña arkaskakiña"
+msgstr[1] "Talliqañanaka arkaskakiña"
+
+#  "Parar"
+#: webactivity.py:668
+msgid "Stop"
+msgstr "Sayt'ayaña"
+
+#  "Página inicial"
+#: webtoolbar.py:288
+msgid "Home page"
+msgstr "Qallta laphi"
+
+#: webtoolbar.py:294
+msgid "Select as initial page"
+msgstr "Qallta wakichata laphiru uñtasiri jajlliña"
+
+#: webtoolbar.py:299
+msgid "Reset initial page"
+msgstr "Qallta wakichata laphi mayampi qhantayaña"
+
+#: webtoolbar.py:305
+msgid "Library"
+msgstr "Pankanaka wakichata imata"
+
+#  "Volver"
+#: webtoolbar.py:338
+msgid "Back"
+msgstr "Kutt'aña"
+
+#  "Avanzar"
+#: webtoolbar.py:352
+msgid "Forward"
+msgstr "Nayrtaña"
+
+#  "Marcador"
+#: webtoolbar.py:366
+msgid "Bookmark"
+msgstr "Chimpuña"
+
+#  "Bajando %s desde \n"
+#  "%s."
+#, python-format
+#~ msgid ""
+#~ "Downloading %s from \n"
+#~ "%s."
+#~ msgstr ""
+#~ "%s ... talliqaña \n"
+#~ "%s ... chanikama."
+
+#  "Editar"
+#~ msgid "Edit"
+#~ msgstr "Chiqachaña"
+
+#  "Ver"
+#~ msgid "View"
+#~ msgstr "Uñjaña"
+
+#  "Añadir lengueta"
+#~ msgid "Add a tab"
+#~ msgstr "Laphi qalluchaña"
+
+#  "Recargar"
+#~ msgid "Reload"
+#~ msgstr "Ch'amanchaña"

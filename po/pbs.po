@@ -1,0 +1,248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-28 00:32-0400\n"
+"PO-Revision-Date: 2013-05-07 17:27+0200\n"
+"Last-Translator: usuariopame05 <proyecto.olpc@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: pbs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.5\n"
+
+#. TRANS: "name" option from activity.info file
+msgid "Browse"
+msgstr "Manjui' manad-eú"
+
+#. TRANS: "summary" option from activity.info file
+#. TRANS: "description" option from activity.info file
+msgid ""
+"Surf the world! Here you can do research, watch educational videos, take "
+"online courses, find books, connect with friends and more."
+msgstr ""
+
+#: browser.py:472 browser.py:524 browser.py:525 webactivity.py:451
+msgid "Untitled"
+msgstr "Nip lumei ngunjiu'"
+
+#: browser.py:521
+msgid "Loading..."
+msgstr "Maveje'p..."
+
+#: browser.py:757 browser.py:758
+msgid "This web page could not be loaded"
+msgstr ""
+
+#: browser.py:759
+#, python-format
+msgid ""
+"\"%s\" could not be loaded. Please check for typing errors, and make sure "
+"you are connected to the Internet."
+msgstr ""
+
+#: browser.py:762 pdfviewer.py:394
+msgid "Try again"
+msgstr ""
+
+#: downloadmanager.py:124
+msgid "Not enough space to download"
+msgstr ""
+
+#: downloadmanager.py:133
+msgid ""
+"Download \"%{filename}\" requires %{total_size_in_mb} MB of free space, only "
+"%{free_space_in_mb} MB is available"
+msgstr ""
+
+#: downloadmanager.py:141 downloadmanager.py:176
+msgid "Ok"
+msgstr "Matajaich'"
+
+#: downloadmanager.py:157
+msgid "Download started"
+msgstr "Mapup maveje'p"
+
+#: downloadmanager.py:158 downloadmanager.py:170
+#, python-format
+#, python-format,
+msgid "%s"
+msgstr "%s"
+
+#: downloadmanager.py:168
+msgid "Download completed"
+msgstr "Maveje'p nivieiñ'"
+
+#: downloadmanager.py:173
+msgid "Show in Journal"
+msgstr "Na'u'up ne xiñi'iu xiñi'iu"
+
+#: downloadmanager.py:184 pdfviewer.py:589
+#, python-format
+msgid "From: %s"
+msgstr "Ne: %s"
+
+#: downloadmanager.py:292
+#, python-format
+msgid ""
+"Downloading %(filename)s from \n"
+"%(source)s."
+msgstr ""
+"Maleje'p re maveje'p %(filename)s ne \n"
+"%(source)s."
+
+#: edittoolbar.py:65
+msgid "Previous"
+msgstr "Sevaa"
+
+#: edittoolbar.py:72
+msgid "Next"
+msgstr "Likiu'uch'"
+
+#: linkbutton.py:108
+msgid "Remove"
+msgstr "Malejei'"
+
+#: palettes.py:184
+msgid "Follow link"
+msgstr "Maku'uts ne se lutsjau"
+
+#: palettes.py:189
+msgid "Follow link in new tab"
+msgstr "Maku'uts ne se lutsjau nda vinjiu chiñyia'p"
+
+#: palettes.py:198
+msgid "Keep link"
+msgstr "Matung manu ne se lutsjau"
+
+#: palettes.py:204
+msgid "Copy link"
+msgstr "Make'eik re se lutsjau"
+
+#: palettes.py:218
+msgid "Copy image"
+msgstr "Make'eik ne snakeje'"
+
+#: palettes.py:224
+msgid "Keep image"
+msgstr "Matung makjat ne snakeje'"
+
+#: palettes.py:238
+msgid "Copy text"
+msgstr ""
+
+#: pdfviewer.py:91 viewtoolbar.py:39
+msgid "Zoom out"
+msgstr "Mats'ei'"
+
+#: pdfviewer.py:97 viewtoolbar.py:45
+msgid "Zoom in"
+msgstr "Manandaí"
+
+#: pdfviewer.py:103 viewtoolbar.py:51
+msgid "Actual size"
+msgstr ""
+
+#: pdfviewer.py:114
+msgid "Previous page"
+msgstr "Sevaa nixií"
+
+#: pdfviewer.py:121
+msgid "Next page"
+msgstr "Ne nixií likiu'uch'"
+
+#: pdfviewer.py:133
+msgid "Save PDF to Journal"
+msgstr "Makjaat PDF ne se xiñi'iu matsjau"
+
+#: pdfviewer.py:341
+msgid "Cancel"
+msgstr ""
+
+#: pdfviewer.py:490
+msgid "Downloading document..."
+msgstr ""
+
+#: pdfviewer.py:546
+msgid "This document could not be loaded"
+msgstr ""
+
+#: pdfviewer.py:554
+msgid "Please make sure you are connected to the Internet."
+msgstr ""
+
+#: viewtoolbar.py:62
+msgid "Fullscreen"
+msgstr "Kutau nak'ujuly' mi'ia lipiá"
+
+#: viewtoolbar.py:113
+msgid "Show Tray"
+msgstr "Ma'u'up ndakal' rixií ngk'uix"
+
+#: viewtoolbar.py:116
+msgid "Hide Tray"
+msgstr "Ma'aung ndakal' ngk'uix"
+
+#: webactivity.py:490
+msgid "The initial page was configured"
+msgstr ""
+
+#: webactivity.py:494
+msgid "The default initial page was configured"
+msgstr ""
+
+#: webactivity.py:655
+msgid "Download in progress"
+msgid_plural "Downloads in progress"
+msgstr[0] "Nip livieiñ mapup re se maveje'p"
+msgstr[1] "Nip livieiñ mapup mi'ia re se maveje'p"
+
+#: webactivity.py:658
+msgid "Stopping now will erase your download"
+msgid_plural "Stopping now will erase your downloads"
+msgstr[0] "Mama'ai chu'maní mapejel' mi'ia re se manaja mapup"
+msgstr[1] "Mama'ai chu'maní mi'ia re se manaja k'ua lupup"
+
+#: webactivity.py:663
+msgid "Continue download"
+msgid_plural "Continue downloads"
+msgstr[0] "Lavaiñ vipiup re se maveje'p"
+msgstr[1] "Lavaiñ vipiup mi'ia re se maveje'p"
+
+#: webactivity.py:668
+msgid "Stop"
+msgstr "Ndama'ai"
+
+#: webtoolbar.py:288
+msgid "Home page"
+msgstr "Ne kutap nixií"
+
+#: webtoolbar.py:294
+msgid "Select as initial page"
+msgstr ""
+
+#: webtoolbar.py:299
+msgid "Reset initial page"
+msgstr ""
+
+#: webtoolbar.py:305
+msgid "Library"
+msgstr ""
+
+#: webtoolbar.py:338
+msgid "Back"
+msgstr "kue'e"
+
+#: webtoolbar.py:352
+msgid "Forward"
+msgstr "Mad-uá"
+
+#: webtoolbar.py:366
+msgid "Bookmark"
+msgstr "Me'ets sad-ia"
