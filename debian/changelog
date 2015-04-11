@@ -1,8 +1,12 @@
-sugar-browse-activity (137-2) UNRELEASED; urgency=low
+sugar-browse-activity (157-1) experimental; urgency=low
 
   * Update package relations:
+    + Fix depend explicitly on python.
     + Fix depend on python-telepathy.
     + Stop depend on GIR binding sugarext: Not used directly.
+    + Depend on GIR binding sugarext-1.0.
+    + Recommend ca-certificates.
+    + Bump primary branch to 0.104.
   * Stop track checksum of upstream tarball.
   * Bump debhelper compatibility level to 8.
   * Declare compliance with Debian Policy 3.9.6.
@@ -14,8 +18,9 @@ sugar-browse-activity (137-2) UNRELEASED; urgency=low
     + Relicense packaging as GPL-3+.
   * Rewrite README.source to emphasize that control.in file is *not* a
     show-stopper for contributions, and refer to wiki page for details.
+  * Tell git-buildpackage to suppress upstream .gitignore.
 
- -- Jonas Smedegaard <dr@jones.dk>  Tue, 29 May 2012 12:38:09 +0200
+ -- Jonas Smedegaard <dr@jones.dk>  Sat, 11 Apr 2015 02:34:46 +0200
 
 sugar-browse-activity (137-1) unstable; urgency=low
 

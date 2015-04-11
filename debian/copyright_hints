@@ -10,8 +10,7 @@ Files: po/Browse.pot
  po/ak.po
  po/am.po
  po/ar.po
- po/ar_SY.po
- po/ay.po
+ po/ayc.po
  po/aym.po
  po/be.po
  po/be@latin.po
@@ -23,7 +22,7 @@ Files: po/Browse.pot
  po/bs.po
  po/ca.po
  po/cpp.po
- po/cs.po
+ po/cy.po
  po/da.po
  po/de.po
  po/dz.po
@@ -37,6 +36,9 @@ Files: po/Browse.pot
  po/fi.po
  po/fil.po
  po/gl.po
+ po/gn.po
+ po/gom.po
+ po/gom@latin.po
  po/gu.po
  po/ha.po
  po/he.po
@@ -55,6 +57,7 @@ Files: po/Browse.pot
  po/ko.po
  po/kos.po
  po/ku.po
+ po/ky.po
  po/lg.po
  po/lt.po
  po/lv.po
@@ -70,16 +73,17 @@ Files: po/Browse.pot
  po/nah.po
  po/nb.po
  po/ne.po
+ po/niu.po
  po/nl.po
  po/nn.po
+ po/or.po
  po/pa.po
- po/pis.po
+ po/pbs.po
  po/pl.po
  po/ps.po
- po/pseudo.po
  po/pt_BR.po
- po/qu.po
  po/quy.po
+ po/quz.po
  po/ro.po
  po/ru.po
  po/rw.po
@@ -96,10 +100,8 @@ Files: po/Browse.pot
  po/sw.po
  po/ta.po
  po/te.po
- po/templates.po
  po/th.po
- po/ton.po
- po/tpi.po
+ po/to.po
  po/tr.po
  po/tvl.po
  po/tyv.po
@@ -122,12 +124,12 @@ License: UNKNOWN
 Files: AUTHORS
  activity/activity-web.svg
  activity/activity.info
- agent-stylesheet.css
  browser.dtd
  cert8.db
- clickToView.xml
+ data/error_page.tmpl
  data/favicon_01.png
  data/index.html
+ data/media-controls.css
  debian/README.source
  debian/compat
  debian/control
@@ -136,16 +138,16 @@ Files: AUTHORS
  debian/source/format
  debian/watch
  icons/add-link.svg
+ icons/book.svg
  icons/browse-close-tab.svg
- icons/browse-dialog-cancel.svg
  icons/browse-follow-link-new-tab.svg
  icons/browse-follow-link.svg
- icons/browse-view-refresh.svg
+ icons/channel-insecure-symbolic.svg
+ icons/channel-secure-symbolic.svg
  icons/link.svg
+ icons/save-as-pdf.svg
  icons/save-to-journal.svg
  icons/tab-add.svg
- po/qqa.po
- po/quz.po
 Copyright: *No copyright*
 License: UNKNOWN
  FIXME
@@ -154,10 +156,6 @@ Files: filepicker.py
  messenger.py
  model.py
  pdfviewer.py
- promptservice.py
- securitydialogs.py
- sessionhistory.py
- sugarmenuitem.py
 Copyright: 2006-2007, One Laptop Per Child
   2007, One Laptop Per Child
   2012, One Laptop Per Child
@@ -169,14 +167,6 @@ Files: globalhistory.py
  setup.py
 Copyright: 2006, Red Hat, Inc
   2008, Red Hat, Inc
-License: GPL-2+
- FIXME
-
-Files: progresslistener.py
- webtoolbar.py
-Copyright: 2006, Red Hat, Inc
-  2007, One Laptop Per Child
-  2009, Tomeu Vizoso
 License: GPL-2+
  FIXME
 
@@ -199,6 +189,13 @@ License: UNKNOWN
 Files: webactivity.py
 Copyright: 2006, Red Hat, Inc
   2009, Martin Langhoff, Simon Schampijer, Daniel Drake
+License: GPL-2+
+ FIXME
+
+Files: webtoolbar.py
+Copyright: 2006, Red Hat, Inc
+  2007, One Laptop Per Child
+  2009, Tomeu Vizoso
 License: GPL-2+
  FIXME
 
@@ -251,14 +248,15 @@ Files: po/fr.po
 Copyright: 2007, The package's holder
   : internet"
   YEAR THE PACKAGE'S HOLDER
+  configur�e"
   depuis\n"
+  à %{free_space_in_mb} Mo"
 License: UNKNOWN
  FIXME
 
-Files: po/pap.po
+Files: po/cs.po
 Copyright: YEAR THE PACKAGE'S HOLDER
-  e imagen"
-  e lenk/link"
+  kartě"
 License: UNKNOWN
  FIXME
 
@@ -266,6 +264,13 @@ Files: po/hus.po
 Copyright: YEAR THE PACKAGE'S HOLDER
   la traducción a "Aliy" porque refleja mejor la idea de explorar internet. (Zurik)
   la traducción a -Itmedha'- porque la idea de Reload es actualizar, o cargar nuevamente. la palabra -itmedha'- significa literalmente actualizar. (Zurik)
+License: UNKNOWN
+ FIXME
+
+Files: po/pap.po
+Copyright: YEAR THE PACKAGE'S HOLDER
+  link"
+  plachi"
 License: UNKNOWN
  FIXME
 
