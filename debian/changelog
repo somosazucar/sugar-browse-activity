@@ -1,3 +1,10 @@
+sugar-browse-activity (157-3) unstable; urgency=medium
+
+  * Update package relations: Fix stop recommend sugar-session-*.
+  * Really move packaging to Debian Sugar Team.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 20 Apr 2015 16:31:56 +0200
+
 sugar-browse-activity (157-2) unstable; urgency=medium
 
   * Move packaging to Debian Sugar Team.
