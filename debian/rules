@@ -46,7 +46,6 @@ gir-deps += webkit-3.0 soup-2.4 evince-3.0 sugarext-1.0
 CDBS_DEPENDS_$(pkg) = python
 CDBS_DEPENDS_$(pkg) +=, $(patsubst %,$(comma) python-%,$(python-deps))
 CDBS_DEPENDS_$(pkg) +=, $(patsubst %,$(comma) gir1.2-%,$(gir-deps))
-CDBS_RECOMMENDS_$(pkg) = $(call cdbs_sugar_anybranchdeps,sugar-session)
 CDBS_RECOMMENDS_$(pkg) +=, sugar-$(DEB_SUGAR_PRIMARY_BRANCH)-themes | sugar-themes | sugar-artwork
 CDBS_RECOMMENDS_$(pkg) +=, ca-certificates
 
