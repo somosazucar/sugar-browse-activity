@@ -1,3 +1,16 @@
+sugar-browse-activity (157-4) UNRELEASED; urgency=medium
+
+  * Modernize short and long description.
+  * Modernize git-buildpackage config: Avoid "git-" prefix.
+  * Update copyright info:
+    + Use License-Grant and License-Reference fields.
+      Thanks to Ben Finney.
+    + Add comments on LGPL Lesser versus Library assumption.
+  * Add lintian overrides regarding license in License-Reference field.
+    See bug#786450.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 16 Jun 2015 19:48:31 -0500
+
 sugar-browse-activity (157-3) unstable; urgency=medium
 
   * Update package relations: Fix stop recommend sugar-session-*.
