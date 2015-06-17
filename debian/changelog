@@ -1,5 +1,9 @@
-sugar-browse-activity (157-4) UNRELEASED; urgency=medium
+sugar-browse-activity (157.1-1) unstable; urgency=medium
 
+   [ upstream ]
+  * New release.
+
+  [ Jonas Smedegaard ]
   * Modernize short and long description.
   * Modernize git-buildpackage config: Avoid "git-" prefix.
   * Update copyright info:
@@ -9,7 +13,7 @@ sugar-browse-activity (157-4) UNRELEASED; urgency=medium
   * Add lintian overrides regarding license in License-Reference field.
     See bug#786450.
 
- -- Jonas Smedegaard <dr@jones.dk>  Tue, 16 Jun 2015 19:48:31 -0500
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 16 Jun 2015 19:49:59 -0500
 
 sugar-browse-activity (157-3) unstable; urgency=medium
 
