@@ -31,7 +31,8 @@ DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/fructose/$(DEB_
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
 
 # Suppress unneeded auto-resolved build-dependency on python-dev
-CDBS_BUILD_DEPENDS_class_python-sugar_python = python$(cdbs_python_nondefault_version)
+#  * TODO: drop cdbs_python_binary fallback when cdbs 0.5 is stable
+CDBS_BUILD_DEPENDS_class_python-sugar_python = $(or $(cdbs_curpythonruntime),$(cdbs_python_binary))
 
 # Override Sugar toolkit to use
 CDBS_BUILD_DEPENDS_class_python-sugar_sugar = python-sugar3, unzip
