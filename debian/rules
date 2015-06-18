@@ -51,10 +51,5 @@ CDBS_DEPENDS_$(pkg) +=, $(patsubst %,$(comma) gir1.2-%,$(gir-deps))
 CDBS_RECOMMENDS_$(pkg) +=, sugar-$(DEB_SUGAR_PRIMARY_BRANCH)-themes | sugar-themes | sugar-artwork
 CDBS_RECOMMENDS_$(pkg) +=, ca-certificates
 
-# Ensure only one variant is installed at a time (Debian Policy 7.6.2)
-# (unneeded since Wheezy: can be dropped after Wheezy+1)
-CDBS_CONFLICTS_$(pkg) = $(DEB_SUGAR_SOURCE_PKGBASE)
-CDBS_REPLACES_$(pkg) = $(DEB_SUGAR_SOURCE_PKGBASE)
-
 clean::
 	rm -rf locale
