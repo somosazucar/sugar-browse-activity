@@ -16,8 +16,6 @@ Depends: ${cdbs:Depends},
  ${python:Depends}
 Recommends: ${cdbs:Recommends}
 Suggests: ${cdbs:Suggests}
-Provides: ${cdbs:Provides},
- ${python:Provides}
 Conflicts: ${cdbs:Conflicts}
 Replaces: ${cdbs:Replaces}
 Description: Sugar Learning Platform - web browsing activity

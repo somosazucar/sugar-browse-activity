@@ -56,11 +56,5 @@ CDBS_RECOMMENDS_$(pkg) +=, ca-certificates
 CDBS_CONFLICTS_$(pkg) = $(DEB_SUGAR_SOURCE_PKGBASE)
 CDBS_REPLACES_$(pkg) = $(DEB_SUGAR_SOURCE_PKGBASE)
 
-# Transitional quirk: sugar-web-activity renamed to sugar-browse-activity
-# (unneeded since Squeeze: can be dropped after Squeeze+1)
-CDBS_PROVIDES_$(pkg) += , sugar-web-activity
-CDBS_CONFLICTS_$(pkg) += , sugar-web-activity
-CDBS_REPLACES_$(pkg) += , sugar-web-activity
-
 clean::
 	rm -rf locale
