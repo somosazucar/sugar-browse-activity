@@ -31,6 +31,10 @@ DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
 #  * TODO: drop cdbs_python_binary fallback when cdbs 0.5 is stable
 CDBS_BUILD_DEPENDS_class_python-sugar_python = $(or $(cdbs_curpythonruntime),$(cdbs_python_binary))
 
+# Build-depend unversioned on debhelper
+#  TODO: Drop when adopted in cdbs
+CDBS_BUILD_DEPENDS_rules_debhelper_v9 = debhelper
+
 # Override Sugar toolkit to use
 CDBS_BUILD_DEPENDS_class_python-sugar_sugar = python-sugar3, unzip
 
