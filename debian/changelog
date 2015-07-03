@@ -1,3 +1,16 @@
+sugar-browse-activity (157.2-1) unstable; urgency=medium
+
+  [ upstream ]
+  * New release.
+
+  [ Jonas Smedegaard ]
+  * Bump debhelper compatibility level to 9.
+  * Add lintian override regarding debhelper 9.
+  * Relax watch file to cover any compression suffix.
+  * Stop explicitly declare compression in git-buildpackage config.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 03 Jul 2015 16:14:47 -0500
+
 sugar-browse-activity (157.1-2) unstable; urgency=medium
 
   * Update package relations:
