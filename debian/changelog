@@ -1,3 +1,9 @@
+sugar-browse-activity (157.2-2) unstable; urgency=medium
+
+  * Fix rename locale aym→ay: ISO 639-1 favored over ISO 639-2.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Fri, 03 Jul 2015 17:24:26 -0500
+
 sugar-browse-activity (157.2-1) unstable; urgency=medium
 
   [ upstream ]
