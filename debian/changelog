@@ -1,3 +1,26 @@
+sugar-browse-activity (200-1) unstable; urgency=medium
+
+  [ upstream ]
+  * New release.
+    Highlights:
+    + Use WebKit2.
+
+  [ Jonas Smedegaard ]
+  * Modernize CDBS use:
+    + Extract (not avoid) png files for copyright checking.
+    + Avoid copyright-check upstream certificate database.
+    + Tighten build-dependency on cdbs.
+    + Build-depend on licensecheck (not devscripts).
+    + Build-depend on libregexp-assemble-perl libimage-exiftool-perl
+      libfont-ttf-perl.
+  * Update copyright info:
+    + Update names and coverage of main authors.
+    + Extend coverage for Debian packaging.
+  * Declare compliance with Debian Policy 3.9.8.
+  * Depend on GIR binding webkit2-4.0 (not webkit-3.0).
+
+ -- Jonas Smedegaard <dr@jones.dk>  Mon, 12 Dec 2016 14:51:47 +0100
+
 sugar-browse-activity (157.2-2) unstable; urgency=medium
 
   * Fix rename locale aym→ay: ISO 639-1 favored over ISO 639-2.
