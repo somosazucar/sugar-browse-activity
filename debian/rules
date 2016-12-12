@@ -35,6 +35,7 @@ CDBS_BUILD_DEPENDS_class_python-sugar_python = $(or $(cdbs_python2_defaultruntim
 CDBS_BUILD_DEPENDS_class_python-sugar_sugar = python-sugar3, unzip
 
 DEB_COPYRIGHT_EXTRACT_EXTS = png
+DEB_COPYRIGHT_CHECK_IGNORE_PATHS = cert8.db
 
 # Needed (always/often/seldom) at runtime
 python-deps = sugar3 gi dbus cairo telepathy
