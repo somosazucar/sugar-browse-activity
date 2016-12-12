@@ -28,8 +28,8 @@ DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/fructose/$(DEB_
 DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
 
 # Suppress unneeded auto-resolved build-dependency on python-dev
-#  * TODO: drop cdbs_python_binary fallback when cdbs 0.5 is stable
-CDBS_BUILD_DEPENDS_class_python-sugar_python = $(or $(cdbs_curpythonruntime),$(cdbs_python_binary))
+#  * TODO: drop cdbs_python_binary fallback when cdbs 0.4.150 is stable
+CDBS_BUILD_DEPENDS_class_python-sugar_python = $(or $(cdbs_python2_defaultruntime),$(cdbs_python_binary))
 
 # Build-depend unversioned on debhelper
 #  TODO: Drop when adopted in cdbs
