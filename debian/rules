@@ -34,8 +34,7 @@ CDBS_BUILD_DEPENDS_class_python-sugar_python = $(or $(cdbs_python2_defaultruntim
 # Override Sugar toolkit to use
 CDBS_BUILD_DEPENDS_class_python-sugar_sugar = python-sugar3, unzip
 
-# Suppress binary files to not upset dpkg
-DEB_COPYRIGHT_CHECK_IGNORE_REGEX = ^data/logo_.*\.png|debian/(changelog|copyright(|_hints|_newhints))$
+DEB_COPYRIGHT_EXTRACT_EXTS = png
 
 # Needed (always/often/seldom) at runtime
 python-deps = sugar3 gi dbus cairo telepathy
