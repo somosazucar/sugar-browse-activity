@@ -40,7 +40,7 @@ DEB_COPYRIGHT_CHECK_IGNORE_PATHS = cert8.db
 # Needed (always/often/seldom) at runtime
 python-deps = sugar3 gi dbus cairo telepathy
 gir-deps = glib-2.0 gtk-3.0 gconf-2.0 gdkpixbuf-2.0 pango-1.0 rsvg-2.0
-gir-deps += webkit-3.0 soup-2.4 evince-3.0 sugarext-1.0
+gir-deps += webkit2-4.0 soup-2.4 evince-3.0 sugarext-1.0
 CDBS_DEPENDS_$(pkg) = python
 CDBS_DEPENDS_$(pkg) +=, $(patsubst %,$(comma) python-%,$(python-deps))
 CDBS_DEPENDS_$(pkg) +=, $(patsubst %,$(comma) gir1.2-%,$(gir-deps))
