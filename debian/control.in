@@ -16,6 +16,7 @@ Depends: ${cdbs:Depends},
  ${python:Depends}
 Recommends: ${cdbs:Recommends}
 Suggests: ${cdbs:Suggests}
+Provides: ${cdbs:Provides}
 Description: Sugar Learning Platform - web browsing activity
  Sugar Learning Platform promotes collaborative learning through Sugar
  Activities that encourage critical thinking, the heart of a quality
