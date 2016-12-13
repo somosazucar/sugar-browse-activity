@@ -11,7 +11,6 @@ Files: po/Browse.pot
  po/am.po
  po/ar.po
  po/ayc.po
- po/aym.po
  po/be.po
  po/be@latin.po
  po/bg.po
@@ -139,6 +138,8 @@ Files: AUTHORS
  debian/control
  debian/control.in
  debian/gbp.conf
+ debian/patches/README
+ debian/patches/series
  debian/source/format
  debian/watch
  icons/add-link.svg
@@ -157,7 +158,6 @@ License: UNKNOWN
  FIXME
 
 Files: filepicker.py
- messenger.py
  model.py
  pdfviewer.py
 Copyright: 2006-2007, One Laptop Per Child
@@ -247,6 +247,13 @@ License: GPL-3+
 Files: linkbutton.py
 Copyright: 2007, One Laptop Per Child
 License: LGPL-2+
+ FIXME
+
+Files: debian/patches/2001_collabwrapper.patch
+Copyright: 2015, Batchu Venkat Vishal
+  2015, Sam Parkinson
+  2015, Walter Bender
+License: LGPL-2+ and/or GPL-3+
  FIXME
 
 Files: po/pt.po

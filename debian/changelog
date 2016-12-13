@@ -1,3 +1,23 @@
+sugar-browse-activity (200+20161203-1) unstable; urgency=medium
+
+  [ upstream ]
+  * Git snapshot.
+    Highlights:
+    + Fix typo that broke network error displays.
+    + Port to CollabWrapper based collaboration.
+
+  [ Jonas Smedegaard ]
+  * Use get-orig-source for git snapshots. Document in README.source.
+  * Have git-buildpackage filter any .git* file.
+  * Git-ignore quilt .pc dir.
+  * Add patch 2001 to include collabwrapper.
+  * Update copyright info: Cover patch 2001.
+  * Fix broken path in desktop file.
+  * Stop rename no longer included aym locale.
+  * Update package relations: Provide virtual package www-browser.
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 13 Dec 2016 04:52:35 +0100
+
 sugar-browse-activity (200-1) unstable; urgency=medium
 
   [ upstream ]
