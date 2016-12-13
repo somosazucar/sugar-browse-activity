@@ -9,3 +9,23 @@ More info here: http://wiki.debian.org/CDBS+git-buildpackage
 
 
  -- Jonas Smedegaard <dr@jones.dk>  Mon, 18 Feb 2013 12:55:37 +0100
+
+
+Getting new upstream release
+----------------------------
+
+Packaging is linked with upstream source, tracked as separate git remote:
+
+  * git remote add upstream-git https://github.com/sugarlabs/browse-activity
+  * git fetch upstream-git
+
+To import + link an official release, use uscan:
+
+  * gbp import-orig --upstream-vcs-tag=v200 --uscan
+
+To import + link a snapshot, use get-orig-source target:
+
+  * debian/rules get-orig-source DEB_UPSTREAM_VERSION=200+20161203 DEB_UPSTREAM_TARBALL_BASENAME=464ae4b
+  * gbp import-orig --upstream-vcs-tag=464ae4b ../tarballs/sugar-browse-activity_200+20161203.orig.tar.gz
+
+ -- Jonas Smedegaard <dr@jones.dk>  Tue, 13 Dec 2016 03:58:05 +0100

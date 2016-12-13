@@ -23,9 +23,7 @@ include /usr/share/cdbs/1/rules/debhelper.mk
 
 pkg = $(DEB_SOURCE_PACKAGE)
 
-DEB_UPSTREAM_PACKAGE = Browse
-DEB_UPSTREAM_URL = http://download.sugarlabs.org/sources/sucrose/fructose/$(DEB_UPSTREAM_PACKAGE)
-DEB_UPSTREAM_TARBALL_EXTENSION = tar.bz2
+DEB_UPSTREAM_URL = https://github.com/sugarlabs/browse-activity/archive
 
 # Suppress unneeded auto-resolved build-dependency on python-dev
 #  * TODO: drop cdbs_python_binary fallback when cdbs 0.4.150 is stable
