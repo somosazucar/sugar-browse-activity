@@ -21,12 +21,14 @@ from gettext import gettext as _
 
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import GLib
 from gi.repository import Gdk
 from gi.repository import GConf
 from gi.repository import Pango
 
 import sugar3.profile
 from sugar3.graphics.toolbutton import ToolButton
+from sugar3.graphics.toggletoolbutton import ToggleToolButton
 from sugar3.graphics import iconentry
 from sugar3.graphics.toolbarbox import ToolbarBox as ToolbarBase
 from sugar3.graphics.palettemenu import PaletteMenuItem
@@ -314,6 +316,7 @@ class PrimaryToolbar(ToolbarBase):
 
     __gsignals__ = {
         'add-link': (GObject.SignalFlags.RUN_FIRST, None, ([])),
+        'remove-link': (GObject.SignalFlags.RUN_FIRST, None, ([])),
         'go-home': (GObject.SignalFlags.RUN_FIRST, None, ([])),
         'set-home': (GObject.SignalFlags.RUN_FIRST, None, ([])),
         'reset-home': (GObject.SignalFlags.RUN_FIRST, None, ([])),
@@ -326,10 +329,13 @@ class PrimaryToolbar(ToolbarBase):
         self._url_toolbar = UrlToolbar()
 
         self._activity = act
+        self.model = act.model
+        self.model.link_removed_signal.connect(self.__link_removed_cb)
 
         self._tabbed_view = self._canvas = tabbed_view
 
         self._loading = False
+        self._download_running_hid = None
 
         toolbar = self.toolbar
         activity_button = ActivityToolbarButton(self._activity)
@@ -448,13 +454,15 @@ class PrimaryToolbar(ToolbarBase):
         self._download_icon = ProgressToolButton(
             icon_name='emblem-downloads',
             tooltip=_('No Downloads Running'))
-        down_id = GObject.timeout_add(500, self.__download_running_cb)
         toolbar.insert(self._download_icon, -1)
         self._download_icon.show()
+        downloadmanager.connect_donwload_started(self.__download_started_cb)
 
-        self._link_add = ToolButton('emblem-favorite', accelerator='<ctrl>d')
+        self._link_add = ToggleToolButton('emblem-favorite')
+        self._link_add.set_accelerator('<ctrl>d')
         self._link_add.set_tooltip(_('Bookmark'))
-        self._link_add.connect('clicked', self._link_add_clicked_cb)
+        self._link_add_toggled_hid = \
+            self._link_add.connect('toggled', self.__link_add_toggled_cb)
         toolbar.insert(self._link_add, -1)
         self._link_add.show()
 
@@ -486,17 +494,26 @@ class PrimaryToolbar(ToolbarBase):
 
         self._configure_toolbar()
 
+    def __download_started_cb(self):
+        if self._download_running_hid is None:
+            self._download_running_hid = GLib.timeout_add(
+                80, self.__download_running_cb)
+
     def __download_running_cb(self):
+        print('__DLR')
         progress = downloadmanager.overall_downloads_progress()
         self._download_icon.update(progress)
-        if progress > 0.0:
+        if downloadmanager.num_downloads() > 0:
             self._download_icon.props.tooltip = \
                 _('{}% Downloaded').format(int(progress*100))
-            self._download_icon.props.xo_color = XoColor('white')
+            self._download_icon.props.xo_color = XoColor(None)
+            return True
         else:
+            GLib.source_remove(self._download_running_hid)
+            self._download_running_hid = None
             self._download_icon.props.tooltip = _('No Downloads Running')
             self._download_icon.props.xo_color = XoColor('insensitive')
-        return True
+            return False
 
     def __key_press_event_cb(self, entry, event):
         self._tabbed_view.current_browser.loading_uri = entry.props.text
@@ -658,6 +675,14 @@ class PrimaryToolbar(ToolbarBase):
         if is_webkit_browser:
             self._reload_session_history()
 
+        with self._link_add.handler_block(self._link_add_toggled_hid):
+            uri = self._browser.get_uri()
+            print(self.model.has_link(uri), uri)
+            self._link_add.props.active = self.model.has_link(uri)
+
+    def __link_removed_cb(self, model):
+        self._update_navigation_buttons()
+
     def _entry_activate_cb(self, entry):
         url = entry.props.text
         effective_url = self._tabbed_view.normalize_or_autosearch_url(url)
@@ -767,11 +792,14 @@ class PrimaryToolbar(ToolbarBase):
     def _history_item_activated_cb(self, menu_item, history_item):
         self._back.get_palette().popdown(immediate=True)
         self._forward.get_palette().popdown(immediate=True)
-        #self._browser.set_history_index(index)
+        # self._browser.set_history_index(index)
         self._browser.go_to_back_forward_list_item(history_item)
 
-    def _link_add_clicked_cb(self, button):
-        self.emit('add-link')
+    def __link_add_toggled_cb(self, button):
+        if button.props.active:
+            self.emit('add-link')
+        else:
+            self.emit('remove-link')
 
     def inspect_view(self, button):
         page = self._canvas.get_current_page()
