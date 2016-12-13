@@ -52,3 +52,9 @@ binary-post-install/$(pkg)::
 
 clean::
 	rm -rf locale
+
+# Fix broken path in desktop file
+#  * TODO: drop when fixed in sugar-toolkit-gtk3
+binary-fixup/$(pkg)::
+	find $(cdbs_curdestdir)/usr/share -type f -name '*.desktop' \
+		-execdir perl -pi -e 's,^Path\s*=\s*\K\S*(?=/usr/share),,' '{}' ';'
