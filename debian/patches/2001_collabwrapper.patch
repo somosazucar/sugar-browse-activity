@@ -1060,3 +1060,7 @@ Last-Update: 2016-12-13
 +                               res_id=self._id, start_iter_offset=start.get_line_offset(), 
 +                               start_iter_line=start.get_line(),end_iter_offset=end.get_line_offset(), 
 +                               end_iter_line=end.get_line()))
+--- /dev/null
++++ b/collabwrapper/__init__.py
+@@ -0,0 +1 @@
++# This file intentionally left blank
