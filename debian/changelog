@@ -1,3 +1,10 @@
+sugar-browse-activity (200+20161203-2) unstable; urgency=medium
+
+  * Added missing __init__.py in collabwrapper patch
+    File Was missing in 2001 patch. This fixes bug #848840.
+
+ -- Sebastian Silva <sebastian@fuentelibre.org>  Mon, 01 May 2017 14:09:15 -0500
+
 sugar-browse-activity (200+20161203-1) unstable; urgency=medium
 
   [ upstream ]
